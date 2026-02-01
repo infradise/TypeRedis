@@ -14,17 +14,20 @@ docs/
 docs/BUILD.md
 setup/
 
-# Ignore test artifacts
-test/
-analysis_options.yaml
-
-# Will be removed in the future
-lib/src/utils/module_printer_deprecated.dart
-
 # OpenSSL certificates for testing
 .crt
 .key
 .pem
 
+# Ignore test artifacts
+test/
+analysis_options.yaml
+dart_test.yaml
+
+# Will be removed in the future
+lib/src/utils/module_printer_deprecated.dart
+
 ## CI
-docker-compose.ci.yaml
+docker-compose-cluster-tls.yaml
+docker-compose-cluster.yaml
+docker-compose-sentinel.yaml
