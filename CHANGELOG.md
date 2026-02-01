@@ -1,15 +1,19 @@
 # Changelog
 
+       
 ## 3.1.0
+
 * **Modular Architecture**
-    * **New HASH Commands**: individual files per command for better scalability and maintainability.
-        * `hDel`, `hExists`, `hExpire`, `hExpireAt`, `hExpireTime`, `hGet`, `hGetAll`, `hGetDel`, `hGetEx`, `hIncrBy`, `hIncrByFloat`, `hKeys`, `hLen`, `hMGet`, `hMSet`, `hPersist`, `hPExpire`, `hPExpireAt`, `hPExpireTime`, `hPTtl`, `hRandField`, `hScan`, `hSet`, `hSetEx`, `hSetNx`, `hStrLen`, `hTtl`, `hVals`
-    * **Existing HASH Commands**: Refactored transaction commands (`hset`, `hget`, `hgetall`) into independent extension files.
+    * **New HASH Commands**: Implemented individual files per command for better scalability and maintainability.
+        * Added full suite of hash commands: `hDel`, `hExists`, `hExpire`, `hExpireAt`, `hExpireTime`, `hGet`, `hGetAll`, `hGetDel`, `hGetEx`, `hIncrBy`, `hIncrByFloat`, `hKeys`, `hLen`, `hMGet`, `hMSet`, `hPersist`, `hPExpire`, `hPExpireAt`, `hPExpireTime`, `hPTtl`, `hRandField`, `hScan`, `hSet`, `hSetEx`, `hSetNx`, `hStrLen`, `hTtl`, `hVals`.
+    * **Refactored & Enhanced**: Migrated legacy monolithic commands (`hset`, `hget`, `hgetall`) to the new modular extensions.
         * `ValkeyClient` methods now internally delegate logic to the new extensions (`HSet`, `HGet`, `HGetAll`), ensuring full backward compatibility and interface compliance.
-    * **New Transactions Commands**
-        * `watch`, `unwatch`
-    * **New JSON Debug subcommands**
-        * `jsonDebugDepth`, `jsonDebugFields`, `jsonDebugHelp`, `jsonDebugKeyTableCheck`, `jsonDebugKeyTableCorrupt`, `jsonDebugKeyTableDistribution`, `jsonDebugMaxDepthKey`, `jsonDebugMaxSizeKey`, `jsonDebugMemory`, `jsonDebugTestSharedApi`
+* **New Transactions Commands**
+    * Added: `watch`, `unwatch`.
+* **New JSON Debug Subcommands**
+    * Added: `jsonDebugDepth`, `jsonDebugFields`, `jsonDebugHelp`, `jsonDebugKeyTableCheck`, `jsonDebugKeyTableCorrupt`, `jsonDebugKeyTableDistribution`, `jsonDebugMaxDepthKey`, `jsonDebugMaxSizeKey`, `jsonDebugMemory`, `jsonDebugTestSharedApi`.
+* **New Generic Commands**
+    * **Refactored**: Exposed `scan` command and `ScanResult` class for public use.
 
 ## 3.0.0
 * **Modular Architecture**: Restructured monolithic command implementations into scalable, extension-based modules.
