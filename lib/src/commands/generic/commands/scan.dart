@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
+import '../commands.dart' show GenericCommands;
+
 /// Result for SCAN command
+/// A DTO to hold the result of a SCAN operation.
 class ScanResult {
   final String cursor;
   final List<String> keys;
   ScanResult(this.cursor, this.keys);
 }
 
-/// Mixin to support Redis-JSON and Valkey-JSON commands.
-/// from @Keyscope
-mixin GenericCommands {
-  Future<dynamic> execute(List<String> command);
-
+extension ScanCommand on GenericCommands {
+  /// from @Keyscope
   Future<ScanResult> scan({
     required String cursor,
     String match = '*',

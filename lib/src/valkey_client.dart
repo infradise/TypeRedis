@@ -33,13 +33,13 @@ import 'cluster_slots_parser.dart' show parseClusterSlotsResponse;
 // 3. Export `Commands` in `lib/valkey_client.dart`.
 // ------------------------------------------------------------------------
 // Redis/Valkey Commands
-import 'commands/generic.dart' show GenericCommands;
+import 'commands/generic/commands.dart' show GenericCommands;
 import 'commands/hash/commands.dart' show HashCommands;
 import 'commands/hash/commands/h_get.dart' show HGetCommand;
 import 'commands/hash/commands/h_get_all.dart' show HGetAllCommand;
 import 'commands/hash/commands/h_set.dart' show HSetCommand;
-import 'commands/json/commands.dart'
-    show JsonCommands; // Redis JSON and Valkey JSON
+// Redis JSON and Valkey JSON
+import 'commands/json/commands.dart' show JsonCommands;
 import 'commands/list/commands.dart' show ListCommands;
 import 'commands/transactions/commands.dart' show TransactionCommands;
 import 'commands/transactions/commands/discard.dart' show DiscardCommand;

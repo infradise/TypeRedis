@@ -20,6 +20,9 @@ library;
 
 // Export cluster info data classes (v1.2.0)
 export 'src/cluster_info.dart';
+export 'src/commands/generic/commands.dart' show ScanResult;
+export 'src/commands/generic/commands/scan.dart' show ScanResult;
+export 'src/commands/generic/extensions.dart';
 export 'src/commands/hash/extensions.dart';
 // Helpers for jsonMSet
 export 'src/commands/json/commands.dart'

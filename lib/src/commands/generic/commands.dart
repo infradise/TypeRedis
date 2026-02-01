@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import 'dart:collection' show Queue;
-
-import '../../annotations.dart' show protected;
-
 export 'extensions.dart';
 
-/// This mixin ensures compatibility with the existing `execute` method
-/// by converting all parameters to Strings before sending.
-mixin TransactionCommands {
+mixin GenericCommands {
   // [Interface Definition]
   // The class using this mixin must implement these methods and getters.
 
@@ -35,26 +29,4 @@ mixin TransactionCommands {
 
   /// Checks if the connected server is Valkey.
   Future<bool> isValkeyServer();
-
-  @protected
-  bool _isInTransaction = false;
-
-  final Queue<List<String>> _transactionQueue = Queue();
-
-  bool get isInTransaction => _isInTransaction;
-
-  void setTransactionStateInternal(bool isStarted) {
-    _isInTransaction = isStarted;
-  }
-
-  void clearTransactionQueueInternal() {
-    _transactionQueue.clear();
-  }
-
-  void queueCommandInternal(List<String> command) {
-    _transactionQueue.add(command);
-  }
-
-  List<List<String>> getTransactionQueueInternal() =>
-      _transactionQueue.toList();
 }
