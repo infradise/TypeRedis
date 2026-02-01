@@ -53,16 +53,14 @@
 - [Pubsub](https://github.com/infradise/valkey_client/blob/main/docs/commands/pubsub.md) 
 - [Transaction](https://github.com/infradise/valkey_client/blob/main/docs/commands/transaction.md)
 - [Generic](https://github.com/infradise/valkey_client/blob/main/docs/commands/generic.md)
-- As of v3.2.0
-  - [List](https://github.com/infradise/valkey_client/blob/main/docs/commands/list.md)
-  - Server: `flushDb`, `flushAll`
+- [List](https://github.com/infradise/valkey_client/blob/main/docs/commands/list.md)
+- Server: `flushDb`, `flushAll`
 - More
   - Connection: `ping`, `echo`, `close`
   - Cluster: `clusterSlots`, `asking`
   - Strings: `get`, `set`, `mget`, `incr`, `decr`, `incrBy`, `decrBy`
   - Sets: `sadd`, `srem`, `smembers`
   - Sorted Sets: `zadd`, `zrem`, `zrange`
-  - Lists: `lpush`, `rpush`, `lpop`, `rpop`, `lrange`
 
 ## Features
 
