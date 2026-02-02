@@ -18,17 +18,17 @@ name: CT
 on:
   push:
     branches: [ main ]
-    # paths:
-    #   - 'example/**/*.dart'
-    #   - 'lib/**/*.dart'
-    #   - 'test/**/*.dart'
-    #   - 'docker-compose-cluster-tls.yaml'
-    #   - 'docker-compose-cluster.yaml'
-    #   - 'docker-compose-sentinel.yaml'
-    #   - 'dart_test.yaml'
-    #   - 'pubspec.yaml'
-    #   - 'analysis_options.yaml'
-    #   - '.github/workflows/valkey_client_ct.yaml'
+    paths:
+      - 'example/**/*.dart'
+      - 'lib/**/*.dart'
+      - 'test/**/*.dart'
+      - 'docker-compose-cluster-tls.yaml'
+      - 'docker-compose-cluster.yaml'
+      - 'docker-compose-sentinel.yaml'
+      - 'dart_test.yaml'
+      - 'pubspec.yaml'
+      - 'analysis_options.yaml'
+      - '.github/workflows/valkey_client_ct.yaml'
 
   # pull_request:
 
