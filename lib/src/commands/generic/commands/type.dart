@@ -14,6 +14,23 @@
  * limitations under the License.
  */
 
-export 'commands/del.dart';
-export 'commands/scan.dart';
-export 'commands/type.dart';
+import '../commands.dart' show GenericCommands;
+
+extension TypeCommand on GenericCommands {
+  /// TYPE key
+  ///
+  /// Returns the string representation of the type of the value stored at
+  /// [key].
+  /// The different types that can be returned are: string, list, set, zset,
+  /// hash, stream and none.
+  ///
+  /// Complexity: O(1)
+  ///
+  /// Returns:
+  /// - [String]: The type of the value (e.g., "string", "list", "set", "zset",
+  /// "hash", "stream", "none").
+  Future<String> type(String key) async {
+    final cmd = <String>['TYPE', key];
+    return executeString(cmd);
+  }
+}

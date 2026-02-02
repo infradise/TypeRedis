@@ -3,11 +3,11 @@
 ## 3.2.0
 * **Modular Architecture**
     * **New LIST Commands**: Implemented individual files per command for better scalability and maintainability.
-        * Added full suite of list commands: `blMove`, `blmPop`, `blPop`, `brPop`, `brPopLPush`, `lIndex`, `lInsert`, `lLen`, `lMove`, `lmPop`, `lPop`, `lPos`, `lPush`, `lPushX`, `lRange`, `lRem`, `lSet`, `lTrim`, `rPop`, `rPopLPush`, `rPush`, `rPushX`
-    * **Refactored & Enhanced**: Migrated legacy monolithic commands (`lpush`, `rpush`, `lpop`, `rpop`, `lrange`) to the new modular extensions.
-        * `ValkeyClient` methods now internally delegate logic to the new extensions (`lPush`, `rPush`, `lPop`, `rPop`, `lRange`), ensuring full backward compatibility and interface compliance.
+        * Added full suite of list commands: `blMove`, `blmPop`, `blPop`, `brPop`, `brPopLPush`, `lIndex`, `lInsert`, `lLen`, `lMove`, `lmPop`, `lPop`, `lPos`, `lPush`, `lPushX`, `lRange`, `lRem`, `lSet`, `lTrim`, `rPop`, `rPopLPush`, `rPush`, `rPushX`.
     * **New Server Commands**
         * Added: `flushAll`, `flushDb`, `info`.
+    * **New Generic Commands**
+        * Added `type`.
 
 ## 3.1.0
 * **Modular Architecture**
