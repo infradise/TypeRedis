@@ -21,7 +21,9 @@ limitations under the License.
 | `append`      | [APPEND](https://redis.io/docs/latest/commands/append/)           | [APPEND](https://valkey.io/commands/append/)           |
 | `decr`        | [DECR](https://redis.io/docs/latest/commands/decr/)               | [DECR](https://valkey.io/commands/decr/)               |
 | `decrBy`      | [DECRBY](https://redis.io/docs/latest/commands/decrby/)           | [DECRBY](https://valkey.io/commands/decrby/)           |
-| `delIfEq`     | [DELIFEQ](https://redis.io/docs/latest/commands/delifeq/)         | [DELIFEQ](https://valkey.io/commands/delifeq/)         |
+| `delEx`       | [DELEX](https://redis.io/docs/latest/commands/delex/)             |                                                        |
+| `delIfEq`     |                                                                   | [DELIFEQ](https://valkey.io/commands/delifeq/)         |
+| `digest`      | [DIGEST](https://redis.io/docs/latest/commands/digest/)           |                                                        |
 | `get`         | [GET](https://redis.io/docs/latest/commands/get/)                 | [GET](https://valkey.io/commands/get/)                 |
 | `getDel`      | [GETDEL](https://redis.io/docs/latest/commands/getdel/)           | [GETDEL](https://valkey.io/commands/getdel/)           |
 | `getEx`       | [GETEX](https://redis.io/docs/latest/commands/getex/)             | [GETEX](https://valkey.io/commands/getex/)             |
@@ -34,6 +36,7 @@ limitations under the License.
 | ~~`mget`~~    |                                                                   |                                                        |
 | `mGet`        | [MGET](https://redis.io/docs/latest/commands/mget/)               | [MGET](https://valkey.io/commands/mget/)               |
 | `mSet`        | [MSET](https://redis.io/docs/latest/commands/mset/)               | [MSET](https://valkey.io/commands/mset/)               |
+| `mSetEx`      | [MSETEX](https://redis.io/docs/latest/commands/msetex/)           |                                                        |
 | `mSetNx`      | [MSETNX](https://redis.io/docs/latest/commands/msetnx/)           | [MSETNX](https://valkey.io/commands/msetnx/)           |
 | `pSetEx`      | [PSETEX](https://redis.io/docs/latest/commands/psetex/)           | [PSETEX](https://valkey.io/commands/psetex/)           |
 | `set`         | [SET](https://redis.io/docs/latest/commands/set/)                 | [SET](https://valkey.io/commands/set/)                 |
