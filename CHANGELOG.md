@@ -2,10 +2,10 @@
 
 ## 3.4.0
 * **Modular Architecture**
-    * **New SET Commands**: 
+    * **New SET Commands** 
         * Added full suite of set commands: `sAdd`, `sCard`, `sDiff`, `sDiffStore`, `sInter`, `sInterCard`, `sInterStore`, `sIsMember`, `sMembers`, `sMIsMember`, `sMove`, `sPop`, `sRandMember`, `sRem`, `sScan`, `sUnion`, `sUnionStore`.
-    * **New STRING Commands**: 
-        * Added Redis-only set commands: `delEx`, `digest`, `mSetEx`.
+    * **New STRING Commands** 
+        * Added Redis-only commands: `delEx`, `digest`, `mSetEx`.
 
 ## 3.3.0
 * **Modular Architecture**

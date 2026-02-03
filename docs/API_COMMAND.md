@@ -1,5 +1,7 @@
 # APIs and Commands
 
+Deprecated. See `docs/commands` directory instead of this document.
+
 ## Command
 
 | Category              | Commands                                                                                                                                                                                                                                                                                                                                                                                                                                               |
