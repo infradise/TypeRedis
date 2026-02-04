@@ -8,14 +8,9 @@
     The high-performance, cluster-aware Dart client for Redis and Valkey.<br>
   </p>
 
-  [![pub package](https://img.shields.io/pub/v/valkey_client.svg)](https://pub.dev/packages/valkey_client)
+  [![pub package](https://img.shields.io/pub/v/valkey_client.svg?label=Latest)](https://pub.dev/packages/valkey_client)
   [![CT](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml/badge.svg)](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml)
-
-  <p>
-    <a href="https://www.buymeacoffee.com/keyscope.dev" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="45px" width= "162px">
-    </a>
-  </p>
+  [![pub package](https://img.shields.io/pub/v/keyscope.svg?label=Keyscope&color=blue)](https://pub.dev/packages/keyscope)
 
   <p>
     <a href="#supported-commands">Supported Commands</a> •
