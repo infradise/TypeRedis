@@ -16,4 +16,15 @@
 
 import '../commands.dart' show SortedSetCommands;
 
-extension ZSetTemplateCommand on SortedSetCommands {}
+extension ZIncrByCommand on SortedSetCommands {
+  /// ZINCRBY key increment member
+  ///
+  /// Increments the score of member in the sorted set stored at
+  /// key by increment.
+  Future<double> zIncrBy(String key, num increment, String member) async {
+    final cmd = <String>['ZINCRBY', key, increment.toString(), member];
+    final result = await execute(cmd);
+    if (result is double) return result;
+    return double.parse(result.toString());
+  }
+}
