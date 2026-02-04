@@ -17,7 +17,7 @@
 import 'package:valkey_client/valkey_client.dart';
 
 Future<void> main() async {
-  final client = ValkeyClient(host: 'localhost', port: 9000);
+  final client = ValkeyClient(host: 'localhost', port: 6379);
   await client.connect();
   await client.flushAll();
 
