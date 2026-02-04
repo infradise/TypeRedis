@@ -56,7 +56,8 @@ import 'commands/pubsub/commands.dart' show PubsubCommands;
 import 'commands/scripting_and_functions/commands.dart'
     show ScriptingAndFunctionsCommands;
 import 'commands/search/commands.dart' show SearchCommands;
-import 'commands/server/commands.dart' show ServerCommands;
+import 'commands/server/commands.dart'
+    show ConfigGetCommand, InfoServerMetadataCommand, ServerCommands;
 import 'commands/set/commands.dart' show SetCommands;
 import 'commands/sorted_set/commands.dart' show SortedSetCommands;
 import 'commands/stream/commands.dart' show StreamCommands;
@@ -75,6 +76,8 @@ import 'commands/transactions/commands/discard.dart' show DiscardCommand;
 import 'commands/transactions/commands/exec.dart' show ExecCommand;
 import 'commands/transactions/commands/multi.dart' show MultiCommand;
 import 'commands/vector_set/commands.dart' show VectorSetCommands;
+
+// import 'commands/server/commands/info_server_metadata.dart';
 // ========================================================================
 import 'exceptions.dart';
 import 'logging.dart'; // Built-in Logger
@@ -886,6 +889,12 @@ class ValkeyClient // FYI. extends ValkeyConnection
     }
   }
 
+  @override
+  Future<ServerMetadata> fetchServerMetadata() async => infoServerMetadata();
+
+  // ------------------------------------------------------------------------
+  // TODO: REFACTO REQUIRED.
+
   /// Helper to check server type based on metadata.
   ///
   /// Determine Server Name & Version
@@ -896,6 +905,8 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
   Future<String?> getServerName() async => _metadata?.serverName;
   Future<String?> getServerVersion() async => _metadata?.version;
+
+  // TODO: REFACTO REQUIRED. MERGE INTO `InfoServerMetadata`
 
   /// Parses 'INFO SERVER' and checks configs based on User Rules.
   Future<ServerMetadata> _parseServerMetadata(String info) async {
@@ -955,7 +966,8 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
     // Fetch the specific config
     try {
-      final configVal = await _getConfigValue(configKeyToCheck);
+      // final configVal = await _getConfigValue(configKeyToCheck);
+      final configVal = await configGet(configKeyToCheck);
       if (configVal != null) {
         maxDatabases = int.tryParse(configVal) ?? 16;
       } else {
@@ -980,19 +992,20 @@ class ValkeyClient // FYI. extends ValkeyConnection
     );
   }
 
+  // TODO: REMOVE THIS COMMENT LATER
   /// Helper to get a single config value. Returns null if not found/error.
-  Future<String?> _getConfigValue(String parameter) async {
-    try {
-      // CONFIG GET returns ['parameter', 'value']
-      final result = await execute(['CONFIG', 'GET', parameter]);
-      if (result is List && result.length >= 2) {
-        return result[1] as String;
-      }
-    } catch (e) {
-      return null;
-    }
-    return null;
-  }
+  // Future<String?> _getConfigValue(String parameter) async {
+  //   try {
+  //     // CONFIG GET returns ['parameter', 'value']
+  //     final result = await execute(['CONFIG', 'GET', parameter]);
+  //     if (result is List && result.length >= 2) {
+  //       return result[1] as String;
+  //     }
+  //   } catch (e) {
+  //     return null;
+  //   }
+  //   return null;
+  // }
 
   /// Helper to compare semantic versions.
   /// Returns 1 if v1 > v2, -1 if v1 < v2, 0 if equal.
@@ -1009,6 +1022,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     }
     return 0;
   }
+  // ------------------------------------------------------------------------
 
   // --- Core Data Handler & Parser ---
 

@@ -16,7 +16,7 @@ limitations under the License.
 
 # SERVER
 
-`flushAll`, `flushDb`, `info`
+`flushAll`, `flushDb`, `info`, `infoServerMetadata`
 
 | valkey_client            | Redis                                                                                     | Valkey                                                                         |
 |--------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
@@ -61,6 +61,7 @@ limitations under the License.
 | `flushAll`               | [FLUSHALL](https://redis.io/docs/latest/commands/flushall/)                               | [FLUSHALL](https://valkey.io/commands/flushall/)                               |
 | `flushDb`                | [FLUSHDB](https://redis.io/docs/latest/commands/flushdb/)                                 | [FLUSHDB](https://valkey.io/commands/flushdb/)                                 |
 | `info`                   | [INFO](https://redis.io/docs/latest/commands/info/)                                       | [INFO](https://valkey.io/commands/info/)                                       |
+| `infoServerMetadata`     |                                                                                           | |                                                                              |
 | `lastSave`               | [LASTSAVE](https://redis.io/docs/latest/commands/lastsave/)                               | [LASTSAVE](https://valkey.io/commands/lastsave/)                               |
 | `latency`                | [LATENCY](https://redis.io/docs/latest/commands/latency/)                                 | [LATENCY](https://valkey.io/commands/latency/)                                 |
 | `latencyDoctor`          | [LATENCY DOCTOR](https://redis.io/docs/latest/commands/latency-doctor/)                   | [LATENCY DOCTOR](https://valkey.io/commands/latency-doctor/)                   |

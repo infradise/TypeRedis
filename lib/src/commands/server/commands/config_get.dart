@@ -16,5 +16,18 @@
 
 import '../commands.dart' show ServerCommands;
 
-// CONFIG GET
-extension ConfigGetCommand on ServerCommands {}
+/// Helper to get a single config value. Returns null if not found/error.
+extension ConfigGetCommand on ServerCommands {
+  Future<String?> configGet(String parameter) async {
+    try {
+      // CONFIG GET returns ['parameter', 'value']
+      final result = await execute(['CONFIG', 'GET', parameter]);
+      if (result is List && result.length >= 2) {
+        return result[1] as String;
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+}

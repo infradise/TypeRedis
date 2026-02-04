@@ -16,4 +16,17 @@
 
 import '../commands.dart' show BitmapCommands;
 
-extension BitmapTemplateCommand on BitmapCommands {}
+extension GetBitCommand on BitmapCommands {
+  /// GETBIT key offset
+  ///
+  /// Returns the bit value at offset in the string value stored at key.
+  ///
+  /// Complexity: O(1)
+  ///
+  /// Returns:
+  /// - [int]: The bit value stored at offset (0 or 1).
+  Future<int> getBit(String key, int offset) async {
+    final cmd = <String>['GETBIT', key, offset.toString()];
+    return executeInt(cmd);
+  }
+}

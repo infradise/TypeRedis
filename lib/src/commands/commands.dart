@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+import '../../valkey_client.dart' show ServerMetadata;
+
 /// The base mixin for all command groups.
 mixin Commands {
   // [Interface Definition]
   // The class using this mixin must implement these methods and getters.
 
   /// Executes a raw command against the server.
+  /// Executes a command and returns the result.
   ///
   /// [command] is a list of strings representing the command and its arguments.
   /// Returns a dynamic result directly from the underlying protocol parser.
@@ -37,6 +40,8 @@ mixin Commands {
   Future<bool> isValkeyServer();
 
   /// Helper to execute a command that is expected to return an Integer.
+  ///
+  /// Executes a command and expects an integer result.
   ///
   /// Useful for commands like HDEL, HLEN, HINCRBY, etc.
   /// Handles type casting and parsing safely.
@@ -63,6 +68,8 @@ mixin Commands {
 
   /// Helper: Execute command and expect a String result.
   ///
+  /// Executes a command and expects a String result.
+  ///
   /// Helper to execute a command expecting a String reply (e.g., "OK").
   /// Throws an exception if the result is not a string.
   ///
@@ -87,4 +94,45 @@ mixin Commands {
     final result = await execute(cmd);
     return result.toString();
   }
+
+  /// --------------------------------------------------------------------------
+  /// Version / Metadata Helpers
+  /// --------------------------------------------------------------------------
+  /// Provides access to the server metadata.
+  /// __________
+  ///  Method 1. `Abstract Getter`
+  ///
+  /// The implementing class (e.g., ValkeyClient) must override this.
+  /// ```dart
+  /// ServerMetadata? get serverMetadata;
+  /// ```
+  /// __________
+  ///  Method 2. `Concrete Field`
+  /// ```dart
+  /// ServerMetadata? serverMetadata;
+  /// ```
+  /// __________
+  ///  Method 3. On-Demand Metadata Handling (`current`)
+  ///
+  /// Cached metadata to avoid repeated network calls.
+  /// ```dart
+  /// ServerMetadata? _cachedMetadata;
+  /// ```
+  ServerMetadata? _cachedMetadata;
+
+  /// Returns the cached metadata if available.
+  /// If not, triggers [fetchServerMetadata] to load it on-demand.
+  Future<ServerMetadata> getOrFetchMetadata() async {
+    if (_cachedMetadata != null) {
+      return _cachedMetadata!;
+    }
+    // If the cache is missing, fetch it now (On-Demand)
+    _cachedMetadata = await fetchServerMetadata();
+    return _cachedMetadata!;
+  }
+
+  /// Abstract method to fetch metadata from the server
+  /// (e.g., using INFO command).
+  /// If not connected, this should throw an exception.
+  Future<ServerMetadata> fetchServerMetadata();
 }

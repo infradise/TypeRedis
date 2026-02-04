@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-export 'commands/config_get.dart';
-export 'commands/config_rewrite.dart';
-export 'commands/config_set.dart';
-export 'commands/flush_all.dart';
-export 'commands/flush_db.dart';
-export 'commands/info.dart';
-export 'commands/info_server_metadata.dart';
+import '../commands.dart' show BitmapCommands;
+
+extension SetBitCommand on BitmapCommands {
+  /// SETBIT key offset value
+  ///
+  /// Sets or clears the bit at offset in the string value stored at key.
+  /// The bit is either set or cleared depending on value, which can be 0 or 1.
+  ///
+  /// Complexity: O(1)
+  ///
+  /// Returns:
+  /// - [int]: The original bit value stored at the offset.
+  Future<int> setBit(String key, int offset, int value) async {
+    final cmd = <String>['SETBIT', key, offset.toString(), value.toString()];
+    return executeInt(cmd);
+  }
+}

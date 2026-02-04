@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-export 'commands/template.dart';
+export 'commands/bit_count.dart';
+export 'commands/bit_field.dart';
+export 'commands/bit_field_ro.dart';
+export 'commands/bit_op.dart';
+export 'commands/bit_pos.dart';
+export 'commands/get_bit.dart';
+export 'commands/set_bit.dart';
