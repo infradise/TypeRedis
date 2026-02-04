@@ -1,21 +1,18 @@
+# ⚠️ Renamed to TypeRedis
+
+This package (`valkey_client`) has been renamed to **[TypeRedis](https://pub.dev/packages/TypeRedis)**.
+Please update your dependencies to use the new package for future updates and support.
+
+---
+
 <br />
 <div align="center">
-  <img src="https://download.keyscope.dev/logo.png" alt="Keyscope Devs" width="128" height="128">
-  <br>
- 
-  <h1>valkey_client ⚡</h1>
+  <h1>valkey_client ⚡</h1> 
   <p>
     The high-performance, cluster-aware Dart client for Redis and Valkey.<br>
   </p>
 
   [![pub package](https://img.shields.io/pub/v/valkey_client.svg)](https://pub.dev/packages/valkey_client)
-  [![CT](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml/badge.svg)](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml)
-
-  <p>
-    <a href="https://www.buymeacoffee.com/keyscope.dev" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="45px" width= "162px">
-    </a>
-  </p>
 
   <p>
     <a href="#supported-commands">Supported Commands</a> •
