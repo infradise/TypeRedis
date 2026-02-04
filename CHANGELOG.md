@@ -31,7 +31,7 @@
 ## 3.2.0
 * **Modular Architecture**
     * **New LIST Commands**: Implemented individual files per command for better scalability and maintainability.
-        * Added full suite of list commands: `blMove`, `blmPop`, `blPop`, `brPop`, `brPopLPush`, `lIndex`, `lInsert`, `lLen`, `lMove`, `lmPop`, `lPop`, `lPos`, `lPush`, `lPushX`, `lRange`, `lRem`, `lSet`, `lTrim`, `rPop`, `rPopLPush`, `rPush`, `rPushX`.
+        * Added full suite of list commands: `bLMove`, `bLMPop`, `bLPop`, `bRPop`, `bRPopLPush`, `lIndex`, `lInsert`, `lLen`, `lMove`, `lMPop`, `lPop`, `lPos`, `lPush`, `lPushX`, `lRange`, `lRem`, `lSet`, `lTrim`, `rPop`, `rPopLPush`, `rPush`, `rPushX`.
     * **New Server Commands**
         * Added: `flushAll`, `flushDb`, `info`.
     * **New Generic Commands**
