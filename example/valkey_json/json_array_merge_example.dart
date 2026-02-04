@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 // var cfg = const Config();
 // cfg = cfg.copyWith(allowRedisOnlyJsonMerge: true);
 
-ValkeyLogger logger = ValkeyLogger('JSON Array Merge Example');
+TRLogger logger = TRLogger('JSON Array Merge Example');
 
 Future<void> main() async {
-  logger.setEnableValkeyLog(true); // Enable all log levels (default: false)
+  logger.setEnableTRLog(true); // Enable all log levels (default: false)
 
-  // final client = ValkeyClient(
+  // final client = TRClient(
   //   host: '127.0.0.1',
   //   port: 6379,
   // );
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6380,
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   // Connect to server first
   try {

@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis_client.dart';
 
 void main() async {
   // 1. Connect to a Standalone server
   // Note: Sharded Pub/Sub commands (SSUBSCRIBE, SPUBLISH) are supported
   // on Valkey 9.0+ and Redis 7.0+, even in standalone mode.
-  final client = ValkeyClient(
+  final client = TRClient(
     host: '127.0.0.1',
     port: 6379, // Default standalone port
     commandTimeout: Duration(seconds: 5),
@@ -57,7 +57,7 @@ void main() async {
     // 6. Unsubscribe
     await sub.unsubscribe();
     print('Unsubscribed.');
-  } on ValkeyException catch (e) {
+  } on TRException catch (e) {
     print('❌ Error: $e');
     print(
         '👉 Note: Ensure your server version supports Sharded Pub/Sub (Redis 7.0+ / Valkey 9.0+)');

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Configure the client to connect to ONE node of the cluster.
   // We assume a cluster node is running on port 7001.
-  final client = ValkeyClient(
+  final client = TRClient(
     host: '127.0.0.1',
     port: 7001,
   );
@@ -49,16 +49,16 @@ void main() async {
         print('  Replicas: None');
       }
     }
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     print('\n❌ Connection Failed: $e');
     print('Ensure a Valkey CLUSTER node is running on 127.0.0.1:7001.');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     print('\n❌ Server Error: $e');
     print('Did you run this against a standalone (non-cluster) server?');
-  } on ValkeyParsingException catch (e) {
+  } on TRParsingException catch (e) {
     print('\n❌ Parsing Error: $e');
     print('Failed to parse the server response.');
-  } on ValkeyClientException catch (e) {
+  } on TRClientException catch (e) {
     print('\n❌ Client Error: $e');
   } catch (e) {
     print('\n❌ Unknown Error: $e');

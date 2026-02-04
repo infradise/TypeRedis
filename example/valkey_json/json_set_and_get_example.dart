@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
-ValkeyLogger logger = ValkeyLogger('JSON Set and Get Example');
+TRLogger logger = TRLogger('JSON Set and Get Example');
 
 void main() async {
-  logger.setEnableValkeyLog(true); // Enable all log levels (default: false)
+  logger.setEnableTRLog(true); // Enable all log levels (default: false)
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   try {
     await client.connect();
@@ -44,12 +44,12 @@ void main() async {
     await runJsonArrayListExample(client);
     await runNestedJsonObjectExample(client);
     await runComplexJsonExample(client);
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     logger.error('❌ Connection Failed: $e');
     logger.error('Ensure a Redis or Valkey CLUSTER node is running.');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     logger.error('❌ Server Error: $e');
-  } on ValkeyClientException catch (e) {
+  } on TRClientException catch (e) {
     logger.error('❌ Client Error: $e');
   } on FeatureNotImplementedException catch (e) {
     logger.error('❌ Feature Not Implemented: $e');
@@ -63,7 +63,7 @@ void main() async {
 }
 
 // Example: JSON Object (Map)
-Future<void> runJsonObjectMapExample(ValkeyClient client) async {
+Future<void> runJsonObjectMapExample(TRClient client) async {
   final userMap = {
     'name': 'Alice',
     'age': 30,
@@ -85,7 +85,7 @@ Future<void> runJsonObjectMapExample(ValkeyClient client) async {
 }
 
 // Example: JSON Array (List)
-Future<void> runJsonArrayListExample(ValkeyClient client) async {
+Future<void> runJsonArrayListExample(TRClient client) async {
   final fruits = [
     'apple',
     'banana',
@@ -104,7 +104,7 @@ Future<void> runJsonArrayListExample(ValkeyClient client) async {
 }
 
 // Example: Nested JSON Object (User Profile with US Address - Miami Beach)
-Future<void> runNestedJsonObjectExample(ValkeyClient client) async {
+Future<void> runNestedJsonObjectExample(TRClient client) async {
   // Scenario: Storing a developer's profile who lives in a vacation spot
   // (Miami Beach, FL).
   // Giving developers a refreshing vibe with "Ocean Drive" address!
@@ -153,7 +153,7 @@ Future<void> runNestedJsonObjectExample(ValkeyClient client) async {
 }
 
 // Example: Complex JSON Example (Server Cluster Configuration & Status)
-Future<void> runComplexJsonExample(ValkeyClient client) async {
+Future<void> runComplexJsonExample(TRClient client) async {
   // Scenario: Managing a microservices cluster configuration and node status.
   // This represents a typical backend use case for configuration management.
   final clusterConfig = {

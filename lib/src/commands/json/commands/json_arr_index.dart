@@ -43,7 +43,7 @@ extension JsonArrIndexCommand on JsonCommands {
   /// [Strict Check]
   /// // DO NOT USE THIS KIND OF CODE HERE. (SEE THE NOTE ABOVE)
   /// if (result == null) {
-  ///   throw ValkeyException('WRONGTYPE JSON element is not an array or'
+  ///   throw TRException('WRONGTYPE JSON element is not an array or'
   ///       'key does not exist');
   /// }
   /// ```

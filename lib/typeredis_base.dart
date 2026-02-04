@@ -18,31 +18,22 @@ import 'dart:async';
 
 import 'src/cluster_info.dart';
 import 'src/exceptions.dart'
-    show
-        ValkeyClientException,
-        ValkeyConnectionException,
-        ValkeyServerException;
-import 'valkey_client.dart'
-    show
-        ValkeyClientException,
-        ValkeyConnectionException,
-        ValkeyServerException;
-import 'valkey_cluster_client_base.dart'
-    show
-        ValkeyClientException,
-        ValkeyConnectionException,
-        ValkeyServerException;
-import 'valkey_commands_base.dart';
+    show TRClientException, TRConnectionException, TRServerException;
+import 'typeredis.dart'
+    show TRClientException, TRConnectionException, TRServerException;
+import 'typeredis_cluster_client_base.dart'
+    show TRClientException, TRConnectionException, TRServerException;
+import 'typeredis_commands_base.dart';
 
-export 'package:valkey_client/src/cluster_info.dart'
+export 'package:typeredis/src/cluster_info.dart'
     show ClusterNodeInfo, ClusterSlotRange;
-export 'package:valkey_client/src/connection_settings.dart'
-    show ValkeyConnectionSettings;
-export 'package:valkey_client/src/connection_settings.dart';
-export 'package:valkey_client/src/server_metadata.dart';
+export 'package:typeredis/src/connection_settings.dart'
+    show TRConnectionSettings;
+export 'package:typeredis/src/connection_settings.dart';
+export 'package:typeredis/src/server_metadata.dart';
 
 /// Represents a message received from a subscribed channel or pattern.
-class ValkeyMessage {
+class TRMessage {
   /// The channel the message was sent to.
   ///
   /// This is `null` if the message was received via a pattern subscription
@@ -58,12 +49,12 @@ class ValkeyMessage {
   /// (`message`).
   final String? pattern;
 
-  ValkeyMessage({this.channel, required this.message, this.pattern});
+  TRMessage({this.channel, required this.message, this.pattern});
 
   @override
   String toString() {
     if (pattern != null) {
-      return 'ValkeyMessage{pattern: $pattern, channel: $channel, '
+      return 'TRMessage{pattern: $pattern, channel: $channel, '
           'message: $message}';
     } else {
       return 'Message{channel: $channel, message: $message}';
@@ -77,8 +68,8 @@ class ValkeyMessage {
 class Subscription {
   /// A broadcast stream that emits messages received on the subscribed channels/patterns.
   ///
-  /// Listen to this stream to receive `ValkeyMessage` objects.
-  final Stream<ValkeyMessage> messages;
+  /// Listen to this stream to receive `TRMessage` objects.
+  final Stream<TRMessage> messages;
 
   /// A [Future] that completes when the initial subscription to all requested
   /// channels/patterns is confirmed by the server.
@@ -115,11 +106,11 @@ class Subscription {
   }
 }
 
-/// The abstract base class for a Valkey client.
+/// The abstract base class for a Redis/Valkey client.
 ///
-/// This interface defines the public API for interacting with a Valkey/Redis server.
+/// This interface defines the public API for interacting with a Redis/Valkey server.
 /// It covers core commands, key management, transactions, and Pub/Sub.
-abstract class ValkeyClientBase implements ValkeyCommandsBase {
+abstract class TRClientBase implements TRCommandsBase {
   // --- Connection & Admin ---
 
   /// A [Future] that completes once the connection and authentication
@@ -133,16 +124,16 @@ abstract class ValkeyClientBase implements ValkeyCommandsBase {
   /// print('Client is connected!');
   /// ```
   ///
-  /// Throws a [ValkeyClientException] if accessed before `connect()` is called
+  /// Throws a [TRClientException] if accessed before `connect()` is called
   /// or if the connection attempt failed.
   Future<void> get onConnected;
 
-  /// Connects to the Valkey server.
+  /// Connects to the Redis/Valkey server.
   ///
   /// If [host], [port], [username], or [password] are provided,
   /// they will override the default values set in the constructor.
   ///
-  /// Throws a [ValkeyConnectionException] if the socket connection fails
+  /// Throws a [TRConnectionException] if the socket connection fails
   /// (e.g., connection refused)
   /// or if authentication fails (e.g., wrong password).
   Future<void> connect({
@@ -170,11 +161,11 @@ abstract class ValkeyClientBase implements ValkeyCommandsBase {
   ///
   /// Returns 'PONG' if no [message] is provided,
   /// otherwise returns the [message].
-  /// Throws a [ValkeyServerException] if an error occurs.
+  /// Throws a [TRServerException] if an error occurs.
   Future<String> ping([String? message]);
 
   // ---
-  // Common Commands (See `ValkeyCommandsBase`)
+  // Common Commands (See `TRCommandsBase`)
   // ---
 
   // --- Pub/Sub ---
@@ -187,14 +178,14 @@ abstract class ValkeyClientBase implements ValkeyCommandsBase {
   /// Subscribes the client to the specified [channels].
   ///
   /// Returns a [Subscription] object containing:
-  /// 1. `messages`: A `Stream<ValkeyMessage>` to listen for incoming messages.
+  /// 1. `messages`: A `Stream<TRMessage>` to listen for incoming messages.
   /// 2. `ready`: A `Future<void>` that completes when the server confirms
   ///    subscription to all requested channels.
   ///
   /// You MUST `await subscription.ready` before assuming the subscription
   /// is active.
   ///
-  /// Throws a [ValkeyClientException] if mixing channel and
+  /// Throws a [TRClientException] if mixing channel and
   /// pattern subscriptions.
   Subscription subscribe(List<String> channels);
 
@@ -210,7 +201,7 @@ abstract class ValkeyClientBase implements ValkeyCommandsBase {
   /// You MUST `await subscription.ready` before assuming the subscription is
   /// active.
   ///
-  /// Throws a [ValkeyClientException] if mixing channel and pattern
+  /// Throws a [TRClientException] if mixing channel and pattern
   /// subscriptions.
   Subscription psubscribe(List<String> patterns);
 
@@ -256,7 +247,7 @@ abstract class ValkeyClientBase implements ValkeyCommandsBase {
   /// Returns a `List<dynamic>` of replies for each command in the transaction.
   /// Returns `null` if the transaction was aborted (e.g., due to a `WATCH`
   /// failure).
-  /// Throws a [ValkeyServerException] (e.g., `EXECABORT`) if the transaction
+  /// Throws a [TRServerException] (e.g., `EXECABORT`) if the transaction
   /// was discarded due to a command syntax error within the `MULTI` block.
   Future<List<dynamic>?> exec();
 

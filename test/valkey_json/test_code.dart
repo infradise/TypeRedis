@@ -15,19 +15,19 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/utils/module_printer.dart'
+import 'package:typeredis/src/utils/module_printer.dart'
     show printPrettyModuleList;
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // (Standalone: 6379 / Cluster: 7001)
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  // final client = ValkeyClient(host: '127.0.0.1', port: 6379);
-  final client = ValkeyClient.fromSettings(settings);
+  // final client = TRClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient.fromSettings(settings);
 
   setUpAll(() async {
     await client.connect();
@@ -121,8 +121,8 @@ void main() async {
           values: ['b']);
       fail('Should throw an error');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
@@ -176,8 +176,8 @@ void main() async {
           stop: null);
       fail('Should throw an error');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
@@ -223,8 +223,8 @@ void main() async {
       await client.jsonArrPop(key: 'json:notarray3', path: '.', index: 0);
       fail('Should throw an error');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
@@ -241,8 +241,8 @@ void main() async {
       await client.jsonArrLen(key: 'json:notarray4', path: '.');
       fail('Should throw an error');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
@@ -273,8 +273,8 @@ void main() async {
           key: 'json:notarray5', path: '.', start: 0, stop: 1);
       fail('Should throw an error');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
@@ -529,8 +529,8 @@ void main() async {
       await client.jsonStrAppend(key: 'json:str2', path: '.', value: '"baz"');
       fail('Should throw');
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not a string'));
     }
   });

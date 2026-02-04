@@ -19,93 +19,93 @@
 /// Defines logging severity levels.
 ///
 /// Follows the levels from `package:logging`.
-class ValkeyLogLevel {
+class TRLogLevel {
   final String name;
   final int value;
 
-  const ValkeyLogLevel(this.name, this.value);
+  const TRLogLevel(this.name, this.value);
 
   /// Fine-grained tracing
-  static const ValkeyLogLevel fine = ValkeyLogLevel('FINE', 500);
+  static const TRLogLevel fine = TRLogLevel('FINE', 500);
 
   /// Informational messages
-  static const ValkeyLogLevel info = ValkeyLogLevel('INFO', 700);
+  static const TRLogLevel info = TRLogLevel('INFO', 700);
 
   /// Potential problems
-  static const ValkeyLogLevel warning = ValkeyLogLevel('WARNING', 800);
+  static const TRLogLevel warning = TRLogLevel('WARNING', 800);
 
   /// Serious failures
-  static const ValkeyLogLevel severe = ValkeyLogLevel('SEVERE', 1000);
+  static const TRLogLevel severe = TRLogLevel('SEVERE', 1000);
 
   /// Error messages
-  static const ValkeyLogLevel error = ValkeyLogLevel('ERROR', 1400);
+  static const TRLogLevel error = TRLogLevel('ERROR', 1400);
 
   /// Disables logging.
-  static const ValkeyLogLevel off = ValkeyLogLevel('OFF', 2000);
+  static const TRLogLevel off = TRLogLevel('OFF', 2000);
 
   /// Enables logging.
-  static const EnableValkeyLog = false;
+  static const EnableTRLog = false;
 
-  bool operator <(ValkeyLogLevel other) => value < other.value;
-  bool operator <=(ValkeyLogLevel other) => value <= other.value;
+  bool operator <(TRLogLevel other) => value < other.value;
+  bool operator <=(TRLogLevel other) => value <= other.value;
 
   // Legacy identifiers kept for backward compatibility (deprecated)
   @Deprecated('Since 1.1.0: Use "severe" instead')
-  static const ValkeyLogLevel SEVERE = severe;
+  static const TRLogLevel SEVERE = severe;
 
   @Deprecated('Since 1.1.0: Use "warning" instead')
-  static const ValkeyLogLevel WARNING = warning;
+  static const TRLogLevel WARNING = warning;
 
   @Deprecated('Since 1.1.0: Use "info" instead')
-  static const ValkeyLogLevel INFO = info;
+  static const TRLogLevel INFO = info;
 
   @Deprecated('Since 1.1.0: Use "fine" instead')
-  static const ValkeyLogLevel FINE = fine;
+  static const TRLogLevel FINE = fine;
 
   @Deprecated('Since 1.1.0: Use "off" instead')
-  static const ValkeyLogLevel OFF = off;
+  static const TRLogLevel OFF = off;
 }
 
 /// A simple internal logger for the valkey_client.
 ///
 /// This avoids adding an external dependency on `package:logging`.
-class ValkeyLogger {
+class TRLogger {
   final String name;
-  static ValkeyLogLevel level = ValkeyLogLevel.off; // Logging is off by default
-  bool _enableValkeyLog = ValkeyLogLevel.EnableValkeyLog;
-  void setEnableValkeyLog(bool status) => _enableValkeyLog = status;
+  static TRLogLevel level = TRLogLevel.off; // Logging is off by default
+  bool _enableTRLog = TRLogLevel.EnableTRLog;
+  void setEnableTRLog(bool status) => _enableTRLog = status;
 
-  ValkeyLogger(this.name);
+  TRLogger(this.name);
 
   void setLogLevelFine() {
-    level = ValkeyLogLevel.fine;
+    level = TRLogLevel.fine;
   }
 
   void setLogLevelInfo() {
-    level = ValkeyLogLevel.info;
+    level = TRLogLevel.info;
   }
 
   void setLogLevelWarning() {
-    level = ValkeyLogLevel.warning;
+    level = TRLogLevel.warning;
   }
 
   void setLogLevelSevere() {
-    level = ValkeyLogLevel.severe;
+    level = TRLogLevel.severe;
   }
 
   void setLogLevelError() {
-    level = ValkeyLogLevel.error;
+    level = TRLogLevel.error;
   }
 
   void setLogLevelOff() {
-    level = ValkeyLogLevel.off;
+    level = TRLogLevel.off;
   }
 
   /// Logs a message if [messageLevel] is at or above the current [level].
-  void _log(ValkeyLogLevel messageLevel, String message,
+  void _log(TRLogLevel messageLevel, String message,
       [Object? error, StackTrace? stackTrace]) {
-    if (!_enableValkeyLog) {
-      if (messageLevel.value < ValkeyLogger.level.value) {
+    if (!_enableTRLog) {
+      if (messageLevel.value < TRLogger.level.value) {
         return; // Log level is too low, ignore.
       }
     }
@@ -122,22 +122,22 @@ class ValkeyLogger {
   }
 
   void fine(String message) {
-    _log(ValkeyLogLevel.fine, message);
+    _log(TRLogLevel.fine, message);
   }
 
   void info(String message) {
-    _log(ValkeyLogLevel.info, message);
+    _log(TRLogLevel.info, message);
   }
 
   void warning(String message, [Object? error]) {
-    _log(ValkeyLogLevel.warning, message, error);
+    _log(TRLogLevel.warning, message, error);
   }
 
   void severe(String message, [Object? error, StackTrace? stackTrace]) {
-    _log(ValkeyLogLevel.severe, message, error, stackTrace);
+    _log(TRLogLevel.severe, message, error, stackTrace);
   }
 
   void error(String message) {
-    _log(ValkeyLogLevel.error, message);
+    _log(TRLogLevel.error, message);
   }
 }

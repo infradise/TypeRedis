@@ -1,15 +1,12 @@
 <br />
 <div align="center">
-  <img src="https://download.keyscope.dev/logo.png" alt="Keyscope Devs" width="128" height="128">
-  <br>
- 
-  <h1>valkey_client ⚡</h1>
+  <h1>TypeRedis</h1>
   <p>
-    The high-performance, cluster-aware Dart client for Redis and Valkey.<br>
+    A high-performance, cluster-aware, type-safe Dart client for Redis, Valkey, and compatible servers.<br>
   </p>
 
-  [![pub package](https://img.shields.io/pub/v/valkey_client.svg?label=Latest)](https://pub.dev/packages/valkey_client)
-  [![CT](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml/badge.svg)](https://github.com/infradise/valkey_client/actions/workflows/valkey_client_ct.yaml)
+  [![pub package](https://img.shields.io/pub/v/typeredis.svg?label=Latest)](https://pub.dev/packages/typeredis)
+  [![CT](https://github.com/infradise/TypeRedis/actions/workflows/typeredis_ct.yaml/badge.svg)](https://github.com/infradise/TypeRedis/actions/workflows/typeredis_ct.yaml)
   [![pub package](https://img.shields.io/pub/v/keyscope.svg?label=Keyscope&color=blue)](https://pub.dev/packages/keyscope)
 
   <p>
@@ -26,159 +23,116 @@
 
 Basic data structures and generic key operations.
 
-* [STRING](https://github.com/infradise/valkey_client/blob/main/docs/commands/STRING.md) / [HASH](https://github.com/infradise/valkey_client/blob/main/docs/commands/HASH.md) / [LIST](https://github.com/infradise/valkey_client/blob/main/docs/commands/LIST.md) / [SET](https://github.com/infradise/valkey_client/blob/main/docs/commands/SET.md) / [SORTED SET](https://github.com/infradise/valkey_client/blob/main/docs/commands/SORTED-SET.md)
-* [BITMAP](https://github.com/infradise/valkey_client/blob/main/docs/commands/BITMAP.md) / [HYPERLOGLOG](https://github.com/infradise/valkey_client/blob/main/docs/commands/HYPERLOGLOG.md) / [GEOSPATIAL INDICES](https://github.com/infradise/valkey_client/blob/main/docs/commands/GEOSPATIAL-INDICES.md) / [STREAM](https://github.com/infradise/valkey_client/blob/main/docs/commands/STREAM.md)
-* [GENERIC](https://github.com/infradise/valkey_client/blob/main/docs/commands/GENERIC.md) (Keys, Expiration, etc.)
+* [STRING](https://github.com/infradise/TypeRedis/blob/main/docs/commands/STRING.md) / [HASH](https://github.com/infradise/TypeRedis/blob/main/docs/commands/HASH.md) / [LIST](https://github.com/infradise/TypeRedis/blob/main/docs/commands/LIST.md) / [SET](https://github.com/infradise/TypeRedis/blob/main/docs/commands/SET.md) / [SORTED SET](https://github.com/infradise/TypeRedis/blob/main/docs/commands/SORTED-SET.md)
+* [BITMAP](https://github.com/infradise/TypeRedis/blob/main/docs/commands/BITMAP.md) / [HYPERLOGLOG](https://github.com/infradise/TypeRedis/blob/main/docs/commands/HYPERLOGLOG.md) / [GEOSPATIAL INDICES](https://github.com/infradise/TypeRedis/blob/main/docs/commands/GEOSPATIAL-INDICES.md) / [STREAM](https://github.com/infradise/TypeRedis/blob/main/docs/commands/STREAM.md)
+* [GENERIC](https://github.com/infradise/TypeRedis/blob/main/docs/commands/GENERIC.md) (Keys, Expiration, etc.)
 
 ### Modules & Extensions
 
 Advanced data types and query engines (JSON, Search, Probabilistic structures).
 
-* [JSON](https://github.com/infradise/valkey_client/blob/main/docs/commands/JSON.md) / [SEARCH](https://github.com/infradise/valkey_client/blob/main/docs/commands/SEARCH.md) / [TIME SERIES](https://github.com/infradise/valkey_client/blob/main/docs/commands/TIME-SERIES.md) / [VECTOR SET](https://github.com/infradise/valkey_client/blob/main/docs/commands/VECTOR-SET.md)
-* [BLOOM FILTER](https://github.com/infradise/valkey_client/blob/main/docs/commands/BLOOM-FILTER.md) / [CUCKOO FILTER](https://github.com/infradise/valkey_client/blob/main/docs/commands/CUCKOO-FILTER.md)
-* [COUNT-MIN SKETCH](https://github.com/infradise/valkey_client/blob/main/docs/commands/COUNT-MIN-SKETCH.md) / [T-DIGEST SKETCH](https://github.com/infradise/valkey_client/blob/main/docs/commands/T-DIGEST-SKETCH.md) / [TOP-K SKETCH](https://github.com/infradise/valkey_client/blob/main/docs/commands/TOP-K-SKETCH.md)
+* [JSON](https://github.com/infradise/TypeRedis/blob/main/docs/commands/JSON.md) / [SEARCH](https://github.com/infradise/TypeRedis/blob/main/docs/commands/SEARCH.md) / [TIME SERIES](https://github.com/infradise/TypeRedis/blob/main/docs/commands/TIME-SERIES.md) / [VECTOR SET](https://github.com/infradise/TypeRedis/blob/main/docs/commands/VECTOR-SET.md)
+* [BLOOM FILTER](https://github.com/infradise/TypeRedis/blob/main/docs/commands/BLOOM-FILTER.md) / [CUCKOO FILTER](https://github.com/infradise/TypeRedis/blob/main/docs/commands/CUCKOO-FILTER.md)
+* [COUNT-MIN SKETCH](https://github.com/infradise/TypeRedis/blob/main/docs/commands/COUNT-MIN-SKETCH.md) / [T-DIGEST SKETCH](https://github.com/infradise/TypeRedis/blob/main/docs/commands/T-DIGEST-SKETCH.md) / [TOP-K SKETCH](https://github.com/infradise/TypeRedis/blob/main/docs/commands/TOP-K-SKETCH.md)
 
 ### System & Operations
 
 Server management, connection handling, and flow control.
 
-* [CONNECTION](https://github.com/infradise/valkey_client/blob/main/docs/commands/CONNECTION.md) / [SERVER](https://github.com/infradise/valkey_client/blob/main/docs/commands/SERVER.md) / [CLUSTER](https://github.com/infradise/valkey_client/blob/main/docs/commands/CLUSTER.md)
-* [PUBSUB](https://github.com/infradise/valkey_client/blob/main/docs/commands/PUBSUB.md) / [TRANSACTIONS](https://github.com/infradise/valkey_client/blob/main/docs/commands/TRANSACTIONS.md) / [SCRIPTING AND FUNCTIONS](https://github.com/infradise/valkey_client/blob/main/docs/commands/SCRIPTING-AND-FUNCTIONS.md)
+* [CONNECTION](https://github.com/infradise/TypeRedis/blob/main/docs/commands/CONNECTION.md) / [SERVER](https://github.com/infradise/TypeRedis/blob/main/docs/commands/SERVER.md) / [CLUSTER](https://github.com/infradise/TypeRedis/blob/main/docs/commands/CLUSTER.md)
+* [PUBSUB](https://github.com/infradise/TypeRedis/blob/main/docs/commands/PUBSUB.md) / [TRANSACTIONS](https://github.com/infradise/TypeRedis/blob/main/docs/commands/TRANSACTIONS.md) / [SCRIPTING AND FUNCTIONS](https://github.com/infradise/TypeRedis/blob/main/docs/commands/SCRIPTING-AND-FUNCTIONS.md)
 
 ## Usage
 
-Check out [Developer Experience Improvements](https://github.com/infradise/valkey_client/wiki/Developer-Experience-Improvements).
-
-### 1\. Example for Standalone or Sentinel environment 
-
-<table>
-<tr>
-<td>
-
-**`For Redis users`**
+### 1\-1\. Redis/Valkey Standalone (Basic)
 
 ```dart
-import 'package:valkey_client/redis_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
-  final client = RedisClient();
-  try {
-    await client.connect(
-      host: '127.0.0.1',
-      port: 6379
-    );
-    await client.set('key', 'value');
-    print(await client.get('key'));
-
-  } catch (e) {
-    print('❌ Failed: $e');
-  } finally {
-    await client.close();
-  }
-}
-```
-
-</td>
-<td>
-
-**`For Valkey users`**
-
-```dart
-import 'package:valkey_client/valkey_client.dart';
-
-void main() async {
-  final client = ValkeyClient();
-  try {
-    await client.connect(
-      host: '127.0.0.1',
-      port: 6379
-    );
-    await client.set('key', 'value');
-    print(await client.get('key'));
-
-  } catch (e) {
-    print('❌ Failed: $e');
-  } finally {
-    await client.close();
-  }
-}
-```
-
-</td>
-</tr>
-</table>
-
-
-### 2\. Example for Cluster environment
-
-<table>
-<tr>
-<td>
-
-**`For Redis users`**
-
-```dart
-import 'package:valkey_client/redis_client.dart';
-
-void main() async {
-
-  final nodes = [
-    RedisConnectionSettings(
-      host: '127.0.0.1',
-      port: 7001,
-    ),
-  ];
-
-  final client = RedisClusterClient(nodes);
+  final client = TRClient(host: 'localhost', port: 6379);
   try {
     await client.connect();
-    
-    await client.set('key', 'value');
-    print(await client.get('key'));
-
+    await client.set('Hello', 'Welcome to TypeRedis');
+    print(await client.get('Hello'));
   } catch (e) {
-    print('❌ Failed: $e');
+    print('Error: $e');
   } finally {
     await client.close();
   }
 }
 ```
 
-</td>
-<td>
-
-**`For Valkey users`**
+### 1\-2\. Redis/Valkey Standalone (Advanced)
 
 ```dart
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
-
-  final nodes = [
-    ValkeyConnectionSettings(
-      host: '127.0.0.1',
-      port: 7001,
-    ),
-  ];
-
-  final client = ValkeyClusterClient(nodes);
+  final settings = TRConnectionSettings(
+    host: 'localhost',
+    port: 6379,
+    // useSsl: false,
+    // database: 0,
+  );
+  final aClient = TRClient.fromSettings(settings);
   try {
-    await client.connect();
-
-    await client.set('key', 'value');
-    print(await client.get('key'));
-
+    await aClient.connect();
+    await aClient.set('Hello', 'Welcome to TypeRedis');
+    print(await aClient.get('Hello'));
   } catch (e) {
-    print('❌ Failed: $e');
+    print('Error: $e');
   } finally {
-    await client.close();
+    await aClient.close();
   }
 }
 ```
 
-</td>
-</tr>
-</table>
+### 2\. Redis/Valkey Sentinel
+
+```dart
+import 'package:typeredis/typeredis.dart';
+
+void main() async {
+  final rSettings = TRConnectionSettings(
+    host: 'localhost',
+    port: 6379,
+    readPreference: ReadPreference.preferReplica
+  );
+  final rClient = TRClient.fromSettings(rSettings);
+  try {
+    await rClient.connect();
+    await rClient.set('Hello', 'Welcome to TypeRedis');
+    print(await rClient.get('Hello'));
+  } catch (e) {
+    print('Error: $e');
+  } finally {
+    await rClient.close();
+  }
+}
+```
+
+### 3\. Redis/Valkey Cluster
+
+```dart
+import 'package:typeredis/typeredis.dart';
+
+void main() async {
+  final nodes = [
+    TRConnectionSettings(host: 'localhost', port: 7001)
+  ];
+  final sClient = TRClusterClient(nodes);
+  try {
+    await sClient.connect();
+    await sClient.set('Hello', 'Welcome to TypeRedis');
+    print(await sClient.get('Hello'));
+  } catch (e) {
+    print('Error: $e');
+  } finally {
+    await sClient.close();
+  }
+}
+```
 
 ## Features
 
@@ -207,9 +161,7 @@ void main() async {
 | **Redis/Valkey Module Detector** | Retrieves module metadata to identify installed extensions <br>(e.g., `json`, `search`, `ldap`, `bf`). |
 | **JSON Module Checker** | Pre-validates JSON module availability before execution. |
 | **Server Metadata Discovery** | Access server details via `client.metadata` (Version, Mode, Server Name, <br>Max Databases) to write adaptive logic for Valkey vs. Redis. |
-| **Enhanced Developer Experience** | Expanded `Redis` aliases to include Exceptions, Configuration, and Data Models <br>(`RedisException`, `RedisMessage`, etc.) for a seamless migration experience. |
-| **Developer Experience** | Added `RedisClient` alias and smart redirection handling for better usability and stability. |
-| **Type-Safe Exceptions** | Clear distinction between connection errors (`ValkeyConnectionException`), <br>server errors (`ValkeyServerException`), and client errors (`ValkeyClientException`). |
+| **Type-Safe Exceptions** | Clear distinction between connection errors (`TRConnectionException`), <br>server errors (`TRServerException`), and client errors (`TRClientException`). |
 | **Observability** | Built-in logging. |
 
 ### 🔌 Connection & Configuration
@@ -217,11 +169,11 @@ void main() async {
 | Feature | Description |
 | :------ | :---------- |
 | **Smart Database Selection** | First-class support for selecting databases (0-15+) on connection. <br>Automatically detects **Valkey 9.0+ Numbered Clusters** to enable multi-database support <br>in cluster mode, while maintaining backward compatibility with Redis Clusters (DB 0 only). |
-| **Explicit Replica Configuration** | Added `explicitReplicas` to `ValkeyConnectionSettings` to manually define replica nodes, <br>solving connectivity issues in environments where auto-discovery fails. |
-| **Cluster Client** | **ValkeyClusterClient:** Dedicated client for automatic command routing in cluster mode. <br>We recommend using `ValkeyClient` for Standalone/Sentinel and `ValkeyClusterClient` for cluster environments. |
-| **Built-in Connection Pooling** | `ValkeyPool` for efficient connection management (used by Standalone and Cluster clients). |
+| **Explicit Replica Configuration** | Added `explicitReplicas` to `TRConnectionSettings` to manually define replica nodes, <br>solving connectivity issues in environments where auto-discovery fails. |
+| **Cluster Client** | **TRClusterClient:** Dedicated client for automatic command routing in cluster mode. <br>We recommend using `TRClient` for Standalone/Sentinel and `TRClusterClient` for cluster environments. |
+| **Built-in Connection Pooling** | `TRPool` for efficient connection management (used by Standalone and Cluster clients). |
 | **Connection Pool Hardening** | **Smart Release Mechanism:** Prevents pool pollution by automatically detecting and <br>discarding "dirty" connections (e.g., inside Transaction or Pub/Sub) upon release. |
-| **Command Timeout** | Includes a built-in command timeout (via `ValkeyConnectionSettings`) <br>to prevent client hangs on non-responsive servers. |
+| **Command Timeout** | Includes a built-in command timeout (via `TRConnectionSettings`) <br>to prevent client hangs on non-responsive servers. |
 
 ### 🔒 Security & Core
 

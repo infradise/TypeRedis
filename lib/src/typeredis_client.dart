@@ -21,17 +21,17 @@ import 'dart:io';
 import 'dart:math'; // [v2.2.0] For Random LoadBalancing
 import 'dart:typed_data';
 
-import '../valkey_client.dart' show ValkeyPool;
-// Import the base class and the ValkeyMessage / Subscription
-import '../valkey_client_base.dart';
-import '../valkey_pool.dart' show ValkeyPool;
+import '../typeredis.dart' show TRPool;
+// Import the base class and the TRMessage / Subscription
+import '../typeredis_base.dart';
+import '../typeredis_pool.dart' show TRPool;
 // Import the top-level function from the parser file
 import 'cluster_slots_parser.dart' show parseClusterSlotsResponse;
 // ========================================================================
 // Redis/Valkey Commands
 // ------------------------------------------------------------------------
 // 1. Import `Commands` below.
-// 2. Add `Commands` to `ValkeyClient class with`.
+// 2. Add `Commands` to `TRClient class with`.
 // 3. Export `Commands` in `lib/valkey_client.dart`.
 // ------------------------------------------------------------------------
 import 'commands/bitmap/commands.dart' show BitmapCommands;
@@ -82,9 +82,8 @@ import 'commands/vector_set/commands.dart' show VectorSetCommands;
 import 'exceptions.dart';
 import 'logging.dart'; // Built-in Logger
 
-// Re-export ValkeyMessage from the main library file
-export 'package:valkey_client/valkey_client_base.dart'
-    show Subscription, ValkeyMessage;
+// Re-export TRMessage from the main library file
+export 'package:typeredis/typeredis_base.dart' show Subscription, TRMessage;
 
 // Internal helper class to read bytes from the buffer.
 class _BufferReader {
@@ -122,7 +121,7 @@ class _BufferReader {
   /// Returns null if not enough bytes are available.
   Uint8List? readBytes(int length) {
     if (length < 0) {
-      throw ValkeyParsingException('Invalid RESP length: $length');
+      throw TRParsingException('Invalid RESP length: $length');
     }
     if (remainingLength < length) return null; // Not enough bytes
 
@@ -142,7 +141,7 @@ class _BufferReader {
     // If it's not CRLF,
     // \ throw an error because RESP requires it after bulk strings
     // \ throw a specific parsing exception
-    throw ValkeyParsingException(
+    throw TRParsingException(
         'Expected CRLF after bulk string data, but got different bytes.');
   }
 
@@ -165,7 +164,7 @@ class _IncompleteDataException implements Exception {
 }
 
 /// The main client implementation for communicating with a Redis/Valkey server.
-class ValkeyClient // FYI. extends ValkeyConnection
+class TRClient // FYI. extends TRConnection
     with
         Commands, // `Commands` should take precedence over other mixins.
         BitmapCommands,
@@ -194,8 +193,8 @@ class ValkeyClient // FYI. extends ValkeyConnection
         CuckooFilterCommands,
         CountMinSketchCommands
     implements
-        ValkeyClientBase {
-  static final _log = ValkeyLogger('ValkeyClient');
+        TRClientBase {
+  static final _log = TRLogger('TRClient');
 
   /// JSON.MERGE
   ///
@@ -215,13 +214,13 @@ class ValkeyClient // FYI. extends ValkeyConnection
   set setAllowRedisOnlyJsonMerge(bool value) =>
       _allowRedisOnlyJsonMerge = value;
 
-  /// Sets the logging level for all ValkeyClient instances.
+  /// Sets the logging level for all TRClient instances.
   ///
-  /// By default, logging is `ValkeyLogLevel.off`.
-  /// Use `ValkeyLogLevel.info` or `ValkeyLogLevel.warning` for debugging
+  /// By default, logging is `TRLogLevel.off`.
+  /// Use `TRLogLevel.info` or `TRLogLevel.warning` for debugging
   /// connection or parsing issues.
-  static void setLogLevel(ValkeyLogLevel level) {
-    ValkeyLogger.level = level;
+  static void setLogLevel(TRLogLevel level) {
+    TRLogger.level = level;
   }
 
   Socket? _socket;
@@ -242,7 +241,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   final Duration _commandTimeout;
 
   // final Duration _connectTimeout;
-  // final ValkeyConnectionSettings _config;
+  // final TRConnectionSettings _config;
 
   // [v2.0.0] SSL Configuration
   final bool _useSsl;
@@ -250,9 +249,9 @@ class ValkeyClient // FYI. extends ValkeyConnection
   final bool Function(X509Certificate)? _onBadCertificate;
 
   // [v2.1.0] Config & Metadata
-  final ValkeyConnectionSettings _config;
+  final TRConnectionSettings _config;
 
-  ValkeyConnectionSettings? get currentConnectionConfig => _config;
+  TRConnectionSettings? get currentConnectionConfig => _config;
 
   ServerMetadata? _metadata;
 
@@ -309,16 +308,16 @@ class ValkeyClient // FYI. extends ValkeyConnection
   };
 
   // [v2.2.0] Replica Management
-  final List<ValkeyClient> _replicas = [];
+  final List<TRClient> _replicas = [];
   int _roundRobinIndex = 0;
   final Random _random = Random();
 
   // [v2.2.0 Debug Feature] Track the last client used for execution
-  ValkeyClient? _lastUsedClient;
+  TRClient? _lastUsedClient;
 
   /// Returns the configuration of the connection used for the last command.
   /// Useful for debugging load balancing strategies.
-  ValkeyConnectionSettings? get lastUsedConnectionConfig =>
+  TRConnectionSettings? get lastUsedConnectionConfig =>
       _lastUsedClient?._config;
 
   // Command/Response Queue
@@ -337,7 +336,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
   // Pub/Sub State
   /// Controller to broadcast incoming pub/sub messages.
-  StreamController<ValkeyMessage>? _pubSubController;
+  StreamController<TRMessage>? _pubSubController;
 
   /// Flag indicating if the client is in *any* Pub/Sub mode (channel or pattern).
   bool _isInPubSubMode = false;
@@ -386,7 +385,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   /// Returns true if the client is in a stateful mode that makes it
   /// unsuitable for reuse without a reset (e.g., Pub/Sub, Transaction).
   ///
-  /// Used by [ValkeyPool] to determine if a connection should be discarded
+  /// Used by [TRPool] to determine if a connection should be discarded
   /// instead of reused.
   bool get isStateful {
     // 1. Pub/Sub Mode? (SUBSCRIBE, PSUBSCRIBE, SSUBSCRIBE)
@@ -402,14 +401,14 @@ class ValkeyClient // FYI. extends ValkeyConnection
   }
   // ---------------------------------------------
 
-  /// Creates a new Valkey client instance.
+  /// Creates a new TR client instance.
   ///
   /// [host], [port], [username], and [password] are the default
   /// connection parameters used when [connect] is called.
   ///
   /// [commandTimeout] specifies the maximum duration to wait for a command
-  /// response before throwing a [ValkeyClientException].
-  ValkeyClient({
+  /// response before throwing a [TRClientException].
+  TRClient({
     String host = '127.0.0.1',
     int port = 6379,
     String? username,
@@ -424,9 +423,9 @@ class ValkeyClient // FYI. extends ValkeyConnection
     ReadPreference readPreference = ReadPreference.master,
     LoadBalancingStrategy loadBalancingStrategy =
         LoadBalancingStrategy.roundRobin,
-    List<ValkeyConnectionSettings>? explicitReplicas,
+    List<TRConnectionSettings>? explicitReplicas,
     AddressMapper? addressMapper,
-  })  : _config = ValkeyConnectionSettings(
+  })  : _config = TRConnectionSettings(
           host: host,
           port: port,
           username: username,
@@ -455,11 +454,10 @@ class ValkeyClient // FYI. extends ValkeyConnection
         _onBadCertificate = onBadCertificate;
 
   // Constructor utilizing an existing settings object
-  // ValkeyClient.fromSettings(this._config);
+  // TRClient.fromSettings(this._config);
 
-  /// Creates a client using a [ValkeyConnectionSettings] object.
-  factory ValkeyClient.fromSettings(ValkeyConnectionSettings settings) =>
-      ValkeyClient(
+  /// Creates a client using a [TRConnectionSettings] object.
+  factory TRClient.fromSettings(TRConnectionSettings settings) => TRClient(
         host: settings.host,
         port: settings.port,
         username: settings.username,
@@ -481,7 +479,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   @override
   Future<void> get onConnected =>
       _connectionCompleter?.future ??
-      Future.error(ValkeyClientException(
+      Future.error(TRClientException(
           'Client not connected or connection attempt failed.'));
 
   @override
@@ -588,7 +586,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         }
       }
     } catch (e, s) {
-      final connEx = ValkeyConnectionException(
+      final connEx = TRConnectionException(
           'Failed to connect to $_lastHost:$_lastPort. $e', e);
       _cleanup(); // Clean up socket if connection fails
       if (_connectionCompleter != null && !_connectionCompleter!.isCompleted) {
@@ -610,7 +608,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       // If DB selection fails (e.g. index out of range), close connection and
       // rethrow.
       await close();
-      throw ValkeyConnectionException(
+      throw TRConnectionException(
           'Failed to initialize connection (DB Selection): $e', e);
     }
 
@@ -747,13 +745,13 @@ class ValkeyClient // FYI. extends ValkeyConnection
     // Check constraint: If replicaOnly is set but no replicas found
     if (_config.readPreference == ReadPreference.replicaOnly &&
         _replicas.isEmpty) {
-      throw ValkeyConnectionException(
+      throw TRConnectionException(
           'ReadPreference is replicaOnly but no online replicas were found.');
     }
   }
 
   /// Helper to connect and add a replica using a full settings object.
-  Future<void> _addReplicaFromConfig(ValkeyConnectionSettings settings) async {
+  Future<void> _addReplicaFromConfig(TRConnectionSettings settings) async {
     // 1. Deduplication
     //    \ Implement deduplication logic to prevent redundant connections.
     //    \ If a client with the same IP and Port is already in the list, skip it.
@@ -781,10 +779,10 @@ class ValkeyClient // FYI. extends ValkeyConnection
       );
 
       // 3. Connect to the replica
-      final replicaClient = ValkeyClient.fromSettings(safeSettings);
+      final replicaClient = TRClient.fromSettings(safeSettings);
 
       // TODO: REVIEW REQUIRED => REMOVE. NEED CONSENSUS.
-      // final replicaClient = ValkeyClient(
+      // final replicaClient = TRClient(
       //   host: settings.host,
       //   port: settings.port,
       //   username: settings.username,
@@ -844,7 +842,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   //     );
 
   //     // 3. Connect to the replica
-  //     final replicaClient = ValkeyClient.fromSettings(replicaSettings);
+  //     final replicaClient = TRClient.fromSettings(replicaSettings);
   //     await replicaClient.connect();
 
   //     // 4. [Cluster Mode] If metadata indicates cluster, we MUST send READONLY
@@ -876,7 +874,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     if (_config.database > 0) {
       // Check range
       if (_config.database >= _metadata!.maxDatabases) {
-        throw ValkeyClientException(
+        throw TRClientException(
             'Requested database index ${_config.database} is out of range. '
             'Server (${_metadata!.serverName}) supports 0 to '
             '${_metadata!.maxDatabases - 1}.');
@@ -1100,7 +1098,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         }
         // Otherwise, it's unexpected data.
         else {
-          throw ValkeyClientException(
+          throw TRClientException(
               'Received unexpected message when queue was empty: $response');
         }
 
@@ -1114,7 +1112,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
         // Defensive check: If parser succeeded but didn't consume bytes, break.
         if (reader._offset == initialOffset) {
-          throw ValkeyParsingException('Parser completed but did not advance '
+          throw TRParsingException('Parser completed but did not advance '
               '(Buffer: ${_buffer.toBytes()}). Breaking loop.');
         }
       } on _IncompleteDataException {
@@ -1185,7 +1183,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       final message = messageArray[2] as String?;
       if (_pubSubController != null && !_pubSubController!.isClosed) {
         _pubSubController!
-            .add(ValkeyMessage(channel: channel, message: message ?? ''));
+            .add(TRMessage(channel: channel, message: message ?? ''));
       }
     }
     // 2. Sharded Subscribe Confirmation (ssubscribe)
@@ -1241,7 +1239,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         final message = messageArray[2]
             as String?; // Allow null message? Redis usually sends empty string
         if (_pubSubController != null && !_pubSubController!.isClosed) {
-          _pubSubController!.add(ValkeyMessage(
+          _pubSubController!.add(TRMessage(
               channel: channel,
               message: message ?? '')); // Handle potential null
         } else {
@@ -1253,7 +1251,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         final channel = messageArray[2] as String;
         final message = messageArray[3] as String?;
         if (_pubSubController != null && !_pubSubController!.isClosed) {
-          _pubSubController!.add(ValkeyMessage(
+          _pubSubController!.add(TRMessage(
               pattern: pattern, channel: channel, message: message ?? ''));
         }
       } else if (type == 'subscribe' && messageArray.length == 3) {
@@ -1383,7 +1381,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
           }
         }
       } else {
-        _pubSubController?.addError(ValkeyClientException(
+        _pubSubController?.addError(TRClientException(
             'Received unhandled Pub/Sub push message type: $type'));
       }
     }
@@ -1412,7 +1410,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
             // Double check completion
             if (isError) {
               completer.completeError(
-                  result ?? ValkeyException('Unknown error'), stackTrace);
+                  result ?? TRException('Unknown error'), stackTrace);
             } else {
               // Completing command successfully via microtask with result
               completer.complete(result);
@@ -1461,8 +1459,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
           // RETURN the error string instead of throwing immediately
           // The caller (_processBuffer) will decide how to handle it
           // Throw specific server exception
-          result =
-              ValkeyServerException(line); // Return as ValkeyServerException
+          result = TRServerException(line); // Return as TRServerException
           break;
         case 36: // '$' Bulk String
           final line = reader.readLine();
@@ -1513,7 +1510,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         default:
           // Instead of throwing, return an exception object
           // Throw specific parsing exception
-          result = ValkeyParsingException(
+          result = TRParsingException(
               'Unknown RESP prefix type: ${String.fromCharCode(responseType)} '
               '($responseType)');
       }
@@ -1521,9 +1518,9 @@ class ValkeyClient // FYI. extends ValkeyConnection
       // Result type: ${result.runtimeType}');
       return result;
     } catch (e) {
-      if (e is ValkeyException || e is _IncompleteDataException) rethrow;
+      if (e is TRException || e is _IncompleteDataException) rethrow;
       // Wrap other parsing errors (e.g., int.parse)
-      throw ValkeyParsingException('Failed to parse RESP response: $e');
+      throw TRParsingException('Failed to parse RESP response: $e');
     }
   }
 
@@ -1537,7 +1534,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     // ResponseType: ${response.runtimeType}');
 
     // Determine if the response itself is an error
-    // Check for *any* Exception, not just ValkeyConnectionException
+    // Check for *any* Exception, not just TRConnectionException
     final responseIsError = response is Exception;
     final dynamic result = response;
 
@@ -1549,11 +1546,11 @@ class ValkeyClient // FYI. extends ValkeyConnection
         if (responseIsError) {
           // _connectionCompleter!.completeError(result, stackTrace);
 
-          // Wrap auth error (using ValkeyServerException if possible)
-          final message = response is ValkeyServerException
+          // Wrap auth error (using TRServerException if possible)
+          final message = response is TRServerException
               ? response.message
               : response.toString();
-          final authError = ValkeyConnectionException(
+          final authError = TRConnectionException(
               'Authentication failed: $message', response);
           _connectionCompleter!.completeError(authError, stackTrace);
         } else {
@@ -1586,7 +1583,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
         targetClient = _selectReplica();
       } else if (_config.readPreference == ReadPreference.replicaOnly) {
         // Strict mode: Fail if no replicas
-        throw ValkeyClientException(
+        throw TRClientException(
             'ReadPreference is replicaOnly but no replicas are available.');
       }
       // If preferReplica and no replicas, we naturally stay with 'this'
@@ -1620,7 +1617,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   }
 
   /// Selects a replica based on LoadBalancingStrategy
-  ValkeyClient _selectReplica() {
+  TRClient _selectReplica() {
     if (_replicas.isEmpty) return this; // Should not happen given checks
 
     if (_config.loadBalancingStrategy == LoadBalancingStrategy.random) {
@@ -1663,7 +1660,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
     // Identify ALL Pub/Sub management commands
     // Add Allowlist here to avoid the message:
-    //   e.g., "ValkeyClientException: Cannot execute command SUNSUBSCRIBE while in Pub/Sub mode..."
+    //   e.g., "TRClientException: Cannot execute command SUNSUBSCRIBE while in Pub/Sub mode..."
     const pubSubManagementCommands = {
       'SUBSCRIBE',
       'UNSUBSCRIBE',
@@ -1684,7 +1681,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       };
       if (!allowedCommands.contains(cmdUpper)) {
         // Throw specific client exception
-        return Future.error(ValkeyClientException(
+        return Future.error(TRClientException(
             'Cannot execute command $cmdUpper while in Pub/Sub mode...'));
       }
     }
@@ -1711,7 +1708,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     // 3. Send to socket
     try {
       if (_socket == null) {
-        throw ValkeyConnectionException('Client not connected.');
+        throw TRConnectionException('Client not connected.');
       }
 
       const skipWaitCommands = {'AUTH', ...pubSubManagementCommands};
@@ -1721,7 +1718,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       _socket!.write(buffer.toString());
     } catch (e, s) {
       // Wrap write error
-      final writeError = ValkeyConnectionException(
+      final writeError = TRConnectionException(
           'Failed to write command $cmdUpper to socket: $e', e);
       if (completer != null &&
           _responseQueue.contains(completer) &&
@@ -1733,7 +1730,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       } else if (isPubSubManagementCmd) {
         // Error sending Pub/Sub command, fail the relevant completer
         final error =
-            ValkeyConnectionException('Failed to send $cmdUpper command: $e');
+            TRConnectionException('Failed to send $cmdUpper command: $e');
         if (cmdUpper == 'SUBSCRIBE' &&
             _subscribeReadyCompleter != null &&
             !_subscribeReadyCompleter!.isCompleted) {
@@ -1763,12 +1760,12 @@ class ValkeyClient // FYI. extends ValkeyConnection
     if (cmdUpper == 'SUBSCRIBE') {
       return _subscribeReadyCompleter?.future ??
           Future.error(
-              ValkeyClientException('Subscribe completer not initialized'));
+              TRClientException('Subscribe completer not initialized'));
     }
     if (cmdUpper == 'PSUBSCRIBE') {
       return _psubscribeReadyCompleter?.future ??
           Future.error(
-              ValkeyClientException('PSubscribe completer not initialized'));
+              TRClientException('PSubscribe completer not initialized'));
     }
     // if (isPubSubManagementCmd) {
     //    // UNSUBSCRIBE/PUNSUBSCRIBE: Return a new Future tied to the queue
@@ -1806,7 +1803,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
           }
 
           // Throw a clear exception (this will be caught by the example)
-          throw ValkeyClientException(
+          throw TRClientException(
               'Command timed out after ${_commandTimeout.inMilliseconds}ms: '
               '${command.join(' ')}');
         },
@@ -2102,7 +2099,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   @override
   Subscription subscribe(List<String> channels) {
     if (_isInPubSubMode && _subscribedPatterns.isNotEmpty) {
-      throw ValkeyClientException(
+      throw TRClientException(
           'Client is already in subscribed mode. Mixing channel and pattern '
           'subscriptions on the same client instance is discouraged due to '
           'complexity. '
@@ -2115,7 +2112,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     }
 
     if (_pubSubController == null || _pubSubController!.isClosed) {
-      _pubSubController = StreamController<ValkeyMessage>.broadcast();
+      _pubSubController = StreamController<TRMessage>.broadcast();
     }
 
     _subscribedChannels.clear(); // Reset channel list for this subscription
@@ -2153,7 +2150,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
   @override
   Subscription ssubscribe(List<String> channels) {
     if (_isInPubSubMode && _subscribedPatterns.isNotEmpty) {
-      throw ValkeyClientException(
+      throw TRClientException(
           'Mixing SSUBSCRIBE with PSUBSCRIBE is discouraged.');
     }
     if (channels.isEmpty) {
@@ -2161,7 +2158,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     }
 
     if (_pubSubController == null || _pubSubController!.isClosed) {
-      _pubSubController = StreamController<ValkeyMessage>.broadcast();
+      _pubSubController = StreamController<TRMessage>.broadcast();
     }
 
     if (_ssubscribeReadyCompleter == null ||
@@ -2195,8 +2192,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
     if (_sunsubscribeCompleter != null &&
         !_sunsubscribeCompleter!.isCompleted) {
-      throw ValkeyClientException(
-          'Another sunsubscribe operation is in progress.');
+      throw TRClientException('Another sunsubscribe operation is in progress.');
     }
     _sunsubscribeCompleter = Completer<void>();
 
@@ -2277,7 +2273,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
     // Initialize completer before executing
     if (_unsubscribeCompleter != null && !_unsubscribeCompleter!.isCompleted) {
-      throw ValkeyClientException(
+      throw TRClientException(
           'Another unsubscribe operation is already in progress.');
     }
     _unsubscribeCompleter = Completer<void>();
@@ -2312,10 +2308,10 @@ class ValkeyClient // FYI. extends ValkeyConnection
       // lead to unexpected behavior.');
       // throw Exception('Cannot mix PSUBSCRIBE with active channel
       // subscriptions on the same client.');
-      // throw ValkeyClientException('Mixing channel and pattern subscriptions
+      // throw TRClientException('Mixing channel and pattern subscriptions
       // is discouraged. Please use separate client instances.');
 
-      throw ValkeyClientException(
+      throw TRClientException(
           'Mixing channel and pattern subscriptions on the same client '
           'instance is discouraged due to complexity. '
           'Please use separate client instances for channel (subscribe) '
@@ -2325,7 +2321,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
       throw ArgumentError('Pattern list cannot be empty for PSUBSCRIBE.');
     }
     if (_pubSubController == null || _pubSubController!.isClosed) {
-      _pubSubController = StreamController<ValkeyMessage>.broadcast();
+      _pubSubController = StreamController<TRMessage>.broadcast();
     }
 
     // Initialize or reset ready completer for this command
@@ -2366,7 +2362,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
     // Initialize completer before executing
     if (_punsubscribeCompleter != null &&
         !_punsubscribeCompleter!.isCompleted) {
-      throw ValkeyClientException(
+      throw TRClientException(
           'Another punsubscribe operation is already in progress.');
     }
     _punsubscribeCompleter = Completer<void>();
@@ -2477,10 +2473,10 @@ class ValkeyClient // FYI. extends ValkeyConnection
       // 3. Use the v1.1.0 logger
       _log.severe('Error executing CLUSTER SLOTS: $e', e, s);
       // 4. Re-throw v1.1.0 exceptions
-      // Re-throw as a ValkeyException if it's not one already
-      if (e is ValkeyException) rethrow;
+      // Re-throw as a TRException if it's not one already
+      if (e is TRException) rethrow;
       // Wrap unknown errors
-      throw ValkeyClientException('Failed to execute CLUSTER SLOTS: $e');
+      throw TRClientException('Failed to execute CLUSTER SLOTS: $e');
     }
   }
 
@@ -2488,7 +2484,7 @@ class ValkeyClient // FYI. extends ValkeyConnection
 
   void _handleSocketError(Object error, StackTrace stackTrace) {
     final connEx =
-        ValkeyConnectionException('Socket error occurred: $error', error);
+        TRConnectionException('Socket error occurred: $error', error);
     // Call cleanup FIRST to release resources immediately
     _cleanup(); // Close socket etc. FIRST
 
@@ -2512,8 +2508,8 @@ class ValkeyClient // FYI. extends ValkeyConnection
   void _handleSocketDone() {
     _cleanup(); // Close socket etc. FIRST
 
-    final connEx = ValkeyConnectionException(
-        'Connection closed unexpectedly by the server.');
+    final connEx =
+        TRConnectionException('Connection closed unexpectedly by the server.');
     final stackTrace = StackTrace.current; // Get current stack for context
 
     // Complete connection completer if it's still pending
@@ -2569,14 +2565,13 @@ class ValkeyClient // FYI. extends ValkeyConnection
       if (_socket == null &&
           _connectionCompleter != null &&
           !_connectionCompleter!.isCompleted) {
-        throw ValkeyConnectionException(
-            'Socket closed before AUTH could be sent.');
+        throw TRConnectionException('Socket closed before AUTH could be sent.');
       }
       // Send to socket
       _socket?.write(buffer.toString());
     } catch (e, s) {
       final authError =
-          ValkeyConnectionException('Failed to send AUTH command: $e', e);
+          TRConnectionException('Failed to send AUTH command: $e', e);
       // If sending AUTH fails, connection setup fails
       if (_connectionCompleter != null && !_connectionCompleter!.isCompleted) {
         _connectionCompleter!.completeError(authError, s);

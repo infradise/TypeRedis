@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 Future<void> main() async {
-  final client = ValkeyClient(host: 'localhost', port: 6379);
+  final client = TRClient(host: 'localhost', port: 6379);
   await client.connect();
 
   print('--- 🚀 List Commands Example ---\n');

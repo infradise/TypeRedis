@@ -99,7 +99,7 @@ No modules loaded.
 [2026-01-25T15:31:49.600172] JSON Array Merge Example - INFO: Value before jsonMergeForce (jsonGet):
 [2026-01-25T15:31:49.600566] JSON Array Merge Example - INFO: {price: 1000, stock: 20}
 [2026-01-25T15:31:49.600579] JSON Array Merge Example - INFO: 🚀 Calling jsonMergeForce...
-[2026-01-25T15:31:49.601416] JSON Array Merge Example - INFO: ❌ jsonMergeForce error: ValkeyServerException(ERR): ERR unknown command 'JSON.MERGE', with args beginning with: 'product:1' '$' '{"price":1200,"stock":50}' 
+[2026-01-25T15:31:49.601416] JSON Array Merge Example - INFO: ❌ jsonMergeForce error: TRServerException(ERR): ERR unknown command 'JSON.MERGE', with args beginning with: 'product:1' '$' '{"price":1200,"stock":50}' 
 [2026-01-25T15:31:49.601432] JSON Array Merge Example - INFO: Value after jsonMergeForce (jsonGet):
 [2026-01-25T15:31:49.601814] JSON Array Merge Example - INFO: {price: 1000, stock: 20}
 [2026-01-25T15:31:49.603324] JSON Array Merge Example - INFO: Client closed.
@@ -381,9 +381,9 @@ Starting Resilience & Continuous Operations Test Loop...
 [SUCCESS 13] Node 192.168.65.254:7004 | resilience:key = val-13
 [SUCCESS 14] Node 192.168.65.254:7004 | resilience:key = val-14
 [SUCCESS 15] Node 192.168.65.254:7004 | resilience:key = val-15
-[RETRY 16] Client error: ValkeyClientException: Cluster operation failed after 4 retries. Last error: ValkeyConnectionException: Failed to create new pool connection: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573) (Original: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573))
-[RETRY 17] Client error: ValkeyClientException: Cluster operation failed after 4 retries. Last error: ValkeyConnectionException: Failed to create new pool connection: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616) (Original: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616))
-[RETRY 18] Client error: ValkeyClientException: Cluster operation failed after 4 retries. Last error: ValkeyConnectionException: Failed to create new pool connection: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657) (Original: ValkeyConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657))
+[RETRY 16] Client error: TRClientException: Cluster operation failed after 4 retries. Last error: TRConnectionException: Failed to create new pool connection: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573) (Original: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63573))
+[RETRY 17] Client error: TRClientException: Cluster operation failed after 4 retries. Last error: TRConnectionException: Failed to create new pool connection: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616) (Original: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63616))
+[RETRY 18] Client error: TRClientException: Cluster operation failed after 4 retries. Last error: TRConnectionException: Failed to create new pool connection: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657) (Original: TRConnectionException: Failed to connect to 127.0.0.1:7004. SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657 (Original: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 63657))
 [SUCCESS 19] Node 192.168.65.254:7002 | resilience:key = val-19
 [SUCCESS 20] Node 192.168.65.254:7002 | resilience:key = val-20
 [SUCCESS 21] Node 192.168.65.254:7002 | resilience:key = val-21
@@ -608,7 +608,7 @@ Hello, Valkey!
 
 ### simple_pool_example.dart
 ```sh
-Hello from ValkeyPool!
+Hello from TRPool!
 ```
 
 ### valkey_client_example.dart
@@ -710,7 +710,7 @@ SPUBLISH sent successfully. Receivers: 0
 ```sh
 # for both modes (Standalone and Cluster)
 
-00:00 +0: ValkeyClient Sharded Pub/Sub ssubscribe receives messages published via spublish
+00:00 +0: TRClient Sharded Pub/Sub ssubscribe receives messages published via spublish
 Subscribing to shard-channel:{1}...
 Publishing to shard-channel:{1}...
 Received message on shard-channel:{1}: Hello Sharding
@@ -719,7 +719,7 @@ Received message on shard-channel:{1}: Hello Sharding
 
 ### valkey_client_test.dart
 ```sh
-00:00 +41: ValkeyClient Pub/Sub should receive messages on subscribed channel
+00:00 +41: TRClient Pub/Sub should receive messages on subscribed channel
 TEST: Waiting for subscription ready...
 TEST: Subscription ready!
 TEST Publishing message 1...
@@ -745,7 +745,7 @@ TEST Received message 2 OK
 
 ### valkey_cluster_sharded_test.dart
 ```sh
-00:00 +0: ValkeyClusterClient Sharded Pub/Sub ssubscribe receives messages from multiple shards (Scatter-Gather)
+00:00 +0: TRClusterClient Sharded Pub/Sub ssubscribe receives messages from multiple shards (Scatter-Gather)
 Cluster: Subscribing to [shard:channel:{a}, shard:channel:{b},
                          shard:channel:{c}]...
 Cluster: Subscription READY.

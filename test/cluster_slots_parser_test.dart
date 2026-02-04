@@ -15,9 +15,9 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/cluster_info.dart';
-import 'package:valkey_client/src/cluster_slots_parser.dart';
-import 'package:valkey_client/src/exceptions.dart';
+import 'package:typeredis/src/cluster_info.dart';
+import 'package:typeredis/src/cluster_slots_parser.dart';
+import 'package:typeredis/src/exceptions.dart';
 
 void main() {
   group('parseClusterSlotsResponse (top-level)', () {
@@ -113,18 +113,18 @@ void main() {
       expect(result[0].replicas, isEmpty);
     });
 
-    test('should throw ValkeyParsingException on invalid response type', () {
+    test('should throw TRParsingException on invalid response type', () {
       // Check for string
       expect(() => parseClusterSlotsResponse('not a list'),
-          throwsA(isA<ValkeyParsingException>()));
+          throwsA(isA<TRParsingException>()));
 
       // Check for map
       expect(() => parseClusterSlotsResponse({'key': 'value'}),
-          throwsA(isA<ValkeyParsingException>()));
+          throwsA(isA<TRParsingException>()));
 
       // Check for integer
       expect(() => parseClusterSlotsResponse(123),
-          throwsA(isA<ValkeyParsingException>()));
+          throwsA(isA<TRParsingException>()));
     });
 
     test('should skip invalid slot entry format', () {
@@ -135,7 +135,7 @@ void main() {
       expect(parseClusterSlotsResponse(invalidSlotEntry), isEmpty);
     });
 
-    test('should throw ValkeyParsingException on invalid node info format', () {
+    test('should throw TRParsingException on invalid node info format', () {
       final invalidNodeInfo = [
         [
           0,
@@ -144,7 +144,7 @@ void main() {
         ]
       ];
       expect(() => parseClusterSlotsResponse(invalidNodeInfo),
-          throwsA(isA<ValkeyParsingException>()));
+          throwsA(isA<TRParsingException>()));
     });
   });
 }

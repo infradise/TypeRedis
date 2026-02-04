@@ -23,7 +23,7 @@ import 'logging.dart';
 /// This class is immutable. A new instance must be created
 /// if the cluster topology changes (e.g., after a -MOVED redirection).
 class ClusterSlotMap {
-  static final _log = ValkeyLogger('ClusterSlotMap');
+  static final _log = TRLogger('ClusterSlotMap');
 
   /// A fast lookup map from a slot number (0-16383) to its master node.
   final Map<int, ClusterNodeInfo> _slotToNode;

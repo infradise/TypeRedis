@@ -15,21 +15,21 @@
  */
 
 import 'dart:async';
-import 'valkey_client.dart'; // Export exceptions
-// import 'package:valkey_client/valkey_commands_base.dart';
+import 'typeredis.dart'; // Export exceptions
+// import 'package:typeredis/valkey_commands_base.dart';
 
-export 'package:valkey_client/valkey_client.dart'
+export 'package:typeredis/typeredis.dart'
     show
-        ValkeyClientException,
-        ValkeyConnectionException,
-        ValkeyParsingException,
-        ValkeyServerException;
+        TRClientException,
+        TRConnectionException,
+        TRParsingException,
+        TRServerException;
 
-/// The abstract base class for a **cluster-aware** Valkey client.
+/// The abstract base class for a **cluster-aware** Redis/Valkey client.
 ///
 /// This interface automatically routes commands to the correct node
 /// based on the key's hash slot.
-abstract class ValkeyClusterClientBase implements ValkeyCommandsBase {
+abstract class TRClusterClientBase implements TRCommandsBase {
   /// Connects to the cluster using the provided initial node(s).
   ///
   /// This method will perform the following steps:
@@ -37,7 +37,7 @@ abstract class ValkeyClusterClientBase implements ValkeyCommandsBase {
   /// 2. Call `CLUSTER SLOTS` to fetch the topology.
   /// 3. Create connection pools for each discovered master node.
   ///
-  /// Throws [ValkeyConnectionException] if it fails to connect or
+  /// Throws [TRConnectionException] if it fails to connect or
   /// fetch the cluster topology.
   Future<void> connect();
 
@@ -45,9 +45,9 @@ abstract class ValkeyClusterClientBase implements ValkeyCommandsBase {
   Future<void> close();
 
   // ---
-  // Key-based Commands (See `ValkeyCommandsBase`)
+  // Key-based Commands (See `TRCommandsBase`)
   // All commands like get, set, hget are now inherited
-  // from the ValkeyCommandsBase interface.
+  // from the TRCommandsBase interface.
   // NO DUPLICATION NEEDED.
   // ---
 

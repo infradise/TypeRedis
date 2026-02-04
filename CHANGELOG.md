@@ -22,7 +22,7 @@
     * **New STRING Commands**: Implemented individual files per command for better scalability and maintainability.
         * Added full suite of string commands: `append`, `decr`, `decrBy`, `delIfEq`, `get`, `getDel`, `getEx`, `getRange`, `getSet`, `incr`, `incrBy`, `incrByFloat`, `lcs`, `mGet`, `mSet`, `mSetNx`, `pSetEx`, `set`, `setEx`, `setNx`, `setRange`, `strLen`, `subStr`.
     * **Refactored & Enhanced**: Migrated legacy monolithic commands (`get`, `set`, `incr`, `decr`, `incrBy`, `decrBy`) to the new modular extensions.
-        * `ValkeyClient` methods now internally delegate logic to the new extensions (`get`, `set`, `incr`, `decr`, `incrBy`, `decrBy`), ensuring full backward compatibility and interface compliance.
+        * `TRClient` methods now internally delegate logic to the new extensions (`get`, `set`, `incr`, `decr`, `incrBy`, `decrBy`), ensuring full backward compatibility and interface compliance.
 
 ## 3.2.0
 * **Modular Architecture**
@@ -38,7 +38,7 @@
     * **New HASH Commands**: Implemented individual files per command for better scalability and maintainability.
         * Added full suite of hash commands: `hDel`, `hExists`, `hExpire`, `hExpireAt`, `hExpireTime`, `hGet`, `hGetAll`, `hGetDel`, `hGetEx`, `hIncrBy`, `hIncrByFloat`, `hKeys`, `hLen`, `hMGet`, `hMSet`, `hPersist`, `hPExpire`, `hPExpireAt`, `hPExpireTime`, `hPTtl`, `hRandField`, `hScan`, `hSet`, `hSetEx`, `hSetNx`, `hStrLen`, `hTtl`, `hVals`.
     * **Refactored & Enhanced**: Migrated legacy monolithic commands (`hset`, `hget`, `hgetall`) to the new modular extensions.
-        * `ValkeyClient` methods now internally delegate logic to the new extensions (`HSet`, `HGet`, `HGetAll`), ensuring full backward compatibility and interface compliance.
+        * `TRClient` methods now internally delegate logic to the new extensions (`HSet`, `HGet`, `HGetAll`), ensuring full backward compatibility and interface compliance.
     * **New Transactions Commands**
         * Added: `watch`, `unwatch`.
     * **New JSON Debug Subcommands**
@@ -53,7 +53,7 @@
     * **JSON Commands**: Decomposed the monolithic `json.dart` into individual files per command (e.g., `jsonArrAppend`, `jsonGet`) for better scalability and maintainability.
     * **Transaction Commands**: Refactored transaction commands (`multi`, `exec`, `discard`) into independent extension files.
         * Migrated transaction state (`isInTransaction`) and queue management logic to the `TransactionsCommands` mixin for better encapsulation.
-        * `ValkeyClient` methods now internally delegate logic to the new extensions (`Multi`, `Exec`, `Discard`), ensuring full backward compatibility and interface compliance.
+        * `TRClient` methods now internally delegate logic to the new extensions (`Multi`, `Exec`, `Discard`), ensuring full backward compatibility and interface compliance.
 
 ## 2.5.5
 * **JSON Enhanced Commands**: Batch Operations
@@ -86,10 +86,10 @@
 
 ## 2.4.1
 * **Built-in Logger**
-    * **New Feature**: `setEnableValkeyLog()` in `ValkeyLogger`
+    * **New Feature**: `setEnableTRLog()` in `TRLogger`
     * **Example Update**: `built_in_logger_example.dart`
 * **Currently Connected Host and Port Information Provider**
-    * **New Feature**: `currentConnectionConfig` to get `ValkeyConnectionSettings` in `ValkeyClient`
+    * **New Feature**: `currentConnectionConfig` to get `TRConnectionSettings` in `TRClient`
     * **New Example:** `get_currently_connected_host_info.dart`
 
 ## 2.4.0
@@ -113,14 +113,14 @@
     - `roundRobin`: Distribute requests sequentially.
     - `random`: Select a replica randomly.
 - **Replica Discovery:** Added automatic discovery of replica nodes using `INFO REPLICATION` command in Standalone/Sentinel modes.
-- **Config Updates:** Updated `ValkeyConnectionSettings` to include `readPreference` and `loadBalancingStrategy` parameters.
-- **Explicit Replica Configuration**: Added `explicitReplicas` to `ValkeyConnectionSettings` to manually define replica nodes, solving connectivity issues in some environments (e.g., Docker/NAT) where auto-discovery fails.
+- **Config Updates:** Updated `TRConnectionSettings` to include `readPreference` and `loadBalancingStrategy` parameters.
+- **Explicit Replica Configuration**: Added `explicitReplicas` to `TRConnectionSettings` to manually define replica nodes, solving connectivity issues in some environments (e.g., Docker/NAT) where auto-discovery fails.
 
 
 ## 2.1.0
 
 ### Added
-- **Database Selection Support:** Added `database` parameter to `ValkeyConnectionSettings` and `ValkeyClient` constructors to automatically `SELECT` a database upon connection.
+- **Database Selection Support:** Added `database` parameter to `TRConnectionSettings` and `TRClient` constructors to automatically `SELECT` a database upon connection.
 - **Server Metadata API:** Introduced `client.metadata` property and `ServerMetadata` class to expose server information:
     - `serverName`: Detects 'valkey' or 'redis'.
     - `version`: Server version string.
@@ -133,7 +133,7 @@
 
 ### Added
 - **Enterprise SSL/TLS Support:** Implemented full support for encrypted connections (`SecureSocket`) across Standalone, Pool, and Cluster clients.
-    - **Configuration:** Added `useSsl`, `sslContext`, and `onBadCertificate` options to `ValkeyConnectionSettings`.
+    - **Configuration:** Added `useSsl`, `sslContext`, and `onBadCertificate` options to `TRConnectionSettings`.
     - **Cloud Ready:** Fully compatible with managed services requiring TLS (AWS ElastiCache, Azure Cache for Redis, GCP Memorystore).
     - **Dev Friendly:** Supports self-signed certificates via the `onBadCertificate` callback for local development.
 
@@ -147,10 +147,10 @@
 ## 1.7.0
 
 ### Added
-- **Connection Pool Hardening (Smart Release):** `ValkeyPool` now automatically detects and discards "dirty" connections (e.g., inside a Transaction or Pub/Sub mode) or closed connections upon release. This prevents pool pollution and ensures that acquired connections are always clean and ready for use.
+- **Connection Pool Hardening (Smart Release):** `TRPool` now automatically detects and discards "dirty" connections (e.g., inside a Transaction or Pub/Sub mode) or closed connections upon release. This prevents pool pollution and ensures that acquired connections are always clean and ready for use.
 - **Enhanced Developer Experience:** Expanded `Redis` aliases in `redis_client.dart`. Added aliases for Exceptions (`RedisException`, `RedisConnectionException`, etc.), Configuration (`RedisConnectionSettings`), and Data Models (`RedisMessage`), allowing for a seamless migration from other Redis clients.
-- **Robust Resource Management:** Implemented strict ownership tracking within `ValkeyPool` to prevent resource leaks and ensure thread safety. `release()` and `discard()` are now idempotent and safe to call multiple times.
-- **Client Introspection:** `ValkeyClient` now exposes `isStateful` and `isConnected` properties, which support the new smart pooling logic and allow for custom connection management.
+- **Robust Resource Management:** Implemented strict ownership tracking within `TRPool` to prevent resource leaks and ensure thread safety. `release()` and `discard()` are now idempotent and safe to call multiple times.
+- **Client Introspection:** `TRClient` now exposes `isStateful` and `isConnected` properties, which support the new smart pooling logic and allow for custom connection management.
 
 
 ## 1.6.0
@@ -174,19 +174,19 @@
   - The client now automatically retries commands on the correct node when a slot migration or failover occurs.
   - **`-MOVED` Handling:** Automatically updates the internal `ClusterSlotMap` and redirects the request to the new master.
   - **`-ASK` Handling:** Successfully handles temporary slot migrations by sending `ASKING` commands to the target node.
-- **Developer Experience:** Added `RedisClient` alias. You can now use `RedisClient` interchangeably with `ValkeyClient` for a familiar development experience.
-- **Configuration:** Added `maxRedirects` parameter to `ValkeyClusterClient` (default: `5`) to control the maximum number of retries before throwing an exception.
+- **Developer Experience:** Added `RedisClient` alias. You can now use `RedisClient` interchangeably with `TRClient` for a familiar development experience.
+- **Configuration:** Added `maxRedirects` parameter to `TRClusterClient` (default: `5`) to control the maximum number of retries before throwing an exception.
 - **Inspection Helper:** Added `getMasterFor(key)` method to retrieve the `ClusterNodeInfo` currently responsible for a specific key. This is useful for debugging topology changes.
 
 ### Changed
-- **Robustness:** `ValkeyClusterClient` no longer fails immediately upon encountering topology changes but attempts to recover using the new redirection logic.
+- **Robustness:** `TRClusterClient` no longer fails immediately upon encountering topology changes but attempts to recover using the new redirection logic.
 
 
 ## 1.4.0
 
 ### Added
-- **Multi-key Command Support (MGET):** Implemented `mget` support for `ValkeyClusterClient`.
-  - **Core Update:** Updated `ValkeyClusterClient` to handle multi-key operations gracefully.
+- **Multi-key Command Support (MGET):** Implemented `mget` support for `TRClusterClient`.
+  - **Core Update:** Updated `TRClusterClient` to handle multi-key operations gracefully.
   - **Strategy:** Uses a **Scatter-Gather** strategy to group keys by node.
   - **Performance:** Utilizes **Pipelining** (sending multiple `GET` commands concurrently) instead of a single `MGET` to avoid `CROSSSLOT` errors while maintaining high performance.
   - **Ordering:** Correctly re-assembles results in the requested order.
@@ -198,26 +198,26 @@
 ## 1.3.0
 
 ### Added
-- **Cluster Client (v1.3.0):** Introduced the new `ValkeyClusterClient` for automatic command routing in cluster mode.
+- **Cluster Client (v1.3.0):** Introduced the new `TRClusterClient` for automatic command routing in cluster mode.
   - This cluster-aware client fetches the topology using `clusterSlots()` during the `connect()` call.
   - Automatically detects NAT/Docker environments by comparing the initial connection IPs with `CLUSTER SLOTS` response, enabling correct routing without manual configuration. 
   - Fetches topology using `clusterSlots()` on `connect()`.
-  - Manages internal `ValkeyPool`s for each discovered master node.
+  - Manages internal `TRPool`s for each discovered master node.
   - Automatically routes single-key commands (`GET`, `SET`, `HSET`, etc.) to the correct node using the `getHashSlot` calculator.
-- **`ValkeyCommandsBase`:** Created a new base interface (`lib/valkey_commands_base.dart`) to abstract common data commands, preventing code duplication between `ValkeyClientBase` and `ValkeyClusterClientBase`.
+- **`TRCommandsBase`:** Created a new base interface (`lib/valkey_commands_base.dart`) to abstract common data commands, preventing code duplication between `TRClientBase` and `TRClusterClientBase`.
 - **Internal (Hash Slot):** Added a dependency-free hash slot calculator (`lib/src/cluster_hash.dart`) implementing CRC-16/XMODEM.
 - **Internal (Slot Map):** Added `ClusterSlotMap` (`lib/src/cluster_slot_map.dart`) to manage the mapping of slots to nodes efficiently.
-- **Example (Cluster):** Added `example/cluster_client_example.dart` to demonstrate `ValkeyClusterClient` usage and its auto-NAT routing.
+- **Example (Cluster):** Added `example/cluster_client_example.dart` to demonstrate `TRClusterClient` usage and its auto-NAT routing.
 - **Testing (Cluster):** 
   - Added `test/cluster_hash_test.dart` for validating the CRC-16 hash slot calculator.
   - Added `test/valkey_cluster_client_test.dart` for integration testing of the new cluster client.
 
 ### Fixed
-- **Critical `ValkeyClient` Hang (IPv6):** Fixed a bug in `ValkeyClient.connect` where connecting to `127.0.0.1` on macOS/Windows could hang indefinitely by attempting an IPv6 connection (`::1`) first. The client now forces `InternetAddress.loopbackIPv4` for loopback addresses.
-- **Critical `ValkeyClusterClient` Routing Bug:** Fixed a bug where the client's NAT auto-detection logic (`_hostMap`) was not being used consistently, causing connection pools to be created with incorrect (internal) IPs.
+- **Critical `TRClient` Hang (IPv6):** Fixed a bug in `TRClient.connect` where connecting to `127.0.0.1` on macOS/Windows could hang indefinitely by attempting an IPv6 connection (`::1`) first. The client now forces `InternetAddress.loopbackIPv4` for loopback addresses.
+- **Critical `TRClusterClient` Routing Bug:** Fixed a bug where the client's NAT auto-detection logic (`_hostMap`) was not being used consistently, causing connection pools to be created with incorrect (internal) IPs.
 
 ### Known Limitations
-- **`MGET`:** The `mget` command (defined in `ValkeyCommandsBase`) is **not** implemented in `ValkeyClusterClient` in this version and will throw an `UnimplementedError`. Multi-key scatter-gather operations are planned for **v1.4.0**.
+- **`MGET`:** The `mget` command (defined in `TRCommandsBase`) is **not** implemented in `TRClusterClient` in this version and will throw an `UnimplementedError`. Multi-key scatter-gather operations are planned for **v1.4.0**.
 - **`Transactions` & `Pub/Sub`:** Cluster-aware Transactions (which require multi-node coordination) and Sharded Pub/Sub (`SSUBSCRIBE`, `SPUBLISH`) are not implemented *in this version*. Sharded Pub/Sub is planned for **v1.6.0** as part of the v2.0.0 cluster roadmap.
 
 
@@ -231,9 +231,9 @@
 ### Fixed
 - **Critical Hang Bug (Command Timeout):** Fixed a critical bug where the client would hang indefinitely if the server did not send a response (e.g., a standalone server receiving the `CLUSTER SLOTS` command).
 - **`commandTimeout` Implementation:**
-  - Added a `commandTimeout` (default 10s) property to `ValkeyConnectionSettings` and the `ValkeyClient` constructor.
-  - `ValkeyPool` now correctly propagates this setting to newly created clients.
-  - The core `execute` method now applies this timeout to all standard commands, throwing a `ValkeyClientException` on timeout.
+  - Added a `commandTimeout` (default 10s) property to `TRConnectionSettings` and the `TRClient` constructor.
+  - `TRPool` now correctly propagates this setting to newly created clients.
+  - The core `execute` method now applies this timeout to all standard commands, throwing a `TRClientException` on timeout.
 - **Queue Desync Prevention:** The `onTimeout` handler now correctly removes the stale `Completer` from the `_responseQueue`, preventing potential desynchronization issues on late responses.
 
 ### Documentation
@@ -243,12 +243,12 @@
 ## 1.1.0
 
 ### Added
-- **Built-in Connection Pooling:** Implemented `ValkeyPool` for efficient, high-concurrency connection management.
+- **Built-in Connection Pooling:** Implemented `TRPool` for efficient, high-concurrency connection management.
   - Includes `pool.acquire()` and `pool.release()` methods.
   - Automatically handles connection creation up to `maxConnections`.
   - Implemented a wait queue for requests when the pool is full.
   - Added health checks (`PING`) on `acquire` to discard unhealthy connections.
-- **`ValkeyConnectionSettings`:** Added a class to hold connection parameters for the pool.
+- **`TRConnectionSettings`:** Added a class to hold connection parameters for the pool.
 
 ### Fixed
 - Fixed a bug in the pool's `release()` logic where unhealthy (closed) clients were incorrectly returned to the pool, causing errors on reuse.
@@ -262,12 +262,12 @@ This release marks the first stable version of `valkey_client` suitable for prod
 
 ### Changed
 * **Production-Ready Cleanup:** Removed all internal debug `print` statements.
-* **Error Handling:** Replaced standard `Exceptions` with specific exception classes (`ValkeyConnectionException`, `ValkeyServerException`, `ValkeyClientException`, `ValkeyParsingException`) for robust error handling.
-* **Logging:** Added an internal lightweight logger (via `ValkeyClient.setLogLevel(ValkeyLogLevel)`) instead of requiring `package:logging`. (Logging is `OFF` by default).
+* **Error Handling:** Replaced standard `Exceptions` with specific exception classes (`TRConnectionException`, `TRServerException`, `TRClientException`, `TRParsingException`) for robust error handling.
+* **Logging:** Added an internal lightweight logger (via `TRClient.setLogLevel(TRLogLevel)`) instead of requiring `package:logging`. (Logging is `OFF` by default).
 
 ### Fixed
-* **Test Suite:** Corrected several tests (e.g., `WRONGTYPE`, `EXECABORT`) to correctly expect the new specific exception types (`ValkeyServerException`).
-* **Lints:** Addressed `constant_identifier_names` lint for `ValkeyLogLevel` via `analysis_options.yaml`.
+* **Test Suite:** Corrected several tests (e.g., `WRONGTYPE`, `EXECABORT`) to correctly expect the new specific exception types (`TRServerException`).
+* **Lints:** Addressed `constant_identifier_names` lint for `TRLogLevel` via `analysis_options.yaml`.
 
 ### Documentation
 * **README.md:** Updated to reflect `v1.0.0` status. Added an **Important Note** regarding the lack of built-in connection pooling and recommending `package:pool`.
@@ -300,7 +300,7 @@ This release marks the first stable version of `valkey_client` suitable for prod
   - `client.unsubscribe()`: Unsubscribes from specific channels or all channels.
   - `client.psubscribe()`: Subscribes to patterns, returning a `Subscription` object.
   - `client.punsubscribe()`: Unsubscribes from specific patterns or all patterns.
-- **`pmessage` Handling:** The client now correctly parses and emits `pmessage` (pattern message) events via the `ValkeyMessage` stream (with `pattern` field populated).
+- **`pmessage` Handling:** The client now correctly parses and emits `pmessage` (pattern message) events via the `TRMessage` stream (with `pattern` field populated).
 - **State Management:** Improved internal state management (`_isInPubSubMode`, `_resetPubSubState`) for handling mixed and multiple subscription/unsubscription scenarios.
 
 ### Fixed
@@ -331,9 +331,9 @@ This release marks the first stable version of `valkey_client` suitable for prod
 ### Added
 - **New Commands (Pub/Sub):** Added basic Publish/Subscribe functionality.
   - `client.publish()`: Posts a message to a channel.
-  - `client.subscribe()`: Subscribes to channels and returns a `Stream<ValkeyMessage>` for receiving messages.
+  - `client.subscribe()`: Subscribes to channels and returns a `Stream<TRMessage>` for receiving messages.
 - **Push Message Handling:** The internal parser and client logic were updated to handle asynchronous push messages (like pub/sub messages) separate from command responses.
-- **`ValkeyMessage` Class:** Introduced a class to represent incoming pub/sub messages.
+- **`TRMessage` Class:** Introduced a class to represent incoming pub/sub messages.
 
 ### Known Limitations
 - Once subscribed, only `UNSUBSCRIBE`, `PUNSUBSCRIBE`, `PING`, and `QUIT` commands are allowed by Redis/Valkey. The client currently enforces this restriction partially. Full `unsubscribe` logic is not yet implemented.

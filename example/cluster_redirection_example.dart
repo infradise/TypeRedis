@@ -15,12 +15,12 @@
  */
 
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Connect to the cluster
   final initialNodes = [
-    ValkeyConnectionSettings(
+    TRConnectionSettings(
       host: '127.0.0.1',
       port: 7001,
       commandTimeout:
@@ -29,7 +29,7 @@ void main() async {
   ];
 
   // Create client with Auto-NAT logic
-  final client = ValkeyClusterClient(initialNodes, maxRedirects: 3);
+  final client = TRClusterClient(initialNodes, maxRedirects: 3);
 
   try {
     print('Connecting to cluster...');
@@ -75,10 +75,10 @@ void main() async {
           print('[FAILURE $count] Node $nodeStr | Value mismatch! '
               'Expected $value, got $result');
         }
-      } on ValkeyClientException catch (e) {
+      } on TRClientException catch (e) {
         // Client-side errors (e.g. pool exhausted during failover)
         print('[RETRY $count] Client error: $e');
-      } on ValkeyServerException catch (e) {
+      } on TRServerException catch (e) {
         // Server errors (e.g. CLUSTERDOWN)
         print('[RETRY $count] Server error: $e');
       } catch (e) {

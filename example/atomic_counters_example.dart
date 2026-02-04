@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Connect to the server (Standalone or Cluster)
   // Atomic commands work identically on both.
-  final client = ValkeyClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient(host: '127.0.0.1', port: 6379);
 
   try {
     await client.connect();

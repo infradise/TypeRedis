@@ -19,7 +19,7 @@ library;
 
 import 'dart:async';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   const host = '127.0.0.1';
@@ -28,7 +28,7 @@ void main() async {
   // Helper to check server status
   Future<bool> isServerUp() async {
     try {
-      final client = ValkeyClient(host: host, port: port);
+      final client = TRClient(host: host, port: port);
       await client.connect();
       await client.close();
       return true;
@@ -39,12 +39,11 @@ void main() async {
 
   final serverUp = await isServerUp();
 
-  group('ValkeyClusterClient Sharded Pub/Sub', () {
-    late ValkeyClusterClient client;
+  group('TRClusterClient Sharded Pub/Sub', () {
+    late TRClusterClient client;
 
     setUp(() {
-      client = ValkeyClusterClient(
-          [ValkeyConnectionSettings(host: host, port: port)]);
+      client = TRClusterClient([TRConnectionSettings(host: host, port: port)]);
     });
 
     tearDown(() async {

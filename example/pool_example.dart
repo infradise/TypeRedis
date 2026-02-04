@@ -16,11 +16,11 @@
 
 import 'dart:async';
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 /// Helper function to simulate a web request using the pool.
-Future<void> handleRequest(ValkeyPool pool, String userId) async {
-  ValkeyClient? client;
+Future<void> handleRequest(TRPool pool, String userId) async {
+  TRClient? client;
   try {
     // 1. Acquire connection
     print('[$userId] Acquiring connection...');
@@ -33,7 +33,7 @@ Future<void> handleRequest(ValkeyPool pool, String userId) async {
 
     // Simulate some work
     await Future<void>.delayed(const Duration(milliseconds: 500));
-  } on ValkeyException catch (e) {
+  } on TRException catch (e) {
     print('[$userId] Valkey Error: $e');
   } on TimeoutException {
     print('[$userId] Timed out waiting for a connection!');
@@ -54,14 +54,14 @@ Future<void> main() async {
   // ---
 
   // 1. Define connection settings
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379, // or 7001
     // password: 'my-password',
   );
 
   // 2. Create a pool with a max of 3 connections
-  final pool = ValkeyPool(
+  final pool = TRPool(
     connectionSettings: settings,
     maxConnections: 3,
   );

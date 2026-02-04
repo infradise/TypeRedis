@@ -16,7 +16,7 @@
 
 import 'dart:io' show X509Certificate;
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 // ---------------------------------------------------------
 // Scenario 1: Connecting to a Self-Signed Local Server (Dev)
@@ -25,7 +25,7 @@ import 'package:valkey_client/valkey_client.dart';
 void main() async {
   print('🔒 [Dev] Connecting to Standalone SSL (Self-Signed)...');
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6380, // SSL Port
     useSsl: true,
@@ -38,7 +38,7 @@ void main() async {
     // password: 'your_password',
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   try {
     await client.connect();

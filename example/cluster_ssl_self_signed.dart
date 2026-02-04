@@ -16,12 +16,12 @@
 
 import 'dart:io' show File, SecurityContext, X509Certificate;
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   print('🔒 [Dev] Connecting to Cluster SSL (Self-Signed)...');
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     sslContext: setupSecurityContext(),
     // [CRITICAL] Trust self-signed certificates for development
@@ -53,8 +53,8 @@ void main() async {
   await connectServer(initialNodesWithSSL);
 }
 
-Future<void> connectServer(List<ValkeyConnectionSettings> initialNodes) async {
-  final cluster = ValkeyClusterClient(initialNodes);
+Future<void> connectServer(List<TRConnectionSettings> initialNodes) async {
+  final cluster = TRClusterClient(initialNodes);
 
   try {
     await cluster.connect();

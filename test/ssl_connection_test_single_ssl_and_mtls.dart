@@ -19,7 +19,7 @@ library;
 
 import 'dart:io';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   group('SSL/TLS Connection Tests', () {
@@ -37,7 +37,7 @@ void main() {
 
     test('Standalone: Should connect using Basic SSL (accepting self-signed)',
         () async {
-      final client = ValkeyClient(
+      final client = TRClient(
         host: host,
         port: tlsPort,
         useSsl: true,
@@ -56,7 +56,7 @@ void main() {
         expect(value, equals('success'));
       } catch (e) {
         // Gracefully fail if the SSL container is not running
-        if (e is SocketException || e is ValkeyConnectionException) {
+        if (e is SocketException || e is TRConnectionException) {
           print('⚠️ SKIPPING TEST: SSL Server not reachable at $host:$tlsPort');
           return;
         }
@@ -81,7 +81,7 @@ void main() {
       context.useCertificateChain(clientCertPath);
       context.usePrivateKey(clientKeyPath);
 
-      final client = ValkeyClient(
+      final client = TRClient(
         host: host,
         port: mTlsPort,
         useSsl: true,
@@ -101,7 +101,7 @@ void main() {
         final value = await client.get('test:ssl:mtls');
         expect(value, equals('verified'));
       } catch (e) {
-        if (e is SocketException || e is ValkeyConnectionException) {
+        if (e is SocketException || e is TRConnectionException) {
           print(
               '⚠️ SKIPPING mTLS TEST: Server not reachable at $host:$mTlsPort');
           return;

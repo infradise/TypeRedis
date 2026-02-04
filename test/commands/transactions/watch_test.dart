@@ -18,17 +18,17 @@
 // library;
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   group('WATCH / UNWATCH Commands', () {
-    late ValkeyClient client1;
-    late ValkeyClient client2;
+    late TRClient client1;
+    late TRClient client2;
 
     setUp(() async {
       // Initialize two clients to simulate concurrency
-      client1 = ValkeyClient(host: 'localhost', port: 6379);
-      client2 = ValkeyClient(host: 'localhost', port: 6379);
+      client1 = TRClient(host: 'localhost', port: 6379);
+      client2 = TRClient(host: 'localhost', port: 6379);
       await client1.connect();
       await client2.connect();
 

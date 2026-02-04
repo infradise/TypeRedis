@@ -1,11 +1,11 @@
-valkey_client
+TypeRedis
 Copyright 2025-2026 Infradise Inc.
 
 This product includes software developed at
-Infradise Inc. (https://k8spodo.dev).
+Infradise Inc. (https://keyscope.dev).
 
 This product utilizes the following open source library:
 
 - Keyscope (https://pub.dev/packages/keyscope)
-  Copyright 2026 Infradise Inc.
+  Copyright 2025-2026 Infradise Inc.
   Licensed under the Apache License, Version 2.0

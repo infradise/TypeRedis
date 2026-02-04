@@ -19,7 +19,7 @@ library;
 
 import 'dart:io';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   // -------------------------------------------------------------------------
@@ -29,12 +29,12 @@ void main() {
   // 2. Cluster SSL Ports: 7001-7006 (Requires complex Docker setup)
   // -------------------------------------------------------------------------
 
-  group('ValkeyClient (Standalone) SSL', () {
+  group('TRClient (Standalone) SSL', () {
     const host = '127.0.0.1';
     const sslPort = 6380;
 
     test('connects using SSL with self-signed cert', () async {
-      final client = ValkeyClient(
+      final client = TRClient(
         host: host,
         port: sslPort,
         useSsl: true,
@@ -49,7 +49,7 @@ void main() {
         await client.set('test:ssl:standalone', 'ok');
         expect(await client.get('test:ssl:standalone'), equals('ok'));
       } catch (e) {
-        if (e is ValkeyConnectionException) {
+        if (e is TRConnectionException) {
           print('⚠️ Skipped Standalone SSL test: Server unreachable');
           return;
         }
@@ -60,13 +60,13 @@ void main() {
     });
   });
 
-  group('ValkeyClusterClient SSL', () {
+  group('TRClusterClient SSL', () {
     // Assuming a local cluster with TLS is running on 7001
     const seedHost = '127.0.0.1';
     const seedPort = 7101;
 
     test('connects to cluster using SSL with self-signed cert', () async {
-      final node = ValkeyConnectionSettings(
+      final node = TRConnectionSettings(
         host: seedHost,
         port: seedPort,
         useSsl: true,
@@ -74,7 +74,7 @@ void main() {
         commandTimeout: const Duration(seconds: 2),
       );
 
-      final cluster = ValkeyClusterClient([node]);
+      final cluster = TRClusterClient([node]);
 
       try {
         await cluster.connect();
@@ -84,7 +84,7 @@ void main() {
         final res = await cluster.get('test:ssl:cluster');
         expect(res, equals('sharded-secure'));
       } catch (e) {
-        if (e is ValkeyConnectionException || e is SocketException) {
+        if (e is TRConnectionException || e is SocketException) {
           print('⚠️ Skipped Cluster SSL test: Server unreachable on $seedPort');
           return;
         }

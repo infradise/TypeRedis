@@ -15,10 +15,10 @@
  */
 
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 Future<void> main() async {
-  final client = ValkeyClient(host: 'localhost', port: 6379);
+  final client = TRClient(host: 'localhost', port: 6379);
   await client.connect();
 
   print('--- 🚀 Hash Commands Example: User Profile ---\n');

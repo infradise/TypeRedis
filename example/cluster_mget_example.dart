@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
-  // ValkeyClient.setLogLevel(ValkeyLogLevel.off); // default
+  // TRClient.setLogLevel(TRLogLevel.off); // default
 
   // 1. Configure cluster connection
   // We use 127.0.0.1:7001 as the entry point (based on your Docker setup)
   final initialNodes = [
-    ValkeyConnectionSettings(
+    TRConnectionSettings(
       host: '127.0.0.1',
       port: 7001,
       commandTimeout: const Duration(seconds: 5),
     ),
   ];
-  final client = ValkeyClusterClient(initialNodes);
+  final client = TRClusterClient(initialNodes);
 
   try {
     print('Connecting to cluster...');
@@ -70,7 +70,7 @@ void main() async {
     await client.del(['key:A']);
     await client.del(['key:B']);
     await client.del(['key:C']);
-  } on ValkeyException catch (e) {
+  } on TRException catch (e) {
     print('❌ Error: $e');
   } finally {
     await client.close();

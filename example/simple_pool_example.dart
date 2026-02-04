@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Define connection settings
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
     // password: 'my-super-secret-password',
   );
 
   // 2. Create a pool (e.g., max 10 connections)
-  final pool = ValkeyPool(connectionSettings: settings, maxConnections: 10);
-  ValkeyClient? client;
+  final pool = TRPool(connectionSettings: settings, maxConnections: 10);
+  TRClient? client;
 
   try {
     // 3. Acquire a client from the pool
     client = await pool.acquire();
 
     // 4. Run commands
-    await client.set('greeting', 'Hello from ValkeyPool!');
+    await client.set('greeting', 'Hello from TRPool!');
     final value = await client.get('greeting');
-    print(value); // Output: Hello from ValkeyPool!
-  } on ValkeyConnectionException catch (e) {
+    print(value); // Output: Hello from TRPool!
+  } on TRConnectionException catch (e) {
     print('Connection or pool acquisition failed: $e');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     print('Server returned an error: $e');
   } finally {
     // 5. Release the client back to the pool

@@ -15,11 +15,11 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   // Configure the port according to the test environment
-  final client = ValkeyClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient(host: '127.0.0.1', port: 6379);
 
   setUpAll(() async {
     await client.connect();

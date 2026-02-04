@@ -13,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-name: valkey_client
-description: A high-performance, cluster-aware Dart client for Redis and Valkey.
+name: typeredis
+description: A high-performance, cluster-aware, type-safe Dart client for Redis, Valkey, and compatible servers.
 version: 3.6.0
-repository: https://github.com/infradise/valkey_client
-homepage: https://github.com/infradise/valkey_client
-issue_tracker: https://github.com/infradise/valkey_client/issues
-# documentation: https://github.com/infradise/valkey_client/wiki
+repository: https://github.com/infradise/TypeRedis
+homepage: https://github.com/infradise/TypeRedis
+issue_tracker: https://github.com/infradise/TypeRedis/issues
+# documentation: https://github.com/infradise/TypeRedis/wiki
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

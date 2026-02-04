@@ -19,7 +19,7 @@ library;
 
 import 'dart:io';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   group('SSL/TLS Connection Tests', () {
@@ -38,7 +38,7 @@ void main() {
       context.useCertificateChain('tests/tls/valkey.crt');
       context.usePrivateKey('tests/tls/valkey.key');
 
-      final client = ValkeyClient(
+      final client = TRClient(
         host: host,
         port: sslPort,
         useSsl: true,

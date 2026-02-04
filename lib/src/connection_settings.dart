@@ -15,10 +15,9 @@
  */
 
 import 'dart:io';
+import '../typeredis.dart' show TRPool;
 
-import '../valkey_client.dart' show ValkeyPool;
-
-import '../valkey_pool.dart' show ValkeyPool;
+import '../typeredis_pool.dart' show TRPool;
 
 /// Defines which node to select for read operations.
 enum ReadPreference {
@@ -49,8 +48,8 @@ typedef AddressMapper = ({String host, int port}) Function(
 /// Configuration for a Valkey connection.
 /// Holds all configuration options for creating a new connection.
 ///
-/// Used by [ValkeyPool] to create new client instances.
-class ValkeyConnectionSettings {
+/// Used by [TRPool] to create new client instances.
+class TRConnectionSettings {
   /// The host of the Valkey server.
   final String host;
 
@@ -96,13 +95,13 @@ class ValkeyConnectionSettings {
   final LoadBalancingStrategy loadBalancingStrategy;
 
   // [v2.2.0] Manual Replica Configuration
-  final List<ValkeyConnectionSettings>? explicitReplicas;
+  final List<TRConnectionSettings>? explicitReplicas;
 
   // [v2.2.0] Address Mapper for NAT/Docker
   // Discovered IP (e.g. 172.xxx) -> External IP (e.g. 127.0.0.1)
   final AddressMapper? addressMapper;
 
-  ValkeyConnectionSettings({
+  TRConnectionSettings({
     // required this.host, // '127.0.0.1'
     // required this.port, // 6379
     this.host = '127.0.0.1',
@@ -111,7 +110,7 @@ class ValkeyConnectionSettings {
     this.password,
     this.commandTimeout = const Duration(seconds: 10),
     this.connectTimeout = const Duration(seconds: 10),
-    this.useSsl = false,
+    this.useSsl = false, // TODO: useTls, tlsPort
     this.sslContext,
     this.onBadCertificate,
     this.database = 0, // Default to DB 0
@@ -123,7 +122,7 @@ class ValkeyConnectionSettings {
   });
 
   /// Creates a copy of this settings object with the given fields replaced.
-  ValkeyConnectionSettings copyWith({
+  TRConnectionSettings copyWith({
     String? host,
     int? port,
     String? username,
@@ -136,10 +135,10 @@ class ValkeyConnectionSettings {
     int? database,
     ReadPreference? readPreference,
     LoadBalancingStrategy? loadBalancingStrategy,
-    List<ValkeyConnectionSettings>? explicitReplicas,
+    List<TRConnectionSettings>? explicitReplicas,
     AddressMapper? addressMapper,
   }) =>
-      ValkeyConnectionSettings(
+      TRConnectionSettings(
         host: host ?? this.host,
         port: port ?? this.port,
         username: username ?? this.username,

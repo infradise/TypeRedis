@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 Future<void> main() async {
   // We use two clients to demonstrate Optimistic Locking (Race Condition)
-  final client1 = ValkeyClient(host: 'localhost', port: 6379);
-  final client2 = ValkeyClient(host: 'localhost', port: 6379);
+  final client1 = TRClient(host: 'localhost', port: 6379);
+  final client2 = TRClient(host: 'localhost', port: 6379);
 
   await client1.connect();
   await client2.connect();

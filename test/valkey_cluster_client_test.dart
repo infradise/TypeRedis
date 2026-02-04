@@ -19,12 +19,12 @@ library;
 
 import 'dart:async';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 // Helper function (can be shared or duplicated from valkey_client_test.dart)
 // Helper to check if the cluster is reachable
 Future<bool> checkServerStatus(String host, int port) async {
-  final client = ValkeyClient(host: host, port: port);
+  final client = TRClient(host: host, port: port);
   try {
     await client.connect();
     await client.close();
@@ -45,22 +45,22 @@ Future<void> main() async {
     print('=' * 70);
     print('⚠️  WARNING: Valkey CLUSTER not running on '
         '$clusterHost:$clusterPort.');
-    print('Skipping ValkeyClusterClient tests.');
+    print('Skipping TRClusterClient tests.');
     print('Please start a cluster (e.g., ports 7001-7006) to run all tests.');
     print('=' * 70);
   }
 
-  group('ValkeyClusterClient', () {
-    late ValkeyClusterClient client;
+  group('TRClusterClient', () {
+    late TRClusterClient client;
 
     setUp(() {
       final initialNodes = [
-        ValkeyConnectionSettings(
+        TRConnectionSettings(
           host: clusterHost,
           port: clusterPort,
         ),
       ];
-      client = ValkeyClusterClient(initialNodes);
+      client = TRClusterClient(initialNodes);
     });
 
     tearDown(() async {

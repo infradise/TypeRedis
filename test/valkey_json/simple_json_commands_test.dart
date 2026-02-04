@@ -15,19 +15,19 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/utils/module_printer.dart'
+import 'package:typeredis/src/utils/module_printer.dart'
     show printPrettyModuleList;
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // (Standalone: 6379 / Cluster: 7001)
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  // final client = ValkeyClient(host: '127.0.0.1', port: 6379);
-  final client = ValkeyClient.fromSettings(settings);
+  // final client = TRClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient.fromSettings(settings);
 
   setUpAll(() async {
     await client.connect();

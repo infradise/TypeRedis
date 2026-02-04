@@ -16,16 +16,16 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // Configure with a known cluster entry point
   final initialNodes = [
-    ValkeyConnectionSettings(host: '127.0.0.1', port: 7001),
+    TRConnectionSettings(host: '127.0.0.1', port: 7001),
   ];
 
   // Enable retries for failover
-  final client = ValkeyClusterClient(initialNodes, maxRedirects: 10);
+  final client = TRClusterClient(initialNodes, maxRedirects: 10);
 
   var successCount = 0;
   var failCount = 0;

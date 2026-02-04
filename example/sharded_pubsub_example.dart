@@ -15,21 +15,21 @@
  */
 
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // Standalone Pub/Sub Best Practice:
   // Use separate connections for Subscribing and Publishing.
 
   // 1. Setup Subscriber Client (Listens for messages)
-  final subscriber = ValkeyClient(
+  final subscriber = TRClient(
     host: '127.0.0.1',
     port: 6379,
     commandTimeout: const Duration(seconds: 5),
   );
 
   // 2. Setup Publisher Client (Sends messages)
-  final publisher = ValkeyClient(
+  final publisher = TRClient(
     host: '127.0.0.1',
     port: 6379,
     commandTimeout: const Duration(seconds: 5),
@@ -79,7 +79,7 @@ void main() async {
     // 6. Unsubscribe
     await sub.unsubscribe();
     print('Unsubscribed.');
-  } on ValkeyException catch (e) {
+  } on TRException catch (e) {
     print('❌ Error: $e');
     print(
         '👉 Note: Ensure your server version supports Sharded Pub/Sub (Redis 7.0+ / Valkey 9.0+)');

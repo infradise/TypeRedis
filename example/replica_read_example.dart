@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // Enable detailed logging
-  // ValkeyClient.setLogLevel(ValkeyLogLevel.info);
+  // TRClient.setLogLevel(TRLogLevel.info);
 
   print('🚀 Starting Replica Read & Load Balancing Example...');
 
@@ -27,7 +27,7 @@ void main() async {
   // final portReplica2 = 6381;
 
   // Base settings for Master
-  final masterSettings = ValkeyConnectionSettings(
+  final masterSettings = TRConnectionSettings(
     host: '127.0.0.1',
     port: portMaster,
 
@@ -61,9 +61,9 @@ void main() async {
   //     masterSettings.copyWith(port: portReplica2),
   //   ],
   // );
-  // final client = ValkeyClient.fromSettings(settings);
+  // final client = TRClient.fromSettings(settings);
 
-  final client = ValkeyClient.fromSettings(masterSettings);
+  final client = TRClient.fromSettings(masterSettings);
 
   try {
     // 2. Connect

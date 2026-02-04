@@ -15,11 +15,11 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // (Standalone: 6379 / Cluster: 7001)
-  final client = ValkeyClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient(host: '127.0.0.1', port: 6379);
 
   setUpAll(() async {
     await client.connect();

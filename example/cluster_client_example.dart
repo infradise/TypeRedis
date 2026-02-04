@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Define the initial nodes to connect to. (use 127.0.0.1 as telnet works)
   // The client only needs one node to discover the entire cluster.
   // We assume a cluster node is running on port 7001.
   final initialNodes = [
-    ValkeyConnectionSettings(
+    TRConnectionSettings(
       host: '127.0.0.1',
       port: 7001,
       commandTimeout:
           const Duration(seconds: 5), // Set timeout for all commands
     ),
     // You could add other seed nodes here if desired
-    // ValkeyConnectionSettings(host: '127.0.0.1', port: 7002),
-    // ValkeyConnectionSettings(host: '127.0.0.1', port: 7003),
+    // TRConnectionSettings(host: '127.0.0.1', port: 7002),
+    // TRConnectionSettings(host: '127.0.0.1', port: 7003),
   ];
 
-  // 2. Create the new ValkeyClusterClient
-  final client = ValkeyClusterClient(
-    // (Option 1) Create the new ValkeyClusterClient
+  // 2. Create the new TRClusterClient
+  final client = TRClusterClient(
+    // (Option 1) Create the new TRClusterClient
     initialNodes,
 
     // (Option 2) Create the client with the hostMapper
@@ -78,12 +78,12 @@ void main() async {
 
     // Note: MGET is not supported in v1.3.0
     // await client.mget(['key:A', 'key:B']); // Throws UnimplementedError
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     print('\n❌ Connection Failed: $e');
     print('Ensure a Valkey CLUSTER node is running.');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     print('\n❌ Server Error: $e');
-  } on ValkeyClientException catch (e) {
+  } on TRClientException catch (e) {
     print('\n❌ Client Error: $e');
   } on FeatureNotImplementedException catch (e) {
     print('\n❌ Feature Not Implemented: $e');

@@ -28,7 +28,7 @@ on:
       - 'dart_test.yaml'
       - 'pubspec.yaml'
       - 'analysis_options.yaml'
-      - '.github/workflows/valkey_client_ct.yaml'
+      - '.github/workflows/typeredis_ct.yaml'
 
   # pull_request:
 
@@ -147,8 +147,6 @@ jobs:
             local name=$2
             echo "Checking $name on port $port..."
 
-            # Retry loop: Run keyscope ping and check if output contains "PONG"
-            # Using 'grep' ensures we validate the connection logic inside valkey_client
             for i in {1..15}; do
               # Run keyscope ping and check for PONG in the output
               OUTPUT=$(dart run keyscope/bin/keyscope.dart ping --port $port --silent || true)

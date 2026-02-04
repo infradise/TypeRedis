@@ -15,12 +15,12 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/cluster_slot_map.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/src/cluster_slot_map.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   // Enable detailed logging
-  ValkeyClient.setLogLevel(ValkeyLogLevel.info);
+  TRClient.setLogLevel(TRLogLevel.info);
 
   group('ClusterSlotMap', () {
     test('updateSlot should correctly modify the node for a specific slot', () {

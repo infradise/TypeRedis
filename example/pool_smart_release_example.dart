@@ -15,7 +15,7 @@
  */
 
 // import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 /// Standalone & Pool Example: The essence of Smart Release
 ///
@@ -27,13 +27,13 @@ import 'package:valkey_client/valkey_client.dart';
 
 void main() async {
   // 1. Configure the Connection Pool (Standalone)
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
   // Create a pool with a limit of 5 connections
-  final pool = ValkeyPool(connectionSettings: settings, maxConnections: 5);
+  final pool = TRPool(connectionSettings: settings, maxConnections: 5);
 
   print('--- Starting v1.7.0 Smart Pool Example ---');
 

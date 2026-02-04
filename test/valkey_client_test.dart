@@ -18,7 +18,7 @@ import 'dart:async';
 // import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 // import 'package:stream_channel/stream_channel.dart'; // for StreamMatcher
 // import 'package:async/async.dart' show StreamQueue;
 
@@ -32,7 +32,7 @@ const closedPort = 6380;
 
 /// Helper function to check server status *before* tests are defined.
 Future<bool> checkServerStatus(String host, int port) async {
-  final client = ValkeyClient(host: host, port: port);
+  final client = TRClient(host: host, port: port);
   try {
     await client.connect();
     await client.close();
@@ -55,12 +55,12 @@ Future<void> main() async {
     print('=' * 70);
   }
 
-  group('ValkeyClient Connection (No Auth)', () {
-    late ValkeyClient client;
+  group('TRClient Connection (No Auth)', () {
+    late TRClient client;
 
     setUpAll(() async {
       if (isServerRunning) {
-        client = ValkeyClient(host: noAuthHost, port: noAuthPort);
+        client = TRClient(host: noAuthHost, port: noAuthPort);
         await client.connect();
 
         // Clean the database before running command tests
@@ -71,7 +71,7 @@ Future<void> main() async {
     // setUp is called before each test.
     setUp(() {
       // Use the default port (6379)
-      client = ValkeyClient(host: noAuthHost, port: noAuthPort);
+      client = TRClient(host: noAuthHost, port: noAuthPort);
     });
 
     // tearDown is called after each test.
@@ -82,7 +82,7 @@ Future<void> main() async {
     });
 
     test('should connect successfully using connect() args', () async {
-      final c = ValkeyClient(); // Create with defaults (127.0.0.1)
+      final c = TRClient(); // Create with defaults (127.0.0.1)
       // Connect using method args
       await expectLater(
           c.connect(host: noAuthHost, port: noAuthPort), completes);
@@ -111,11 +111,10 @@ Future<void> main() async {
           ? 'Valkey server not running on $noAuthHost:$noAuthPort'
           : false);
 
-  group('ValkeyClient Connection (Failure Scenarios)', () {
-    test('should throw a ValkeyConnectionException if connection fails',
-        () async {
+  group('TRClient Connection (Failure Scenarios)', () {
+    test('should throw a TRConnectionException if connection fails', () async {
       // Act: Attempt to connect to a port where no server is running.
-      final client = ValkeyClient(
+      final client = TRClient(
           // host: noAuthHost,
           port: closedPort); // Bad or Non-standard port
 
@@ -124,15 +123,15 @@ Future<void> main() async {
 
       await expectLater(
         connectFuture,
-        throwsA(isA<ValkeyConnectionException>()),
+        throwsA(isA<TRConnectionException>()),
       );
     });
 
     test(
-        'should throw a ValkeyConnectionException when providing auth to a '
+        'should throw a TRConnectionException when providing auth to a '
         'server that does not require it', () async {
       // This test requires the NO-AUTH server to be running
-      final client = ValkeyClient(
+      final client = TRClient(
         host: noAuthHost,
         port: noAuthPort,
         password: 'any-password', // Provide a password
@@ -144,7 +143,7 @@ Future<void> main() async {
       // which our client should throw as an Exception.
       await expectLater(
         connectFuture,
-        throwsA(isA<ValkeyConnectionException>().having(
+        throwsA(isA<TRConnectionException>().having(
             // (e) => e.toString(),
             (e) => e.message,
             'message',
@@ -162,14 +161,14 @@ Future<void> main() async {
   });
 
   // --- GROUP FOR COMMANDS ---
-  group('ValkeyClient Commands', () {
-    late ValkeyClient client;
+  group('TRClient Commands', () {
+    late TRClient client;
 
     // Connect ONCE before all tests in this group
     setUpAll(() async {
       // This assumes the isServerRunning check from the main setUpAll has
       // passed
-      client = ValkeyClient(host: noAuthHost, port: noAuthPort);
+      client = TRClient(host: noAuthHost, port: noAuthPort);
       await client.connect();
     });
 
@@ -450,7 +449,7 @@ Future<void> main() async {
       expect(ttl3, -2);
     });
 
-    test('should throw ValkeyServerException on WRONGTYPE operation', () async {
+    test('should throw TRServerException on WRONGTYPE operation', () async {
       // 1. Set a normal string key
       const key = 'test:wrongtype:key';
       await client.set(key, 'i am a string');
@@ -461,7 +460,7 @@ Future<void> main() async {
       // 3. Expect the specific WRONGTYPE error from the server
       await expectLater(
           hsetFuture,
-          throwsA(isA<ValkeyServerException>()
+          throwsA(isA<TRServerException>()
               .having((e) => e.code, 'code', 'WRONGTYPE')));
 
       // 4. Clean up the key
@@ -475,15 +474,15 @@ Future<void> main() async {
           : false);
 
   // --- GROUP FOR PUB/SUB ---
-  group('ValkeyClient Pub/Sub', () {
-    late ValkeyClient subscriberClient;
-    late ValkeyClient publisherClient;
+  group('TRClient Pub/Sub', () {
+    late TRClient subscriberClient;
+    late TRClient publisherClient;
 
     // Connect both clients ONCE before tests
     setUpAll(() async {
       if (isServerRunning) {
-        subscriberClient = ValkeyClient(host: noAuthHost, port: noAuthPort);
-        publisherClient = ValkeyClient(host: noAuthHost, port: noAuthPort);
+        subscriberClient = TRClient(host: noAuthHost, port: noAuthPort);
+        publisherClient = TRClient(host: noAuthHost, port: noAuthPort);
         await Future.wait([
           subscriberClient.connect(),
           publisherClient.connect(),
@@ -522,8 +521,8 @@ Future<void> main() async {
       // ---------------------------------------------------
 
       // 2. Use Completers to wait for messages AFTER subscription is ready
-      final completer1 = Completer<ValkeyMessage>();
-      final completer2 = Completer<ValkeyMessage>();
+      final completer1 = Completer<TRMessage>();
+      final completer2 = Completer<TRMessage>();
       var messageCount = 0;
 
       final subscriptionListener = sub.messages.listen(// Listen to sub.messages
@@ -566,7 +565,7 @@ Future<void> main() async {
         print('TEST Timeout waiting for message 1');
         throw TimeoutException('Timeout waiting for message 1');
       });
-      expect(receivedMessage1, isA<ValkeyMessage>());
+      expect(receivedMessage1, isA<TRMessage>());
       expect(receivedMessage1.channel, channel);
       expect(receivedMessage1.message, message1);
       print('TEST Received message 1 OK');
@@ -577,7 +576,7 @@ Future<void> main() async {
         print('TEST Timeout waiting for message 2');
         throw TimeoutException('Timeout waiting for message 2');
       });
-      expect(receivedMessage2, isA<ValkeyMessage>());
+      expect(receivedMessage2, isA<TRMessage>());
       expect(receivedMessage2.channel, channel);
       expect(receivedMessage2.message, message2);
       print('TEST Received message 2 OK');
@@ -603,7 +602,7 @@ Future<void> main() async {
       const channel = 'test:pubsub:unsub';
       const message1 = 'message before unsub';
       const message2 = 'message after unsub';
-      var msgCompleter = Completer<ValkeyMessage>();
+      var msgCompleter = Completer<TRMessage>();
 
       // 1. Subscribe
       final sub = subscriberClient.subscribe([channel]);
@@ -649,8 +648,8 @@ Future<void> main() async {
       const channel2 = 'test:psub:channelB';
       const message1 = 'Msg A';
       const message2 = 'Msg B';
-      final msg1Completer = Completer<ValkeyMessage>();
-      final msg2Completer = Completer<ValkeyMessage>();
+      final msg1Completer = Completer<TRMessage>();
+      final msg2Completer = Completer<TRMessage>();
       var receivedCount = 0;
 
       // 1. PSubscribe
@@ -699,7 +698,7 @@ Future<void> main() async {
       const channel = 'test:punsub:channel';
       const message1 = 'Msg before punsub';
       const message2 = 'Msg after punsub';
-      var msgCompleter = Completer<ValkeyMessage>();
+      var msgCompleter = Completer<TRMessage>();
 
       // 1. PSubscribe
       final sub = subscriberClient.psubscribe([pattern]);
@@ -740,12 +739,12 @@ Future<void> main() async {
           : false);
 
   // --- GROUP FOR v0.11.0 (Transactions) ---
-  group('ValkeyClient Transactions', () {
-    late ValkeyClient client;
+  group('TRClient Transactions', () {
+    late TRClient client;
 
     // Connect and clean DB before each test in this group
     setUp(() async {
-      client = ValkeyClient(host: noAuthHost, port: noAuthPort);
+      client = TRClient(host: noAuthHost, port: noAuthPort);
       await client.connect();
       await client.flushDb();
       // Ensure we are not in a transaction state from a failed test
@@ -770,7 +769,7 @@ Future<void> main() async {
       expect(execResponse, <List>[]);
     });
 
-    test('exec() throws ValkeyServerException when transaction is aborted',
+    test('exec() throws TRServerException when transaction is aborted',
         () async {
       await client.multi();
 
@@ -781,7 +780,7 @@ Future<void> main() async {
           .execute(['SET', 'key']); // Missing argument → error // wrong arity
       await expectLater(
         enqueueFuture,
-        throwsA(isA<ValkeyServerException>().having(
+        throwsA(isA<TRServerException>().having(
           // (e) => e.toString(),
           (e) => e.message,
           'message',
@@ -847,7 +846,7 @@ Future<void> main() async {
     });
 
     test(
-        'exec() throws ValkeyServerException if transaction was aborted '
+        'exec() throws TRServerException if transaction was aborted '
         '(e.g., by syntax error)', () async {
       await client.multi();
 
@@ -858,7 +857,7 @@ Future<void> main() async {
       // Server replies with an error immediately for syntax errors
       await expectLater(
           badCommandFuture,
-          throwsA(isA<ValkeyServerException>().having(
+          throwsA(isA<TRServerException>().having(
               // (e) => e.toString(),
               (e) => e.message,
               'message',
@@ -899,15 +898,15 @@ Future<void> main() async {
           : false);
 
   // --- GROUP FOR v0.12.0 (Pub/Sub Introspection) ---
-  group('ValkeyClient Pub/Sub Introspection', () {
-    late ValkeyClient client; // Client for sending commands
-    late ValkeyClient subClient; // Client to create subscriptions
+  group('TRClient Pub/Sub Introspection', () {
+    late TRClient client; // Client for sending commands
+    late TRClient subClient; // Client to create subscriptions
     StreamSubscription? subListener; // To manage the subscription
 
     setUp(() async {
       // Create two clients for these tests
-      client = ValkeyClient(host: noAuthHost, port: noAuthPort);
-      subClient = ValkeyClient(host: noAuthHost, port: noAuthPort);
+      client = TRClient(host: noAuthHost, port: noAuthPort);
+      subClient = TRClient(host: noAuthHost, port: noAuthPort);
       await Future.wait([client.connect(), subClient.connect()]);
       await client.flushDb();
     });

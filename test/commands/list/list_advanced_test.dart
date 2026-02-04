@@ -15,16 +15,16 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   group('List Advanced Commands', () {
-    late ValkeyClient client;
+    late TRClient client;
     const key = 'test:list:adv';
     const dest = 'test:list:dest';
 
     setUp(() async {
-      client = ValkeyClient(host: 'localhost', port: 6379);
+      client = TRClient(host: 'localhost', port: 6379);
       await client.connect();
       await client.flushAll();
     });

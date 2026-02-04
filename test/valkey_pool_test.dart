@@ -16,8 +16,8 @@
 
 import 'dart:async';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
-// import 'package:valkey_client/src/exceptions.dart';
+import 'package:typeredis/typeredis.dart';
+// import 'package:typeredis/src/exceptions.dart';
 
 const noAuthHost = 'localhost'; // or 127.0.0.1
 const noAuthPort = 6379;
@@ -26,7 +26,7 @@ const noAuthPort = 6379;
 
 /// Helper function to check server status *before* tests are defined.
 Future<bool> checkServerStatus(String host, int port) async {
-  final client = ValkeyClient(host: host, port: port);
+  final client = TRClient(host: host, port: port);
   try {
     await client.connect();
     await client.close();
@@ -39,9 +39,9 @@ Future<bool> checkServerStatus(String host, int port) async {
 Future<void> main() async {
   final isServerRunning = await checkServerStatus(noAuthHost, noAuthPort);
 
-  group('ValkeyPool', () {
-    late ValkeyPool pool;
-    final settings = ValkeyConnectionSettings(
+  group('TRPool', () {
+    late TRPool pool;
+    final settings = TRConnectionSettings(
       host: noAuthHost,
       port: noAuthPort,
     );
@@ -52,12 +52,12 @@ Future<void> main() async {
     });
 
     test('can acquire and release a connection', () async {
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: 5);
+      pool = TRPool(connectionSettings: settings, maxConnections: 5);
 
-      ValkeyClient? client;
+      TRClient? client;
       try {
         client = await pool.acquire();
-        expect(client, isA<ValkeyClient>());
+        expect(client, isA<TRClient>());
 
         // Check if connection is alive
         final response = await client.ping();
@@ -73,9 +73,9 @@ Future<void> main() async {
 
     test('pool respects maxConnections limit', () async {
       const max = 3;
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: max);
+      pool = TRPool(connectionSettings: settings, maxConnections: max);
 
-      final clients = <ValkeyClient>[];
+      final clients = <TRClient>[];
 
       // 1. Acquire all connections
       for (var i = 0; i < max; i++) {
@@ -94,10 +94,10 @@ Future<void> main() async {
       pool.release(clients.removeLast());
 
       // 4. Acquiring should now succeed
-      ValkeyClient? newClient;
+      TRClient? newClient;
       try {
         newClient = await acquireFuture; // The pending future should complete
-        expect(newClient, isA<ValkeyClient>());
+        expect(newClient, isA<TRClient>());
       } finally {
         if (newClient != null) pool.release(newClient);
         // Release remaining
@@ -109,7 +109,7 @@ Future<void> main() async {
       // This test is tricky because we can't easily make a client "unhealthy"
       // without mocking. We'll simulate a closed client.
 
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: 2);
+      pool = TRPool(connectionSettings: settings, maxConnections: 2);
 
       final client1 = await pool.acquire();
       final client2 = await pool.acquire(); // Pool is now full
@@ -125,7 +125,7 @@ Future<void> main() async {
       pool.release(client2);
 
       // Acquire should now get client2 (or a new healthy one)
-      ValkeyClient? client3;
+      TRClient? client3;
       try {
         client3 = await pool.acquire().timeout(const Duration(seconds: 1));
         final response = await client3.ping();
@@ -136,18 +136,18 @@ Future<void> main() async {
     });
 
     test('close() rejects new acquires', () async {
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: 2);
+      pool = TRPool(connectionSettings: settings, maxConnections: 2);
       await pool.close();
 
       await expectLater(
           pool.acquire(),
-          throwsA(isA<ValkeyClientException>().having(
+          throwsA(isA<TRClientException>().having(
               (e) => e.message, 'message', contains('Pool is closing'))));
     });
 
     test('release() automatically discards stateful clients (Smart Release)',
         () async {
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: 2);
+      pool = TRPool(connectionSettings: settings, maxConnections: 2);
 
       // 1. Acquire and make stateful
       final client = await pool.acquire();
@@ -174,7 +174,7 @@ Future<void> main() async {
     test(
         'release() and discard() are safe to call multiple times (Idempotency)',
         () async {
-      pool = ValkeyPool(connectionSettings: settings, maxConnections: 5);
+      pool = TRPool(connectionSettings: settings, maxConnections: 5);
       final client = await pool.acquire();
 
       // 1. Call release multiple times
@@ -192,7 +192,7 @@ Future<void> main() async {
 
       // Pool should be healthy and allow new acquires
       final client2 = await pool.acquire();
-      expect(client2, isA<ValkeyClient>());
+      expect(client2, isA<TRClient>());
       pool.release(client2);
     });
   },

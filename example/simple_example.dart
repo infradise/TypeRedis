@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Configure the client
-  final client = ValkeyClient(
+  final client = TRClient(
     host: '127.0.0.1',
     port: 6379,
     // password: 'my-super-secret-password',
@@ -32,9 +32,9 @@ void main() async {
     await client.set('greeting', 'Hello, Valkey!');
     final value = await client.get('greeting');
     print(value); // Output: Hello, Valkey!
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     print('Connection failed: $e');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     print('Server returned an error: $e');
   } finally {
     // 4. Close the connection

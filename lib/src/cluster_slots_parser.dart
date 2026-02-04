@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-import '../valkey_client.dart' show ValkeyClient;
-import '../valkey_client_base.dart'; // For ClusterSlotRange
+import '../typeredis.dart' show TRClient;
+import '../typeredis_base.dart'; // For ClusterSlotRange
 import 'exceptions.dart';
-import 'valkey_client.dart' show ValkeyClient; // For ValkeyParsingException
-// import 'package:valkey_client/src/cluster_info.dart'
+import 'typeredis_client.dart' show TRClient; // For TRParsingException
+// import 'package:typeredis/src/cluster_info.dart'
 //     show ClusterNodeInfo, ClusterSlotRange;
 
 /// Internal utility class to parse the complex nested array response
 /// from the 'CLUSTER SLOTS' command.
 ///
-/// This logic is separated from [ValkeyClient] to improve testability,
+/// This logic is separated from [TRClient] to improve testability,
 /// as the response format is complex.
 ///
-/// Throws a [ValkeyParsingException] if the response format is invalid.
+/// Throws a [TRParsingException] if the response format is invalid.
 List<ClusterSlotRange> parseClusterSlotsResponse(dynamic response) {
   if (response is! List) {
-    throw ValkeyParsingException(
-        'Invalid CLUSTER SLOTS response: expected List, '
+    throw TRParsingException('Invalid CLUSTER SLOTS response: expected List, '
         'got ${response.runtimeType}');
   }
 
@@ -69,11 +68,11 @@ List<ClusterSlotRange> parseClusterSlotsResponse(dynamic response) {
         replicas: replicas,
       ));
     }
-  } on ValkeyParsingException {
+  } on TRParsingException {
     rethrow; // Re-throw exceptions from _parseNodeInfo
   } catch (e) {
     // Catching generic errors during parsing (e.g., cast errors)
-    throw ValkeyParsingException('Failed to parse CLUSTER SLOTS response. '
+    throw TRParsingException('Failed to parse CLUSTER SLOTS response. '
         'Error: $e. Response: $response');
   }
 
@@ -85,7 +84,7 @@ List<ClusterSlotRange> parseClusterSlotsResponse(dynamic response) {
 ClusterNodeInfo _parseNodeInfo(dynamic nodeData) {
   if (nodeData is! List || nodeData.length < 2) {
     // Host and Port are minimum
-    throw ValkeyParsingException(
+    throw TRParsingException(
         'Invalid node info format: expected [host, port, ...], got $nodeData');
   }
 

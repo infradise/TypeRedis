@@ -15,14 +15,14 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() {
   group('Hash Commands - Advanced & Expiration', () {
-    late ValkeyClient client;
+    late TRClient client;
 
     setUp(() async {
-      client = ValkeyClient(host: 'localhost', port: 6379);
+      client = TRClient(host: 'localhost', port: 6379);
       await client.connect();
       await client.flushAll();
     });

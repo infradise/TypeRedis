@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
-ValkeyLogger logger = ValkeyLogger('JSON Debug Memory Example');
+TRLogger logger = TRLogger('JSON Debug Memory Example');
 
 void main() async {
-  logger.setEnableValkeyLog(true);
+  logger.setEnableTRLog(true);
 
-  final client = ValkeyClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient(host: '127.0.0.1', port: 6379);
 
   try {
     await client.connect();

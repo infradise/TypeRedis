@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
-ValkeyLogger logger = ValkeyLogger('JSON Debug Type Simple Example');
+TRLogger logger = TRLogger('JSON Debug Type Simple Example');
 
 void main() async {
-  logger.setEnableValkeyLog(true); // Enable all log levels (default: false)
+  logger.setEnableTRLog(true); // Enable all log levels (default: false)
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   try {
     await client.connect();
@@ -41,12 +41,12 @@ void main() async {
     }
 
     await runDebugTypeExamples(client);
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     logger.error('❌ Connection Failed: $e');
     logger.error('Ensure a Redis or Valkey CLUSTER node is running.');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     logger.error('❌ Server Error: $e');
-  } on ValkeyClientException catch (e) {
+  } on TRClientException catch (e) {
     logger.error('❌ Client Error: $e');
   } on FeatureNotImplementedException catch (e) {
     logger.error('❌ Feature Not Implemented: $e');
@@ -59,7 +59,7 @@ void main() async {
   }
 }
 
-Future<void> runDebugTypeExamples(ValkeyClient client) async {
+Future<void> runDebugTypeExamples(TRClient client) async {
   logger.info('--- 🚀 JSON Debug/Type/Toggle Examples ---');
 
   // 1. Setup Data

@@ -15,19 +15,19 @@
  */
 
 import 'dart:async';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // 1. Configure cluster connection
   // We use 127.0.0.1:7001 as the entry point
   final initialNodes = [
-    ValkeyConnectionSettings(
+    TRConnectionSettings(
       host: '127.0.0.1',
       port: 7001,
       commandTimeout: const Duration(seconds: 5),
     ),
   ];
-  final client = ValkeyClusterClient(initialNodes);
+  final client = TRClusterClient(initialNodes);
 
   try {
     print('Connecting to cluster...');
@@ -78,7 +78,7 @@ void main() async {
     // This cleans up connections to the shards.
     await sub.unsubscribe();
     print('Unsubscribed.');
-  } on ValkeyException catch (e) {
+  } on TRException catch (e) {
     print('❌ Error: $e');
   } finally {
     await client.close();

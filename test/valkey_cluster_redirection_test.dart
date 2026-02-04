@@ -18,11 +18,11 @@
 library;
 
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
-// import 'package:valkey_client/src/cluster_hash.dart'; // Need getHashSlot
+import 'package:typeredis/typeredis.dart';
+// import 'package:typeredis/src/cluster_hash.dart'; // Need getHashSlot
 
 Future<bool> checkServerStatus(String host, int port) async {
-  final client = ValkeyClient(host: host, port: port);
+  final client = TRClient(host: host, port: port);
   try {
     await client.connect();
     await client.close();
@@ -38,14 +38,14 @@ void main() async {
 
   final isClusterRunning = await checkServerStatus(clusterHost, clusterPort);
 
-  group('ValkeyClusterClient Redirection', () {
-    late ValkeyClusterClient client;
+  group('TRClusterClient Redirection', () {
+    late TRClusterClient client;
 
     setUp(() async {
       final initialNodes = [
-        ValkeyConnectionSettings(host: clusterHost, port: clusterPort),
+        TRConnectionSettings(host: clusterHost, port: clusterPort),
       ];
-      client = ValkeyClusterClient(initialNodes);
+      client = TRClusterClient(initialNodes);
       await client.connect();
     });
 

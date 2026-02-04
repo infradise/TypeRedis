@@ -13,8 +13,8 @@ docker run --name my-valkey -p 6379:6379 valkey/valkey:latest
 Valkey JSON, Valkey Bloom, Valkey Search, LDAP
 
 ```sh
-# When we need to change 6379 to 6380
-docker run --name my-valkey-json -p 6380:6380 valkey/valkey-bundle:latest --port 6380
+# When we need to change 6379 to 6380, use --port.
+docker run --name my-valkey-json -p 6379:6379 valkey/valkey-bundle:latest --port 6379
 ```
 
 OR

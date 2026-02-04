@@ -16,15 +16,15 @@
 
 import 'dart:async';
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 // Here is a basic example of how to connect and close the client.
 // For more examples, check the `/example` folder.
 
 /// This function contains all the command examples.
-/// It accepts any client that implements [ValkeyClientBase],
+/// It accepts any client that implements [TRClientBase],
 /// demonstrating how robust the interface is.
-Future<void> runCommandExamples(ValkeyClientBase client) async {
+Future<void> runCommandExamples(TRClientBase client) async {
   try {
     // 1. Connect and authenticate
     // The client will use whichever configuration it was given.
@@ -190,7 +190,7 @@ Future<void> main() async {
   // ====================================================================
   // Configuration for README Option 1: No Authentication
   // ====================================================================
-  // final fixedClient = ValkeyClient(
+  // final fixedClient = TRClient(
   //   host: host,
   //   port: port,
   // );
@@ -198,7 +198,7 @@ Future<void> main() async {
   // ====================================================================
   // Configuration for README Option 2: Password Only
   // ====================================================================
-  // final fixedClient = ValkeyClient(
+  // final fixedClient = TRClient(
   //   host: host,
   //   port: port,
   //   password: password,
@@ -207,7 +207,7 @@ Future<void> main() async {
   // ====================================================================
   // Configuration for README Option 3: Username + Password (ACL)
   // ====================================================================
-  final fixedClient = ValkeyClient(
+  final fixedClient = TRClient(
     host: host,
     port: port,
     username: username,
@@ -231,7 +231,7 @@ Future<void> main() async {
   print('Running Example with Method Config (flexibleClient)');
   print('=' * 40);
 
-  final flexibleClient = ValkeyClient(); // No config in constructor
+  final flexibleClient = TRClient(); // No config in constructor
 
   // Create a reusable connection object (e.g., from a config file)
   const config = (
@@ -269,9 +269,9 @@ Future<void> main() async {
   print('=' * 40);
 
   // Use two clients: one to subscribe, one to publish
-  final subscriber = ValkeyClient(host: host, port: port);
-  final publisher = ValkeyClient(host: host, port: port);
-  StreamSubscription<ValkeyMessage>? listener; // Keep track of the listener
+  final subscriber = TRClient(host: host, port: port);
+  final publisher = TRClient(host: host, port: port);
+  StreamSubscription<TRMessage>? listener; // Keep track of the listener
   const channel = 'news:updates';
 
   try {
@@ -360,9 +360,9 @@ Future<void> runPatternSubscriptionExample({
   print('Running Advanced Pub/Sub Example (Pattern Subscription)');
   print('=' * 40);
 
-  final subscriber = ValkeyClient(host: host, port: port);
-  final publisher = ValkeyClient(host: host, port: port);
-  StreamSubscription<ValkeyMessage>? listener;
+  final subscriber = TRClient(host: host, port: port);
+  final publisher = TRClient(host: host, port: port);
+  StreamSubscription<TRMessage>? listener;
 
   try {
     await Future.wait([subscriber.connect(), publisher.connect()]);
@@ -441,13 +441,13 @@ Future<void> runPubSubIntrospectionExample({
   print('=' * 40);
 
   // Use the config from main() for both clients
-  final adminClient = ValkeyClient(
+  final adminClient = TRClient(
     host: host,
     port: port,
     username: username,
     password: password,
   );
-  final subClient = ValkeyClient(
+  final subClient = TRClient(
     host: host,
     port: port,
     username: username,

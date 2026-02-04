@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   print('☁️ [Prod] Connecting to Cloud Cluster SSL...');
 
   final initialNodes = [
-    ValkeyConnectionSettings(
+    TRConnectionSettings(
       host: 'clustercfg.my-cluster.cache.amazonaws.com',
       port: 6379,
       useSsl: true,
@@ -29,7 +29,7 @@ void main() async {
     ),
   ];
 
-  final cluster = ValkeyClusterClient(initialNodes);
+  final cluster = TRClusterClient(initialNodes);
 
   try {
     await cluster.connect();

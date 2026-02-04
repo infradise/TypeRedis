@@ -16,7 +16,7 @@
 
 import 'dart:async';
 import 'package:test/test.dart';
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 /// Standalone Sharded Pub/Sub Test: Protocol compliance check
 ///
@@ -36,13 +36,13 @@ void main() {
   // that owns the slot.
   // const port = 7002; // Cluster master node port
 
-  group('ValkeyClient Sharded Pub/Sub', () {
-    late ValkeyClient subscriber;
-    late ValkeyClient publisher;
+  group('TRClient Sharded Pub/Sub', () {
+    late TRClient subscriber;
+    late TRClient publisher;
 
     setUp(() async {
-      subscriber = ValkeyClient(host: host, port: port);
-      publisher = ValkeyClient(host: host, port: port);
+      subscriber = TRClient(host: host, port: port);
+      publisher = TRClient(host: host, port: port);
       await subscriber.connect();
       await publisher.connect();
     });
@@ -62,7 +62,7 @@ void main() {
       await sub.ready; // Wait for confirmation
 
       // 2. Setup listener
-      final completer = Completer<ValkeyMessage>();
+      final completer = Completer<TRMessage>();
       sub.messages.listen((msg) {
         print('Received message on ${msg.channel}: ${msg.message}');
         if (!completer.isCompleted) completer.complete(msg);

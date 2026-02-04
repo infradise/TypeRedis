@@ -15,7 +15,7 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/cluster_hash.dart';
+import 'package:typeredis/src/cluster_hash.dart';
 
 void main() {
   group('getHashSlot (CRC-16/XMODEM % 16384)', () {

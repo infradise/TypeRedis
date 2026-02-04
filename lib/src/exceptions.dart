@@ -15,44 +15,44 @@
  */
 
 /// The base class for all exceptions thrown by the valkey_client package.
-class ValkeyException implements Exception {
+class TRException implements Exception {
   final String message;
 
-  ValkeyException(this.message);
+  TRException(this.message);
 
   @override
-  String toString() => 'ValkeyException: $message';
+  String toString() => 'TRException: $message';
 }
 
 /// Thrown when the client fails to connect to the server (e.g., connection
 /// refused)
 /// or if an established connection is lost.
 /// Corresponds to socket-level or network errors.
-class ValkeyConnectionException extends ValkeyException {
+class TRConnectionException extends TRException {
   /// The original socket exception (e.g., `SocketException`) or error, if
   /// available.
   final Object? originalException;
 
-  ValkeyConnectionException(super.message, [this.originalException]);
+  TRConnectionException(super.message, [this.originalException]);
 
   @override
   String toString() =>
-      'ValkeyConnectionException: $message (Original: $originalException)';
+      'TRConnectionException: $message (Original: $originalException)';
 }
 
 /// Thrown when the Valkey server returns an error reply
 /// (e.g., -ERR, -WRONGPASS).
 /// These are errors reported by the server itself, indicating a command
 /// could not be processed.
-class ValkeyServerException extends ValkeyException {
+class TRServerException extends TRException {
   /// The error code or type returned by the server (e.g., "ERR", "WRONGPASS",
   /// "EXECABORT").
   final String code;
 
-  ValkeyServerException(super.message) : code = message.split(' ').first;
+  TRServerException(super.message) : code = message.split(' ').first;
 
   @override
-  String toString() => 'ValkeyServerException($code): $message';
+  String toString() => 'TRServerException($code): $message';
 }
 
 /// Thrown when a command is issued in an invalid client state.
@@ -61,22 +61,22 @@ class ValkeyServerException extends ValkeyException {
 /// * Calling `EXEC` without `MULTI`.
 /// * Calling `PUBLISH` while the client is in Pub/Sub mode.
 /// * Mixing `SUBSCRIBE` and `PSUBSCRIBE` on the same client.
-class ValkeyClientException extends ValkeyException {
-  ValkeyClientException(super.message);
+class TRClientException extends TRException {
+  TRClientException(super.message);
 
   @override
-  String toString() => 'ValkeyClientException: $message';
+  String toString() => 'TRClientException: $message';
 }
 
 /// Thrown if the client cannot parse the server's response.
 ///
 /// This may indicate corrupted data, a bug in the client,
 /// or an unsupported RESP (Redis Serialization Protocol) version.
-class ValkeyParsingException extends ValkeyException {
-  ValkeyParsingException(super.message);
+class TRParsingException extends TRException {
+  TRParsingException(super.message);
 
   @override
-  String toString() => 'ValkeyParsingException: $message';
+  String toString() => 'TRParsingException: $message';
 }
 
 /// Simple exception to signal an intentionally unimplemented feature.

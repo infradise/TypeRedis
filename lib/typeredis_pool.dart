@@ -16,9 +16,9 @@
 
 import 'dart:async';
 import 'dart:collection';
-import 'valkey_client.dart';
+import 'typeredis.dart';
 
-/// Manages a pool of [ValkeyClient] connections with robust resource tracking.
+/// Manages a pool of [TRClient] connections with robust resource tracking.
 ///
 /// This is the recommended class for high-concurrency applications
 /// as it avoids the overhead of creating new connections for every request.
@@ -27,24 +27,24 @@ import 'valkey_client.dart';
 /// - **Smart Release:** Automatically discards stateful (dirty) connections.
 /// - **Idempotency:** Safe to call release/discard multiple times.
 /// - **Leak Prevention:** Tracks all created connections to prevent leaks.
-class ValkeyPool {
-  final ValkeyConnectionSettings _connectionSettings;
+class TRPool {
+  final TRConnectionSettings _connectionSettings;
   final int _maxConnections;
 
   // --- Pool State (Robust Tracking) ---
 
   /// All connections managed by this pool (Leased + Idle).
   /// Used to verify ownership and prevent leaks.
-  final Set<ValkeyClient> _allClients = {};
+  final Set<TRClient> _allClients = {};
 
   /// Connections currently waiting to be reused.
-  final Queue<ValkeyClient> _idleClients = Queue();
+  final Queue<TRClient> _idleClients = Queue();
 
   /// Connections currently leased out to users.
-  final Set<ValkeyClient> _leasedClients = {};
+  final Set<TRClient> _leasedClients = {};
 
   /// Requests waiting for a connection to become available.
-  final Queue<Completer<ValkeyClient>> _waitQueue = Queue();
+  final Queue<Completer<TRClient>> _waitQueue = Queue();
 
   /// Flag to prevent new acquires after close() is called.
   bool _isClosing = false;
@@ -63,8 +63,8 @@ class ValkeyPool {
   /// [connectionSettings]: The settings used to create new connections.
   /// [maxConnections]: The maximum number of concurrent connections allowed.
   /// Default to 10 max connections.
-  ValkeyPool({
-    required ValkeyConnectionSettings connectionSettings,
+  TRPool({
+    required TRConnectionSettings connectionSettings,
     int maxConnections = 10,
   })  : _connectionSettings = connectionSettings,
         _maxConnections = maxConnections {
@@ -80,9 +80,9 @@ class ValkeyPool {
   ///
   /// (The acquired client **MUST** be returned using [release]
   /// when done.)
-  Future<ValkeyClient> acquire() async {
+  Future<TRClient> acquire() async {
     if (_isClosing) {
-      throw ValkeyClientException(
+      throw TRClientException(
           'Pool is closing, cannot acquire new connections.');
     }
 
@@ -107,15 +107,15 @@ class ValkeyPool {
     }
 
     // 3. Pool is full, wait for a connection
-    final completer = Completer<ValkeyClient>();
+    final completer = Completer<TRClient>();
     _waitQueue.add(completer);
     return completer.future;
   }
 
   /// Helper to create, track, and lease a new client.
-  Future<ValkeyClient> _createNewClientAndLease() async {
+  Future<TRClient> _createNewClientAndLease() async {
     try {
-      final client = ValkeyClient(
+      final client = TRClient(
         host: _connectionSettings.host,
         port: _connectionSettings.port,
         username: _connectionSettings.username,
@@ -135,7 +135,7 @@ class ValkeyPool {
       return client;
     } catch (e) {
       // Creation failed, no tracking needed as it wasn't added
-      throw ValkeyConnectionException(
+      throw TRConnectionException(
           'Failed to create new pool connection: $e', e);
     }
   }
@@ -156,7 +156,7 @@ class ValkeyPool {
   /// - If the client is **stateful** (e.g., Pub/Sub mode), it is automatically **discarded**.
   /// - If the client does not belong to this pool or was already released,
   ///   this does nothing (Safe).
-  void release(ValkeyClient client) {
+  void release(TRClient client) {
     // 1. Ownership & State Check
     if (!_allClients.contains(client)) {
       // Already discarded or foreign client. Ignore safely.
@@ -199,7 +199,7 @@ class ValkeyPool {
   ///
   /// Use this if the connection is broken or no longer needed.
   /// Safe to call multiple times.
-  Future<void> discard(ValkeyClient client) async {
+  Future<void> discard(TRClient client) async {
     // 1. Ownership Check
     if (!_allClients.contains(client)) {
       return; // Already gone. Safe.
@@ -240,7 +240,7 @@ class ValkeyPool {
     // 1. Cancel waiters
     while (_waitQueue.isNotEmpty) {
       _waitQueue.removeFirst().completeError(
-          ValkeyClientException('Pool is closing, request cancelled.'));
+          TRClientException('Pool is closing, request cancelled.'));
     }
 
     // 2. Close all clients (Idle + Leased)

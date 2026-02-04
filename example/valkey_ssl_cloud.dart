@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 // ---------------------------------------------------------
 // Scenario 2: Connecting to a Cloud Provider (Prod)
@@ -24,7 +24,7 @@ import 'package:valkey_client/valkey_client.dart';
 void main() async {
   print('☁️ [Prod] Connecting to Cloud Provider SSL (Trusted CA)...');
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     // Example endpoint for AWS ElastiCache or Azure Redis
     host: 'master.my-cluster.cache.amazonaws.com',
     // host: 'my-redis.region.cache.amazonaws.com',
@@ -35,7 +35,7 @@ void main() async {
     password: 'your_auth_token', // or auth-token-here
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   try {
     await client.connect();

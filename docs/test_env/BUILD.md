@@ -77,7 +77,7 @@ Expected output:
 ...
 [SUCCESS 22] Node 192.168.65.254:7002 | resilience:key = val-22
 # Power-off this node.
-[RETRY 23] Client error: ValkeyClientException: Cluster operation failed ...
+[RETRY 23] Client error: TRClientException: Cluster operation failed ...
 [RETRY 24] ...
 [RETRY 25] ...
 # Redirected successfuly.
@@ -93,7 +93,7 @@ Expected output:
 # Nodes: 7003, 7005, 7006
 [Stress Test] nodeStr = 192.168.65.254:7006 | Success: 27 | Failed: 0 | Last: OK
 # Power-off node 7006.
-❌ Operation Failed: ValkeyClientException: Cluster operation failed. 
+❌ Operation Failed: TRClientException: Cluster operation failed. 
 # Nodes: 7003, 7005, 7002. The node 7002 successfully takes over 7006.
 [Stress Test] nodeStr = 192.168.65.254:7005 | Success: 56 | Failed: 1 | Last: OK
 ```

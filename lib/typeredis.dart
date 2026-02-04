@@ -18,7 +18,6 @@
 /// Fully Redis 7.x/8.* compatible.
 library;
 
-// Export cluster info data classes (v1.2.0)
 export 'src/cluster_info.dart';
 export 'src/commands/bitmap/extensions.dart';
 export 'src/commands/bloom_filter/extensions.dart';
@@ -50,15 +49,19 @@ export 'src/commands/top_k_sketch/extensions.dart';
 export 'src/commands/transactions/extensions.dart';
 export 'src/commands/vector_set/extensions.dart';
 export 'src/exceptions.dart';
-export 'src/logging.dart' show ValkeyLogLevel, ValkeyLogger;
-export 'src/valkey_client.dart';
-export 'src/valkey_cluster_client.dart';
-// Export the public API interface and related classes
-export 'valkey_client_base.dart';
-// Re-export shared data classes and enums for convenience
-export 'valkey_client_base.dart' show Subscription, ValkeyMessage;
-// Export the new cluster client interface (v1.3.0)
-export 'valkey_cluster_client_base.dart';
-// Export the common command interface
-export 'valkey_commands_base.dart';
-export 'valkey_pool.dart';
+export 'src/logging.dart' show TRLogLevel, TRLogger;
+export 'src/typeredis_client.dart';
+export 'src/typeredis_cluster_client.dart';
+export 'typeredis_base.dart'
+    show
+        LoadBalancingStrategy,
+        ReadPreference,
+        RunningMode,
+        ServerMetadata,
+        Subscription,
+        TRClientBase,
+        TRConnectionSettings,
+        TRMessage;
+export 'typeredis_cluster_client_base.dart';
+export 'typeredis_commands_base.dart';
+export 'typeredis_pool.dart';

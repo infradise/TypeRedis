@@ -16,19 +16,19 @@
 
 import 'dart:convert';
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
-ValkeyLogger logger = ValkeyLogger('JSON Array Price and Multi Example');
+TRLogger logger = TRLogger('JSON Array Price and Multi Example');
 
 void main() async {
-  logger.setEnableValkeyLog(true); // Enable all log levels (default: false)
+  logger.setEnableTRLog(true); // Enable all log levels (default: false)
 
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  final client = ValkeyClient.fromSettings(settings);
+  final client = TRClient.fromSettings(settings);
 
   try {
     await client.connect();
@@ -44,12 +44,12 @@ void main() async {
 
     await runArrayPriceExamples(client);
     await runArrayMultiExamples(client);
-  } on ValkeyConnectionException catch (e) {
+  } on TRConnectionException catch (e) {
     logger.error('❌ Connection Failed: $e');
     logger.error('Ensure a Redis or Valkey CLUSTER node is running.');
-  } on ValkeyServerException catch (e) {
+  } on TRServerException catch (e) {
     logger.error('❌ Server Error: $e');
-  } on ValkeyClientException catch (e) {
+  } on TRClientException catch (e) {
     logger.error('❌ Client Error: $e');
   } on FeatureNotImplementedException catch (e) {
     logger.error('❌ Feature Not Implemented: $e');
@@ -62,7 +62,7 @@ void main() async {
   }
 }
 
-Future<void> runArrayPriceExamples(ValkeyClient client) async {
+Future<void> runArrayPriceExamples(TRClient client) async {
   const productKey1 = 'product:1';
   const productKey2 = 'product:2';
   const rootPath = r'$';
@@ -128,7 +128,7 @@ Future<void> runArrayPriceExamples(ValkeyClient client) async {
   logger.info('$productKey2 $pricePath = $currentPrice');
 }
 
-Future<void> runArrayMultiExamples(ValkeyClient client) async {
+Future<void> runArrayMultiExamples(TRClient client) async {
   await client.jsonMSet(entries: [
     // Using Helper Class
     const JsonMSetEntry(key: 'doc:1', path: r'$', value: {'a': 1}),

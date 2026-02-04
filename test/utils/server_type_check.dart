@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
-extension ServerTypeCheck on ValkeyClient {
+extension ServerTypeCheck on TRClient {
   /// Checks if the connected server is a Redis server or a Valkey server.
   ///
   /// This method parses the output of the 'INFO server' command.

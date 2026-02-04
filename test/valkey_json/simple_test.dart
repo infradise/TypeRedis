@@ -15,19 +15,19 @@
  */
 
 import 'package:test/test.dart';
-import 'package:valkey_client/src/utils/module_printer.dart'
+import 'package:typeredis/src/utils/module_printer.dart'
     show printPrettyModuleList;
-import 'package:valkey_client/valkey_client.dart';
+import 'package:typeredis/typeredis.dart';
 
 void main() async {
   // (Standalone: 6379 / Cluster: 7001)
-  final settings = ValkeyConnectionSettings(
+  final settings = TRConnectionSettings(
     host: '127.0.0.1',
     port: 6379,
   );
 
-  // final client = ValkeyClient(host: '127.0.0.1', port: 6379);
-  final client = ValkeyClient.fromSettings(settings);
+  // final client = TRClient(host: '127.0.0.1', port: 6379);
+  final client = TRClient.fromSettings(settings);
 
   setUpAll(() async {
     await client.connect();
@@ -54,7 +54,7 @@ void main() async {
     await client.jsonSet(key: 'json:notarray2', path: '.', data: '{"a":1}');
     expect(() async {
       await client.jsonArrIndex(key: 'json:notarray2', path: '.', value: 'a');
-    }, throwsA(isA<ValkeyException>()));
+    }, throwsA(isA<TRException>()));
 
     await client.jsonSet(key: 'json:arr', path: '.', data: '["a","b","c"]');
     final idx1 =
@@ -73,8 +73,8 @@ void main() async {
           key: 'json:notarray2', path: '.', value: 'a');
       expect(result, isNull);
     } catch (e) {
-      expect(e, isA<ValkeyException>());
-      expect((e as ValkeyException).message,
+      expect(e, isA<TRException>());
+      expect((e as TRException).message,
           equals('WRONGTYPE JSON element is not an array'));
     }
   });
