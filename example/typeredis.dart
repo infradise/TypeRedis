@@ -20,77 +20,42 @@ void main() async {
   // -------------------------------------------------------
   // 1-1. Redis/Valkey Standalone (Basic)
   // -------------------------------------------------------
-  final client = TRClient(
+
+  // -------------------------------------------------------
+  // For Redis users
+  //
+  final redis = RedisClient(
     host: 'localhost',
     port: 6379,
-    //  password: '',
+    // password: '',
+    // username: '',
   );
   try {
-    await client.connect();
-    await client.set('Hello', 'Welcome to TypeRedis');
-    print(await client.get('Hello'));
+    await redis.connect();
+    await redis.set('Hello', 'Welcome to Redis!');
+    print(await redis.get('Hello'));
   } catch (e) {
     print('Error: $e');
   } finally {
-    await client.close();
+    await redis.close();
   }
 
   // -------------------------------------------------------
-  // 1-2. Redis/Valkey Standalone (Advanced)
-  // -------------------------------------------------------
-  final settings = TRConnectionSettings(
+  // For Valkey users
+  //
+  final valkey = ValkeyClient(
     host: 'localhost',
     port: 6379,
-    // useSsl: false,
-    // database: 0,
+    // password: '',
+    // username: '',
   );
-  final aClient = TRClient.fromSettings(settings);
   try {
-    await aClient.connect();
-    await aClient.set('Hello', 'Welcome to TypeRedis');
-    print(await aClient.get('Hello'));
+    await valkey.connect();
+    await valkey.set('Hello', 'Welcome to Valkey!');
+    print(await valkey.get('Hello'));
   } catch (e) {
     print('Error: $e');
   } finally {
-    await aClient.close();
-  }
-
-  // -------------------------------------------------------
-  // 2. Redis/Valkey Sentinel
-  // -------------------------------------------------------
-  final rSettings = TRConnectionSettings(
-      host: 'localhost',
-      port: 6379,
-      readPreference: ReadPreference.preferReplica);
-  final rClient = TRClient.fromSettings(rSettings);
-  try {
-    await rClient.connect();
-    await rClient.set('Hello', 'Welcome to TypeRedis');
-    print(await rClient.get('Hello'));
-  } catch (e) {
-    print('Error: $e');
-  } finally {
-    await rClient.close();
-  }
-
-  // -------------------------------------------------------
-  // 3. Redis/Valkey Cluster
-  // -------------------------------------------------------
-  final nodes = [
-    TRConnectionSettings(
-      host: 'localhost',
-      port: 7001,
-      // password: '',
-    )
-  ];
-  final sClient = TRClusterClient(nodes);
-  try {
-    await sClient.connect();
-    await sClient.set('Hello', 'Welcome to TypeRedis');
-    print(await sClient.get('Hello'));
-  } catch (e) {
-    print('Error: $e');
-  } finally {
-    await sClient.close();
+    await valkey.close();
   }
 }

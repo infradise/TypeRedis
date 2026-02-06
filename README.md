@@ -44,7 +44,7 @@ Server management, connection handling, and flow control.
 
 ## Usage
 
-**TypeRedis** provides full alias sets for `Redis` and `Valkey`, including Client, ClusterClient, Pool, Exceptions, Configuration, and Data Models. (Check out [Developer Experience Improvements](https://github.com/infradise/valkey_client/wiki/Developer-Experience-Improvements)).
+**TypeRedis** provides full alias sets for `Redis` and `Valkey`, including Client, ClusterClient, Pool, Exceptions, Configuration, and Data Models. (Check out [Developer Experience Improvements](https://github.com/infradise/TypeRedis/wiki/Developer-Experience-Improvements)).
 
 ### 1\-1\. Redis/Valkey Standalone (Basic)
 
@@ -58,7 +58,12 @@ Server management, connection handling, and flow control.
 import 'package:typeredis/typeredis.dart';
 
 void main() async {
-  final client = RedisClient(host: 'localhost', port: 6379);
+  final client = RedisClient(
+    host: 'localhost', 
+    port: 6379, 
+    // username: '', 
+    // password: '',
+  );
   try {
     await client.connect();
     await client.set('Hello', 'Welcome to Redis!');
@@ -80,7 +85,12 @@ void main() async {
 import 'package:typeredis/typeredis.dart';
 
 void main() async {
-  final client = ValkeyClient(host: 'localhost', port: 6379);
+  final client = ValkeyClient(
+    host: 'localhost', 
+    port: 6379, 
+    // username: '', 
+    // password: '',
+  );
   try {
     await client.connect();
     await client.set('Hello', 'Welcome to Valkey!');
@@ -235,7 +245,12 @@ import 'package:typeredis/typeredis.dart';
 
 void main() async {
   final nodes = [
-    RedisConnectionSettings(host: 'localhost', port: 7001)
+    RedisConnectionSettings(
+      host: 'localhost', 
+      port: 7001,
+      // password: '',
+      // username: '',
+    )
   ];
   final client = RedisClusterClient(nodes);
   try {

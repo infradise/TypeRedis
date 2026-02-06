@@ -18,7 +18,7 @@ import '../commands.dart' show StreamCommands, StreamEntry, parseStreamEntry;
 
 extension XClaimCommand on StreamCommands {
   /// XCLAIM key group consumer min-idle-time id [id ...] [IDLE ms]
-  /// [TIME ms-unix-time] [RETRYCOUNT count] [FORCE] `[JUSTID]`
+  /// [TIME ms-unix-time] [RETRYCOUNT count] `[FORCE]` `[JUSTID]`
   ///
   /// Changes (or acquires) ownership of a message in a consumer group.
   Future<List<StreamEntry>> xClaim(

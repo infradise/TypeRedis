@@ -17,7 +17,8 @@
 import '../commands.dart' show StreamCommands, StreamEntry, parseStreamEntry;
 
 extension XReadGroupCommand on StreamCommands {
-  /// XREADGROUP GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]
+  /// XREADGROUP GROUP group consumer [COUNT count] [BLOCK milliseconds]
+  /// `[NOACK]` STREAMS key [key ...] id [id ...]
   Future<Map<String, List<StreamEntry>>> xReadGroup(
     String group,
     String consumer,

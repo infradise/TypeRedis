@@ -17,7 +17,8 @@
 import '../commands.dart' show StreamCommands;
 
 extension XAddCommand on StreamCommands {
-  /// XADD key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] ID field value [field value ...]
+  /// XADD key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] ID
+  /// field value [field value ...]
   ///
   /// Appends a new entry to a stream.
   Future<String> xAdd(

@@ -20,13 +20,17 @@ extension XRevRangeCommand on StreamCommands {
   /// XREVRANGE key end start [COUNT count]
   ///
   /// Exactly like XRANGE, but in reverse order.
+  ///
+  /// - [end]: The higher ID (Start of the reverse range). Default: '+'
+  /// - [start]: The lower ID (End of the reverse range). Default: '-'
   Future<List<StreamEntry>> xRevRange(
     String key, {
-    String end = '+',
-    String start = '-',
+    String end = '+', // Spec: end (Max ID)
+    String start = '-', // Spec: start (Min ID)
     int? count,
   }) async {
     final cmd = <String>['XREVRANGE', key, end, start];
+
     if (count != null) {
       cmd.add('COUNT');
       cmd.add(count.toString());
