@@ -18,6 +18,7 @@
 /// Fully Redis 7.x/8.* compatible.
 library;
 
+export 'redis_client.dart';
 export 'src/cluster_info.dart';
 export 'src/commands/bitmap/extensions.dart';
 export 'src/commands/bloom_filter/extensions.dart';
@@ -68,3 +69,4 @@ export 'typeredis_base.dart'
 export 'typeredis_cluster_client_base.dart';
 export 'typeredis_commands_base.dart';
 export 'typeredis_pool.dart';
+export 'valkey_client.dart';
