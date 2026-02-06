@@ -16,4 +16,16 @@
 
 import '../commands.dart' show StreamCommands;
 
-extension StreamTemplateCommand on StreamCommands {}
+extension XSetIdCommand on StreamCommands {
+  /// XSETID key last-id [ENTRIESADDED entries-added]
+  ///
+  /// Internal command to set the last ID of the stream.
+  Future<String> xSetId(String key, String lastId, {int? entriesAdded}) async {
+    final cmd = <String>['XSETID', key, lastId];
+    if (entriesAdded != null) {
+      cmd.add('ENTRIESADDED');
+      cmd.add(entriesAdded.toString());
+    }
+    return executeString(cmd);
+  }
+}

@@ -43,6 +43,7 @@ export 'src/commands/search/extensions.dart';
 export 'src/commands/server/extensions.dart';
 export 'src/commands/set/extensions.dart';
 export 'src/commands/sorted_set/extensions.dart';
+export 'src/commands/stream/commands.dart' show StreamEntry;
 export 'src/commands/stream/extensions.dart';
 export 'src/commands/string/extensions.dart';
 export 'src/commands/t_digest_sketch/extensions.dart';
