@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 name: typeredis
-description: A high-performance, cluster-aware, type-safe Dart client for Redis, Valkey, and compatible servers.
-version: 3.8.1
+description: A high-performance, cluster-aware, type-safe Dart client for Redis, Valkey, Dragonfly, and compatible servers.
+version: 3.9.0
 repository: https://github.com/infradise/TypeRedis
 homepage: https://github.com/infradise/TypeRedis
 issue_tracker: https://github.com/infradise/TypeRedis/issues

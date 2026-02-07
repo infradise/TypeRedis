@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.9.0
+* **Modular Architecture**
+    * **New GENERIC Commands** 
+        * Added full suite of GENERIC commands: `copy`, `del`, `dump`, `exists`, `expire`, `expireAt`, `expireTime`, `keys`, `migrate`, `move`, `objectEncoding`, `objectFreq`, `objectHelp`, `objectIdleTime`, `objectRefCount`, `persist`, `pExpire`, `pExpireAt`, `pExpireTime`, `pTtl`, `randomKey`, `rename`, `renameNx`, `restore`, `scan`, `sort`, `sortRo`, `touch`, `ttl`, `type`, `unlink`, `wait`, `waitAof`.
+
 ## 3.8.1
 * **Dragonfly support**
     * **New aliases**: Added complete alias set for Dragonfly.
