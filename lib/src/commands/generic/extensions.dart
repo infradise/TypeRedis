@@ -14,6 +14,37 @@
  * limitations under the License.
  */
 
+export 'commands/copy.dart';
 export 'commands/del.dart';
+export 'commands/dump.dart';
+export 'commands/exists.dart';
+export 'commands/expire.dart';
+export 'commands/expire_at.dart';
+export 'commands/expire_time.dart';
+export 'commands/keys.dart';
+export 'commands/migrate.dart';
+export 'commands/move.dart';
+export 'commands/object_encoding.dart';
+export 'commands/object_freq.dart';
+export 'commands/object_help.dart';
+export 'commands/object_idle_time.dart';
+export 'commands/object_ref_count.dart';
+export 'commands/p_expire.dart';
+export 'commands/p_expire_at.dart';
+export 'commands/p_expire_time.dart';
+export 'commands/p_ttl.dart';
+export 'commands/persist.dart';
+export 'commands/random_key.dart';
+export 'commands/rename.dart';
+export 'commands/rename_nx.dart';
+export 'commands/restore.dart';
 export 'commands/scan.dart';
+export 'commands/scan_cli.dart';
+export 'commands/sort.dart';
+export 'commands/sort_ro.dart';
+export 'commands/touch.dart';
+export 'commands/ttl.dart';
 export 'commands/type.dart';
+export 'commands/unlink.dart';
+export 'commands/wait.dart';
+export 'commands/wait_aof.dart';

@@ -16,52 +16,38 @@
 
 import '../commands.dart' show GenericCommands;
 
-/// Result for SCAN command
-/// A DTO to hold the result of a SCAN operation.
-class ScanResult {
-  final String cursor;
-  final List<String> keys;
-  ScanResult(this.cursor, this.keys);
-}
-
 extension ScanCommand on GenericCommands {
-  /// from @Keyscope
-  Future<ScanResult> scan({
-    required String cursor,
-    String match = '*',
-    int count = 100,
+  /// SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]
+  ///
+  /// Incrementally iterate the keys space.
+  /// Returns: [next_cursor, [keys]]
+  Future<List<dynamic>> scan(
+    String cursor, {
+    String? match,
+    int? count,
+    String? type,
   }) async {
-    try {
-      /// Execute SCAN command: SCAN <cursor> MATCH <pattern> COUNT <count>
-      final cmd = <String>[
-        'SCAN',
-        cursor,
-        'MATCH',
-        match,
-        'COUNT',
-        count.toString()
-      ];
-
-      /// Sends a command to the server.
-      final result = await execute(cmd);
-
-      /// Result is typically a list: [nextCursor, [key1, key2, ...]]
-      if (result is List && result.length == 2) {
-        final nextCursor = result[0].toString();
-        final rawKeys = result[1];
-
-        var keys = <String>[];
-        if (rawKeys is List) {
-          keys = rawKeys.map((e) => e.toString()).toList();
-        }
-
-        return ScanResult(nextCursor, keys);
-      } else {
-        throw Exception('Unexpected SCAN response format');
-      }
-    } catch (e) {
-      print('Failed to SCAN keys: $e');
-      rethrow;
+    final cmd = <String>['SCAN', cursor];
+    if (match != null) {
+      cmd.add('MATCH');
+      cmd.add(match);
     }
+    if (count != null) {
+      cmd.add('COUNT');
+      cmd.add(count.toString());
+    }
+    if (type != null) {
+      cmd.add('TYPE');
+      cmd.add(type);
+    }
+
+    final result = await execute(cmd);
+    if (result is! List) return ['0', <List>[]];
+
+    // Ensure strict typing for return
+    final nextCursor = result[0].toString();
+    final keys = (result[1] as List).map((e) => e.toString()).toList();
+
+    return [nextCursor, keys];
   }
 }

@@ -37,6 +37,7 @@ extension DelCommand on GenericCommands {
     return executeInt(cmd);
   }
 
+  // TODO: WILL BE REMOVED AFTER REDESIGN FOR CLUSTER IN THE FUTURE
   // Future<int> del(List<String> keys) async {
   //   // Return early for empty input
   //   if (keys.isEmpty) return 0;
