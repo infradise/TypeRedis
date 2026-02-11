@@ -4,6 +4,8 @@
 * **Modular Architecture**
     * **New SEARCH Commands**  
         * Added a full suite of SEARCH commands: `ftAggregate`, `ftAliasAdd`, `ftAliasDel`, `ftAliasUpdate`, `ftAlter`, `ftConfigGet`, `ftConfigSet`, `ftCreate`, `ftCursorDel`, `ftCursorRead`, `ftDictAdd`, `ftDictDel`, `ftDictDump`, `ftDropIndex`, `ftExplain`, `ftExplainCli`, `ftHybrid`, `ftInfo`, `ftList`, `ftProfile`, `ftSearch`, `ftSpellCheck`, `ftSynDump`, `ftSynUpdate`, `ftTagVals`
+* **Breaking Changes**
+    * `hMSet`: Changed parameter type of `data` from `Map<String, String>` to `Map<String, dynamic>`, allowing values of any type instead of only `String`.
 
 ## 4.0.0
 * **Modular Architecture**
@@ -13,7 +15,7 @@
         * Added `configSet`
 * **New APIs**: Introduced `disconnect()` as an alternative name for `close()`. Internally calls `close()`.
 * **Breaking Changes**
-    * `exists`: Changed return type from `String` to `dynamic`, now accepting both `String` and `List<String>`. 
+    * `exists`: Changed parameter type from `String` to `dynamic`, now accepts either a single `String` or a `List<String>`.
 * **RESP Parser**
     * **Bulk Strings**: Improved exception handling to better support commands such as `dump()`.
 
