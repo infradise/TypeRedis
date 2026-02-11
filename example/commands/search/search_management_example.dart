@@ -15,15 +15,17 @@
  */
 
 import 'package:keyscope_client/keyscope_client.dart';
-import 'package:keyscope_client/src/commands/extensions/server_version_check.dart'
-    show ServerVersionCheck;
 
 Future<void> main() async {
   final client = KeyscopeClient(host: 'localhost', port: 6379);
   await client.connect();
 
-  if (await client.isValkey) {
-    print('Skipping: This feature is supported on Redis only.');
+  // Redis Only Feature
+  if (!await client.isRedisServer()) {
+    // or !await client.isRedis
+    print('⚠️  Skipping: This example requires a Redis server.');
+    print('   Current server appears to be Valkey or other compatible server.');
+    await client.close(); // disconnect
     return;
   }
 
