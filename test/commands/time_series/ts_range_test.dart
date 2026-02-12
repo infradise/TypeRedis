@@ -1,0 +1,108 @@
+/*
+ * Copyright 2025-2026 Infradise Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import 'package:keyscope_client/keyscope_client.dart';
+import 'package:test/test.dart';
+
+void main() {
+  group('Time Series - Range & Batch', () {
+    late KeyscopeClient client;
+
+    setUp(() async {
+      client = KeyscopeClient(host: 'localhost', port: 6379);
+      await client.connect();
+      await client.flushAll();
+    });
+
+    tearDown(() async {
+      await client.disconnect();
+    });
+
+    test('TS.MADD, TS.MGET', () async {
+      const key1 = 'ts:batch:1';
+      const key2 = 'ts:batch:2';
+
+      await client.tsCreate(key1,
+          options: ['LABELS', 'type', 'A'], forceRun: true);
+      await client.tsCreate(key2,
+          options: ['LABELS', 'type', 'B'], forceRun: true);
+
+      // 1. TS.MADD
+      final maddRes = await client.tsMAdd([
+        [key1, '*', 10],
+        [key2, '*', 20]
+      ], forceRun: true);
+
+      expect(maddRes, isA<List>());
+      expect(maddRes.length, equals(2));
+
+      // 2. TS.MGET (Filter by label)
+      final mgetRes = await client.tsMGet(['type=A'], forceRun: true);
+
+      // Should contain key1 data but not key2
+      final resStr = mgetRes.toString();
+      expect(resStr, contains(key1));
+      expect(resStr, isNot(contains(key2)));
+    });
+
+    test('TS.RANGE, TS.REVRANGE', () async {
+      const key = 'ts:range_test';
+      await client.tsCreate(key, forceRun: true);
+
+      // Seed data: 10 samples
+      const startTs = 10000;
+      for (var i = 0; i < 10; i++) {
+        await client.tsAdd(key, startTs + (i * 1000), i + 1, forceRun: true);
+      }
+
+      // 1. TS.RANGE (All)
+      final rangeAll = await client.tsRange(key, '-', '+', forceRun: true);
+      expect((rangeAll as List).length, equals(10));
+
+      // 2. TS.RANGE (With Aggregation)
+      // Sum in 5000ms buckets
+      final rangeAgg = await client.tsRange(key, '-', '+',
+          options: ['AGGREGATION', 'sum', 5000], forceRun: true) as List;
+      // Expect 2 buckets
+      expect(rangeAgg.length, equals(2));
+
+      // 3. TS.REVRANGE (Limit Count)
+      final revRange = await client.tsRevRange(key, '-', '+',
+          options: ['COUNT', 2], forceRun: true) as List;
+      expect(revRange.length, equals(2));
+      // First item should be the last inserted (val 10)
+      expect(double.parse((revRange[0] as List)[1].toString()), equals(10.0));
+    });
+
+    test('TS.MRANGE', () async {
+      await client.tsCreate('ts:m:1',
+          options: ['LABELS', 'team', 'blue'], forceRun: true);
+      await client.tsCreate('ts:m:2',
+          options: ['LABELS', 'team', 'blue'], forceRun: true);
+
+      await client.tsAdd('ts:m:1', 1000, 10, forceRun: true);
+      await client.tsAdd('ts:m:2', 1000, 20, forceRun: true);
+
+      // TS.MRANGE (Filter by team=blue)
+      final mrangeRes =
+          await client.tsMRange('-', '+', ['team=blue'], forceRun: true);
+
+      final resStr = mrangeRes.toString();
+      expect(resStr, contains('ts:m:1'));
+      expect(resStr, contains('ts:m:2'));
+    });
+  });
+}
