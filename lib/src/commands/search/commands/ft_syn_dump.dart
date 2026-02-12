@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtSynDumpCommand on SearchCommands {
   /// FT.SYNDUMP index
   ///
   /// Dumps the contents of a synonym group.
   ///
-  /// [index]: The index name.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftSynDump(
     String index, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.SYNDUMP', forceRun);
+    await checkValkeySupport('FT.SYNDUMP', forceRun: forceRun);
     return execute(<dynamic>['FT.SYNDUMP', index]);
   }
 }

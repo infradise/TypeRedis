@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtSynUpdateCommand on SearchCommands {
   /// FT.SYNUPDATE index synonym_group_id `[SKIPINITIALSCAN]` term [term ...]
   ///
   /// Updates a synonym group.
   ///
-  /// [index]: The index name.
-  /// [groupId]: The synonym group ID.
-  /// [terms]: List of terms to add.
-  /// [skipInitialScan]: If true, skips the initial scan.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [groupId]: The synonym group ID.
+  /// - [terms]: List of terms to add.
+  /// - [skipInitialScan]: If true, skips the initial scan.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftSynUpdate(
@@ -35,7 +35,7 @@ extension FtSynUpdateCommand on SearchCommands {
     bool skipInitialScan = false,
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.SYNUPDATE', forceRun);
+    await checkValkeySupport('FT.SYNUPDATE', forceRun: forceRun);
     final cmd = <dynamic>['FT.SYNUPDATE', index, groupId];
     if (skipInitialScan) cmd.add('SKIPINITIALSCAN');
     cmd.addAll(terms);

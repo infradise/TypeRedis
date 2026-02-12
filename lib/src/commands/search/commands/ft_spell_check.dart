@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtSpellCheckCommand on SearchCommands {
   /// FT.SPELLCHECK index query [DISTANCE dist] [TERMS ...]
   ///
   /// Performs spell correction on a query.
   ///
-  /// [index]: The index name.
-  /// [query]: The query to spell check.
-  /// [options]: Options like DISTANCE or TERMS INCLUDE/EXCLUDE.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [query]: The query to spell check.
+  /// - [options]: Options like DISTANCE or TERMS INCLUDE/EXCLUDE.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftSpellCheck(
@@ -33,7 +33,7 @@ extension FtSpellCheckCommand on SearchCommands {
     List<dynamic> options = const [],
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.SPELLCHECK', forceRun);
+    await checkValkeySupport('FT.SPELLCHECK', forceRun: forceRun);
     final cmd = <dynamic>['FT.SPELLCHECK', index, query, ...options];
     return execute(cmd);
   }

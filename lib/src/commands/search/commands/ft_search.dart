@@ -23,9 +23,9 @@ extension FtSearchCommand on SearchCommands {
   ///
   /// Searches the index with a textual query.
   ///
-  /// [index]: The name of the index.
-  /// [query]: The text query to search for.
-  /// [options]: Additional search options (NOCONTENT, LIMIT, SORTBY, etc.).
+  /// - [index]: The name of the index.
+  /// - [query]: The text query to search for.
+  /// - [options]: Additional search options (NOCONTENT, LIMIT, SORTBY, etc.).
   ///
   /// Supported by both Redis and Valkey.
   Future<dynamic> ftSearch(

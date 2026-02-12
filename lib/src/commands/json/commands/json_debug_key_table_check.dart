@@ -23,7 +23,8 @@ extension JsonDebugKeyTableCheckCommand on JsonCommands {
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
   Future<dynamic> jsonDebugKeyTableCheck({bool forceRun = false}) async {
-    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CHECK', forceRun: forceRun);
+    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CHECK',
+        forceRun: forceRun);
 
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'KEYTABLE-CHECK'];

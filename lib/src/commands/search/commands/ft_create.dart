@@ -22,10 +22,11 @@ extension FtCreateCommand on SearchCommands {
   ///
   /// Creates an index with the given specification.
   ///
-  /// [index]: The name of the index to create.
-  /// [options]: Optional arguments like ON HASH, PREFIX, LANGUAGE, SCORE, etc.
-  /// [schema]: The schema definition for the index (e.g., field names and
-  /// types).
+  /// - [index]: The name of the index to create.
+  /// - [options]: Optional arguments like ON HASH, PREFIX, LANGUAGE, SCORE,
+  ///              etc.
+  /// - [schema]: The schema definition for the index (e.g., field names and
+  ///             types).
   ///
   /// Supported by both Redis and Valkey.
   Future<dynamic> ftCreate(

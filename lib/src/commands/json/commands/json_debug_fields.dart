@@ -27,12 +27,10 @@ extension JsonDebugFieldsCommand on JsonCommands {
   /// [path] defaults to root if not provided.
   ///
   /// Returns the number of fields.
-  Future<dynamic> jsonDebugFields({
-    required String key,
-    String? path,
-    bool forceRun = false
-  }) async {
-    await checkValkeySupportExtended('JSON.DEBUG', 'FIELDS', forceRun: forceRun);
+  Future<dynamic> jsonDebugFields(
+      {required String key, String? path, bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'FIELDS',
+        forceRun: forceRun);
 
     final cmd = <String>['JSON.DEBUG', 'FIELDS', key];
     if (path != null) {

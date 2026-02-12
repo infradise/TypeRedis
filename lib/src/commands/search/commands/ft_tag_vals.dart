@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtTagValsCommand on SearchCommands {
   /// FT.TAGVALS index field_name
   ///
   /// Returns the distinct tags indexed in a Tag field.
   ///
-  /// [index]: The index name.
-  /// [fieldName]: The name of the tag field.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [fieldName]: The name of the tag field.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftTagVals(
@@ -31,7 +31,7 @@ extension FtTagValsCommand on SearchCommands {
     String fieldName, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.TAGVALS', forceRun);
+    await checkValkeySupport('FT.TAGVALS', forceRun: forceRun);
     return execute(<dynamic>['FT.TAGVALS', index, fieldName]);
   }
 }

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtCursorDelCommand on SearchCommands {
   /// FT.CURSOR DEL index cursor_id
   ///
   /// Deletes a cursor.
   ///
-  /// [index]: The index name.
-  /// [cursorId]: The ID of the cursor to delete.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [cursorId]: The ID of the cursor to delete.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftCursorDel(
@@ -31,7 +31,7 @@ extension FtCursorDelCommand on SearchCommands {
     int cursorId, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.CURSOR DEL', forceRun);
+    await checkValkeySupportExtended('FT.CURSOR', 'DEL', forceRun: forceRun);
     return execute(<dynamic>['FT.CURSOR', 'DEL', index, cursorId]);
   }
 }

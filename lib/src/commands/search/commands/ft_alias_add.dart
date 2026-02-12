@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtAliasAddCommand on SearchCommands {
   /// FT.ALIASADD alias index
   ///
   /// Adds an alias to an index.
   ///
-  /// [alias]: The alias name.
-  /// [index]: The index name.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [alias]: The alias name.
+  /// - [index]: The index name.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftAliasAdd(
@@ -31,7 +31,7 @@ extension FtAliasAddCommand on SearchCommands {
     String index, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.ALIASADD', forceRun);
+    await checkValkeySupport('FT.ALIASADD', forceRun: forceRun);
     return execute(<dynamic>['FT.ALIASADD', alias, index]);
   }
 }

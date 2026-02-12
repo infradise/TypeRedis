@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export '../extensions/server_version_check.dart' show ServerVersionCheck;
 export 'commands/ft_aggregate.dart';
 export 'commands/ft_alias_add.dart';
 export 'commands/ft_alias_del.dart';

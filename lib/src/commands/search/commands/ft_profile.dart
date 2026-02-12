@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtProfileCommand on SearchCommands {
   /// FT.PROFILE index [SEARCH|AGGREGATE] `[LIMITED]` QUERY query
@@ -22,11 +22,11 @@ extension FtProfileCommand on SearchCommands {
   /// Performs a search or aggregate query and collects performance profiling
   /// information.
   ///
-  /// [index]: The index name.
-  /// [type]: 'SEARCH' or 'AGGREGATE'.
-  /// [query]: The query string.
-  /// [limited]: If true, reduces the verbosity of the profile.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [type]: 'SEARCH' or 'AGGREGATE'.
+  /// - [query]: The query string.
+  /// - [limited]: If true, reduces the verbosity of the profile.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftProfile(
@@ -36,7 +36,7 @@ extension FtProfileCommand on SearchCommands {
     bool limited = false,
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.PROFILE', forceRun);
+    await checkValkeySupport('FT.PROFILE', forceRun: forceRun);
     final cmd = <dynamic>['FT.PROFILE', index, type];
     if (limited) cmd.add('LIMITED');
     cmd.addAll(['QUERY', query]);

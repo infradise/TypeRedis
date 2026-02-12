@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtAggregateCommand on SearchCommands {
   /// FT.AGGREGATE index query [options ...]
   ///
   /// Runs a search query and aggregates the results.
   ///
-  /// [index]: The index name.
-  /// [query]: The query string.
-  /// [options]: Aggregation options like LOAD, GROUPBY, REDUCE, SORTBY, APPLY,
-  /// LIMIT.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [query]: The query string.
+  /// - [options]: Aggregation options like LOAD, GROUPBY, REDUCE, SORTBY,
+  ///              APPLY, LIMIT.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftAggregate(
@@ -34,7 +34,7 @@ extension FtAggregateCommand on SearchCommands {
     List<dynamic> options = const [],
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.AGGREGATE', forceRun);
+    await checkValkeySupport('FT.AGGREGATE', forceRun: forceRun);
     final cmd = <dynamic>['FT.AGGREGATE', index, query, ...options];
     return execute(cmd);
   }

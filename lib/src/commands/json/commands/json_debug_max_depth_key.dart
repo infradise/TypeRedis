@@ -23,7 +23,8 @@ extension JsonDebugMaxDepthKeyCommand on JsonCommands {
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
   Future<dynamic> jsonDebugMaxDepthKey({bool forceRun = false}) async {
-    await checkValkeySupportExtended('JSON.DEBUG', 'MAX-DEPTH-KEY', forceRun: forceRun);
+    await checkValkeySupportExtended('JSON.DEBUG', 'MAX-DEPTH-KEY',
+        forceRun: forceRun);
 
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'MAX-DEPTH-KEY'];

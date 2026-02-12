@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtAlterCommand on SearchCommands {
   /// FT.ALTER index [options ...] SCHEMA ADD field options ...
   ///
   /// Alters an existing index.
   ///
-  /// [index]: The index name.
-  /// [options]: The alteration options (e.g., SCHEMA ADD ...).
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [options]: The alteration options (e.g., SCHEMA ADD ...).
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftAlter(
@@ -31,7 +31,7 @@ extension FtAlterCommand on SearchCommands {
     List<dynamic> options, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.ALTER', forceRun);
+    await checkValkeySupport('FT.ALTER', forceRun: forceRun);
     final cmd = <dynamic>['FT.ALTER', index, ...options];
     return execute(cmd);
   }

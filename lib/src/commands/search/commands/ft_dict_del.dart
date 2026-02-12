@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtDictDelCommand on SearchCommands {
   /// FT.DICTDEL dict term [term ...]
   ///
   /// Deletes terms from a dictionary.
   ///
-  /// [dict]: The dictionary name.
-  /// [terms]: A list of terms to delete.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [dict]: The dictionary name.
+  /// - [terms]: A list of terms to delete.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftDictDel(
@@ -31,7 +31,7 @@ extension FtDictDelCommand on SearchCommands {
     List<String> terms, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.DICTDEL', forceRun);
+    await checkValkeySupport('FT.DICTDEL', forceRun: forceRun);
     return execute(<dynamic>['FT.DICTDEL', dict, ...terms]);
   }
 }

@@ -21,9 +21,9 @@ extension FtDropIndexCommand on SearchCommands {
   ///
   /// Deletes an index.
   ///
-  /// [index]: The name of the index to delete.
-  /// [dd]: If true, deletes the actual document hashes associated with
-  /// the index as well.
+  /// - [index]: The name of the index to delete.
+  /// - [dd]: If true, deletes the actual document hashes associated with
+  ///         the index as well.
   ///
   /// Supported by both Redis and Valkey.
   Future<dynamic> ftDropIndex(String index, {bool dd = false}) async {

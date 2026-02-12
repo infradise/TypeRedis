@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtAliasDelCommand on SearchCommands {
   /// FT.ALIASDEL alias
   ///
   /// Removes an alias from an index.
   ///
-  /// [alias]: The alias to remove.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [alias]: The alias to remove.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftAliasDel(
     String alias, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.ALIASDEL', forceRun);
+    await checkValkeySupport('FT.ALIASDEL', forceRun: forceRun);
     return execute(<dynamic>['FT.ALIASDEL', alias]);
   }
 }

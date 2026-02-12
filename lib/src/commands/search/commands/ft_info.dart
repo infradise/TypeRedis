@@ -21,7 +21,7 @@ extension FtInfoCommand on SearchCommands {
   ///
   /// Returns information and statistics on the index.
   ///
-  /// [index]: The name of the index to inspect.
+  /// - [index]: The name of the index to inspect.
   ///
   /// Returns a `Map<String, dynamic>` containing the index information.
   /// Supported by both Redis and Valkey.

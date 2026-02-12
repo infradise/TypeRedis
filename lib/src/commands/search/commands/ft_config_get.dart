@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtConfigGetCommand on SearchCommands {
   /// FT.CONFIG GET option
   ///
   /// Retrieves a configuration option for the search module.
   ///
-  /// [option]: The name of the configuration option (e.g., '*').
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [option]: The name of the configuration option (e.g., '*').
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftConfigGet(
     String option, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.CONFIG GET', forceRun);
+    await checkValkeySupportExtended('FT.CONFIG', 'GET', forceRun: forceRun);
     return execute(<dynamic>['FT.CONFIG', 'GET', option]);
   }
 }

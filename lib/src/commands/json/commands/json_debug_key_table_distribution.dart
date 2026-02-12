@@ -22,8 +22,10 @@ extension JsonDebugKeyTableDistributionCommand on JsonCommands {
   /// Find and count topN longest runs in KeyTable.
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
-  Future<dynamic> jsonDebugKeyTableDistribution(int topN, {bool forceRun = false}) async {
-    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-DISTRIBUTION', forceRun: forceRun);
+  Future<dynamic> jsonDebugKeyTableDistribution(int topN,
+      {bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-DISTRIBUTION',
+        forceRun: forceRun);
 
     printDebugWarning();
     final cmd = <String>[

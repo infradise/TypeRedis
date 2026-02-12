@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtDictAddCommand on SearchCommands {
   /// FT.DICTADD dict term [term ...]
   ///
   /// Adds terms to a dictionary.
   ///
-  /// [dict]: The dictionary name.
-  /// [terms]: A list of terms to add.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [dict]: The dictionary name.
+  /// - [terms]: A list of terms to add.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftDictAdd(
@@ -31,7 +31,7 @@ extension FtDictAddCommand on SearchCommands {
     List<String> terms, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.DICTADD', forceRun);
+    await checkValkeySupport('FT.DICTADD', forceRun: forceRun);
     return execute(<dynamic>['FT.DICTADD', dict, ...terms]);
   }
 }

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtDictDumpCommand on SearchCommands {
   /// FT.DICTDUMP dict
   ///
   /// Dumps all terms in the given dictionary.
   ///
-  /// [dict]: The dictionary name.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [dict]: The dictionary name.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftDictDump(
     String dict, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.DICTDUMP', forceRun);
+    await checkValkeySupport('FT.DICTDUMP', forceRun: forceRun);
     return execute(<dynamic>['FT.DICTDUMP', dict]);
   }
 }

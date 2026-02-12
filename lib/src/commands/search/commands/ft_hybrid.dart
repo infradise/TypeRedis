@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtHybridCommand on SearchCommands {
   /// FT.HYBRID ...
   ///
   /// Hybrid search command.
   ///
-  /// [index]: The index name.
-  /// [args]: Additional arguments.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [args]: Additional arguments.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftHybrid(
@@ -31,7 +31,7 @@ extension FtHybridCommand on SearchCommands {
     List<dynamic> args, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.HYBRID', forceRun);
+    await checkValkeySupport('FT.HYBRID', forceRun: forceRun);
     final cmd = <dynamic>['FT.HYBRID', index, ...args];
     return execute(cmd);
   }

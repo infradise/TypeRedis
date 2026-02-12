@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtConfigSetCommand on SearchCommands {
   /// FT.CONFIG SET option value
   ///
   /// Sets a configuration option for the search module.
   ///
-  /// [option]: The configuration option name.
-  /// [value]: The value to set.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [option]: The configuration option name.
+  /// - [value]: The value to set.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftConfigSet(
@@ -31,7 +31,7 @@ extension FtConfigSetCommand on SearchCommands {
     String value, {
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.CONFIG SET', forceRun);
+    await checkValkeySupportExtended('FT.CONFIG', 'SET', forceRun: forceRun);
     return execute(<dynamic>['FT.CONFIG', 'SET', option, value]);
   }
 }

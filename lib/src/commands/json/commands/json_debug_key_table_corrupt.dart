@@ -22,8 +22,10 @@ extension JsonDebugKeyTableCorruptCommand on JsonCommands {
   /// Intentionally corrupt KeyTable handle counts.
   ///
   /// ⚠️ WARNING: This is a dangerous command. Do not use on production.
-  Future<dynamic> jsonDebugKeyTableCorrupt(String name, {bool forceRun = false}) async {
-    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CORRUPT', forceRun: forceRun);
+  Future<dynamic> jsonDebugKeyTableCorrupt(String name,
+      {bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CORRUPT',
+        forceRun: forceRun);
 
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'KEYTABLE-CORRUPT', name];

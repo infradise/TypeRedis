@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show SearchCommands;
+import '../commands.dart' show SearchCommands, ServerVersionCheck;
 
 extension FtExplainCliCommand on SearchCommands {
   /// FT.EXPLAINCLI index query [DIALECT dialect]
   ///
   /// Returns the execution plan for a complex query in CLI format.
   ///
-  /// [index]: The index name.
-  /// [query]: The query string.
-  /// [dialect]: Optional dialect version.
-  /// [forceRun]: If true, attempts to execute even if connected to Valkey.
+  /// - [index]: The index name.
+  /// - [query]: The query string.
+  /// - [dialect]: Optional dialect version.
+  /// - [forceRun]: If true, attempts to execute even if connected to Valkey.
   ///
   /// Note: Not currently supported in Valkey.
   Future<dynamic> ftExplainCli(
@@ -33,7 +33,7 @@ extension FtExplainCliCommand on SearchCommands {
     int? dialect,
     bool forceRun = false,
   }) async {
-    await checkValkeySupport('FT.EXPLAINCLI', forceRun);
+    await checkValkeySupport('FT.EXPLAINCLI', forceRun: forceRun);
     final cmd = <dynamic>['FT.EXPLAINCLI', index, query];
     if (dialect != null) cmd.addAll(['DIALECT', dialect]);
     return execute(cmd);

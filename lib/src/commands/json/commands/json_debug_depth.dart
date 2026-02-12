@@ -22,7 +22,10 @@ extension JsonDebugDepthCommand on JsonCommands {
   /// Report the maximum path depth of the JSON document.
   ///
   /// Returns the depth as an integer.
-  Future<int> jsonDebugDepth({required String key, bool forceRun = false,}) async {
+  Future<int> jsonDebugDepth({
+    required String key,
+    bool forceRun = false,
+  }) async {
     await checkValkeySupportExtended('JSON.DEBUG', 'DEPTH', forceRun: forceRun);
 
     final cmd = <String>['JSON.DEBUG', 'DEPTH', key];
