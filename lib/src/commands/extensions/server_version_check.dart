@@ -202,14 +202,20 @@ extension ServerVersionCheck on Commands {
   /// - Force execution for Valkey/Redis compatibility check.
   ///
   /// {@endtemplate}
-  Future<void> checkValkeySupport(String commandName, {bool forceRun = false}
-  ) async => checkValkeySupportExtended(commandName, '', forceRun: forceRun);
+  Future<void> checkValkeySupport(String commandName,
+          {bool forceRun = false}) async =>
+      checkValkeySupportExtended(commandName, '', forceRun: forceRun);
 
   /// {@macro checkValkeySupport_doc}
-  Future<void> checkValkeySupportExtended(String commandName, String subCommandName, {bool forceRun = false}
-  ) async {
-    if (await isValkey && await isRedisOnlyCommand(commandName, subCommandName) && !forceRun ||
-    await isRedis && await isRedisOnlyCommand(commandName, subCommandName) && !forceRun) {
+  Future<void> checkValkeySupportExtended(
+      String commandName, String subCommandName,
+      {bool forceRun = false}) async {
+    if (await isValkey &&
+            await isRedisOnlyCommand(commandName, subCommandName) &&
+            !forceRun ||
+        await isRedis &&
+            await isRedisOnlyCommand(commandName, subCommandName) &&
+            !forceRun) {
       throw Exception('Command $commandName is not supported in your server. '
           'Pass `forceRun: true` to execute it for development reason.');
     }
@@ -219,7 +225,8 @@ extension ServerVersionCheck on Commands {
     //        with args beginning with: 'index' ''
   }
 
-  Future<bool> isRedisOnlyCommand(String commandName, String? subCommandName) async {
+  Future<bool> isRedisOnlyCommand(
+      String commandName, String? subCommandName) async {
     final searchCommands = [
       'FT.AGGREGATE',
       'FT.ALIASADD',
@@ -278,11 +285,7 @@ extension ServerVersionCheck on Commands {
       // jsonDebugCommand
     ];
 
-    final stringCommands = [
-      'DELEX',
-      'DIGEST',
-      'MSETEX'
-    ];
+    final stringCommands = ['DELEX', 'DIGEST', 'MSETEX'];
 
     return switch (commandName) {
       _ when searchCommands.contains(commandName) => true,
@@ -301,8 +304,8 @@ extension ServerVersionCheck on Commands {
 
   /// [commandName]: if provided, check it.
   /// [subCommandName]: if provided, check it with [commandName].
-  Future<bool> isValkeyOnlyCommand(String commandName, String? subCommandName) async {
-
+  Future<bool> isValkeyOnlyCommand(
+      String commandName, String? subCommandName) async {
     const jsonDebugCommand = 'JSON.DEBUG';
 
     // final jsonCommands = [
@@ -325,8 +328,7 @@ extension ServerVersionCheck on Commands {
     ];
 
     return switch (commandName) {
-      jsonDebugCommand =>
-        switch (subCommandName) {
+      jsonDebugCommand => switch (subCommandName) {
           _ when jsonSubCommands.contains(subCommandName) => true,
           _ => false,
         },

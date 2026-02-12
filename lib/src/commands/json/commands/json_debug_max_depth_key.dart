@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugMaxDepthKeyCommand on JsonCommands {
   /// JSON.DEBUG MAX-DEPTH-KEY
@@ -22,7 +22,9 @@ extension JsonDebugMaxDepthKeyCommand on JsonCommands {
   /// Find JSON key with maximum depth.
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
-  Future<dynamic> jsonDebugMaxDepthKey() async {
+  Future<dynamic> jsonDebugMaxDepthKey({bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'MAX-DEPTH-KEY', forceRun: forceRun);
+
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'MAX-DEPTH-KEY'];
     return execute(cmd);

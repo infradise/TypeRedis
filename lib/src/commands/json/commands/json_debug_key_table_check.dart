@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugKeyTableCheckCommand on JsonCommands {
   /// JSON.DEBUG KEYTABLE-CHECK
@@ -22,7 +22,9 @@ extension JsonDebugKeyTableCheckCommand on JsonCommands {
   /// Extended KeyTable integrity check.
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
-  Future<dynamic> jsonDebugKeyTableCheck() async {
+  Future<dynamic> jsonDebugKeyTableCheck({bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CHECK', forceRun: forceRun);
+
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'KEYTABLE-CHECK'];
     return execute(cmd);

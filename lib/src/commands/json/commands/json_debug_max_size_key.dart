@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugMaxSizeKeyCommand on JsonCommands {
   /// JSON.DEBUG MAX-SIZE-KEY
@@ -22,7 +22,9 @@ extension JsonDebugMaxSizeKeyCommand on JsonCommands {
   /// Find JSON key with largest memory size.
   ///
   /// ⚠️ WARNING: This is a long running command. Do not use on production.
-  Future<dynamic> jsonDebugMaxSizeKey() async {
+  Future<dynamic> jsonDebugMaxSizeKey({bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'MAX-SIZE-KEY', forceRun: forceRun);
+
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'MAX-SIZE-KEY'];
     return execute(cmd);

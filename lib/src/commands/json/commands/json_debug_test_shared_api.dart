@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugTestSharedApiCommand on JsonCommands {
   /// JSON.DEBUG TEST-SHARED-API key path
@@ -22,7 +22,9 @@ extension JsonDebugTestSharedApiCommand on JsonCommands {
   /// Provide testing for Shared api interface for search.
   ///
   /// ⚠️ WARNING: This is a testing command. Do not use on production.
-  Future<dynamic> jsonDebugTestSharedApi(String key, String path) async {
+  Future<dynamic> jsonDebugTestSharedApi(String key, String path, {bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'TEST-SHARED-API', forceRun: forceRun);
+
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'TEST-SHARED-API', key, path];
     return execute(cmd);

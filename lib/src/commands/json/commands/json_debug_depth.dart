@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugDepthCommand on JsonCommands {
   /// JSON.DEBUG DEPTH key
@@ -22,7 +22,9 @@ extension JsonDebugDepthCommand on JsonCommands {
   /// Report the maximum path depth of the JSON document.
   ///
   /// Returns the depth as an integer.
-  Future<int> jsonDebugDepth({required String key}) async {
+  Future<int> jsonDebugDepth({required String key, bool forceRun = false,}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'DEPTH', forceRun: forceRun);
+
     final cmd = <String>['JSON.DEBUG', 'DEPTH', key];
     return executeInt(cmd);
   }

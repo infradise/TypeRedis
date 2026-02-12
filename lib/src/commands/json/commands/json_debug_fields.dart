@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugFieldsCommand on JsonCommands {
   /// JSON.DEBUG FIELDS `<key>` [path]
@@ -30,7 +30,10 @@ extension JsonDebugFieldsCommand on JsonCommands {
   Future<dynamic> jsonDebugFields({
     required String key,
     String? path,
+    bool forceRun = false
   }) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'FIELDS', forceRun: forceRun);
+
     final cmd = <String>['JSON.DEBUG', 'FIELDS', key];
     if (path != null) {
       cmd.add(path);

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands, JsonMergeCommand;
+import '../commands.dart' show JsonCommands, JsonMergeCommand, ServerVersionCheck;
 
 extension JsonMergeForceCommand on JsonCommands {
   Future<void> jsonMergeForce({
     required String key,
     required String path,
     required dynamic data,
+    bool forceRun = false,
   }) async {
+    await checkValkeySupport('JSON.MERGE', forceRun: forceRun);
+
     setAllowRedisOnlyJsonMerge = true;
     return jsonMerge(key: key, path: path, data: data);
   }

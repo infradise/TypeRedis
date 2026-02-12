@@ -16,7 +16,7 @@
 
 import 'dart:convert' show jsonEncode;
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonMergeCommand on JsonCommands {
   /// JSON.MERGE key path value
@@ -38,7 +38,10 @@ extension JsonMergeCommand on JsonCommands {
     required String key,
     required String path,
     required dynamic data,
+    bool forceRun = false,
   }) async {
+    await checkValkeySupport('JSON.MERGE', forceRun: forceRun);
+
     /// Check if the server is Redis
     ///
     /// Alternatively, isValkeyServer() can be used for DX improvements.

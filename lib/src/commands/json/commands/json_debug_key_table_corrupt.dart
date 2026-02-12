@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../commands.dart' show JsonCommands;
+import '../commands.dart' show JsonCommands, ServerVersionCheck;
 
 extension JsonDebugKeyTableCorruptCommand on JsonCommands {
   /// JSON.DEBUG KEYTABLE-CORRUPT `<name>`
@@ -22,7 +22,9 @@ extension JsonDebugKeyTableCorruptCommand on JsonCommands {
   /// Intentionally corrupt KeyTable handle counts.
   ///
   /// ⚠️ WARNING: This is a dangerous command. Do not use on production.
-  Future<dynamic> jsonDebugKeyTableCorrupt(String name) async {
+  Future<dynamic> jsonDebugKeyTableCorrupt(String name, {bool forceRun = false}) async {
+    await checkValkeySupportExtended('JSON.DEBUG', 'KEYTABLE-CORRUPT', forceRun: forceRun);
+
     printDebugWarning();
     final cmd = <String>['JSON.DEBUG', 'KEYTABLE-CORRUPT', name];
     return execute(cmd);

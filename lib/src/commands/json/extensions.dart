@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export '../extensions/server_version_check.dart' show ServerVersionCheck;
 export 'commands/json_arr_append.dart';
 export 'commands/json_arr_append_enhanced.dart';
 export 'commands/json_arr_index.dart';
