@@ -262,11 +262,47 @@ extension ServerVersionCheck on Commands {
   Future<bool> doIntegratedCommandChecker(
       String commandName, String? subCommandName,
       {bool useThrow = true}) async {
-    // 1. Command Registry (Map<Command, Map<System, Version>>)
+    // 1. Command Registry
+    // (Map<Command, Map<System, Version>>)
     //
     final commandRegistry = <String, Map<String, List<int>>>{
-      // VECTOR SET
+      // BLOOM FILTER
+      for (var cmd in {
+        'BF.ADD',
+        'BF.CARD',
+        'BF.EXISTS',
+        'BF.INFO',
+        'BF.INSERT',
+        'BF.MADD',
+        'BF.MEXISTS',
+        'BF.RESERVE',
+      })
+        cmd: {
+          'redis': [],
+          'valkey': [],
+        },
 
+      for (var cmd in {'BF.LOADCHUNK', 'BF.SCANDUMP'}) cmd: {'redis': []},
+      'BF.LOAD': {'valkey': []},
+
+      // CUCKOO FILTER
+      for (var cmd in {
+        'CF.ADD',
+        'CF.ADDNX',
+        'CF.COUNT',
+        'CF.DEL',
+        'CF.EXISTS',
+        'CF.INFO',
+        'CF.INSERT',
+        'CF.INSERTNX',
+        'CF.LOADCHUNK',
+        'CF.MEXISTS',
+        'CF.RESERVE',
+        'CF.SCANDUMP'
+      })
+        cmd: {'redis': []},
+
+      // VECTOR SET
       for (var cmd in {
         'VADD',
         'VCARD',
