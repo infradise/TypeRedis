@@ -276,6 +276,19 @@ extension ServerVersionCheck on Commands {
     // (Map<Command, Map<System, Version>>)
     //
     final commandRegistry = <String, Map<String, List<int>>>{
+      // COUNT-MIN SKETCH
+      for (var cmd in {
+        'CMS.INCRBY',
+        'CMS.INFO',
+        'CMS.INITBYDIM',
+        'CMS.INITBYPROB',
+        'CMS.MERGE',
+        'CMS.QUERY',
+      })
+        cmd: {
+          'redis': [2, 0, 0], // Redis Open Source / Bloom
+        },
+
       // BLOOM FILTER
       for (var cmd in {
         'BF.ADD',
