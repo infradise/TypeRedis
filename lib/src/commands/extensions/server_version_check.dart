@@ -276,6 +276,42 @@ extension ServerVersionCheck on Commands {
     // (Map<Command, Map<System, Version>>)
     //
     final commandRegistry = <String, Map<String, List<int>>>{
+      // CONNECTION
+      for (var cmd in {
+        'AUTH',
+        'CLIENT',
+        'CLIENT CACHING',
+        'CLIENT CAPA',
+        'CLIENT GETNAME',
+        'CLIENT GETREDIR',
+        'CLIENT HELP',
+        'CLIENT ID',
+        'CLIENT IMPORT-SOURCE',
+        'CLIENT INFO',
+        'CLIENT KILL',
+        'CLIENT LIST',
+        'CLIENT NO-EVICT',
+        'CLIENT NO-TOUCH',
+        'CLIENT PAUSE',
+        'CLIENT REPLY',
+        'CLIENT SETINFO',
+        'CLIENT SETNAME',
+        'CLIENT TRACKING',
+        'CLIENT TRACKINGINFO',
+        'CLIENT UNBLOCK',
+        'CLIENT UNPAUSE',
+        'ECHO',
+        'HELLO',
+        'PING',
+        'QUIT',
+        'RESET',
+        'SELECT'
+      })
+        cmd: {
+          'redis': [],
+          'valkey': [],
+        },
+
       // T-DIGEST SKETCH
       for (var cmd in {
         'TDIGEST.ADD',

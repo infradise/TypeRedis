@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.6.0
+* **Modular Architecture**
+    * **New CONNECTION Commands**
+        * Added a full suite of CONNECTION commands: `auth`, `client`, `clientCaching`, `clientCapa`, `clientGetName`, `clientGetRedir`, `clientHelp`, `clientId`, `clientImportSource`, `clientInfo`, `clientKill`, `clientList`, `clientNoEvict`, `clientNoTouch`, `clientPause`, `clientReply`, `clientSetInfo`, `clientSetName`, `clientTracking`, `clientTrackingInfo`, `clientUnblock`, `clientUnpause`, `echo`, `hello`, `ping`, `quit`, `reset`, `select`
+
 ## 4.5.2
 * **Modular Architecture**
     * **New T-DIGEST SKETCH Commands**
