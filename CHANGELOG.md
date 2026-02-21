@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.5.0
+* **Modular Architecture**
+    * **New COUNT-MIN SKETCH Commands**
+        * Added a full suite of COUNT-MIN SKETCH commands: `cmsIncrBy`, `cmsInfo`, `cmsInitByDim`, `cmsInitByProb`, `cmsMerge`, `cmsQuery`
+
 ## 4.4.2
 * **Modular Architecture**
     * **Enhanced TIME SERIES Commands**

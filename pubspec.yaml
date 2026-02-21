@@ -15,7 +15,7 @@
 #
 name: keyscope_client
 description: The ultimate multi-engine client for Redis, Valkey, and Dragonfly. A high-performance, cluster-aware SDK with seamless polymorphic aliases.
-version: 4.4.2
+version: 4.5.0
 repository: https://github.com/infradise/keyscope_client
 homepage: https://github.com/infradise/keyscope_client
 issue_tracker: https://github.com/infradise/keyscope_client/issues
