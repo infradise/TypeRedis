@@ -34,4 +34,49 @@ extension TsCreateCommand on TimeSeriesCommands {
     final cmd = <dynamic>['TS.CREATE', key, ...options];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.CREATE key [RETENTION retentionPeriod]
+  /// [ENCODING uncompressed|compressed] [CHUNK_SIZE size]
+  /// [DUPLICATE_POLICY policy] [LABELS field value..]
+  ///
+  /// Create a new time series.
+  ///
+  /// [key]: The key name.
+  /// [retention]: Retention period in milliseconds (0 = unlimited).
+  /// [encoding]: 'COMPRESSED' or 'UNCOMPRESSED'.
+  /// [chunkSize]: Memory chunk size in bytes.
+  /// [duplicatePolicy]: Policy for handling duplicate samples (e.g., 'BLOCK',
+  ///                    'FIRST', 'LAST', 'MIN', 'MAX').
+  /// [labels]: A map of labels to associate with the time series.
+  /// [tryAnyway]: Force execution on Valkey.
+  Future<dynamic> tsCreate2(
+    String key, {
+    int? retention,
+    String? encoding,
+    int? chunkSize,
+    String? duplicatePolicy,
+    Map<String, String>? labels,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.CREATE', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.CREATE', key];
+
+    if (retention != null) cmd.addAll(['RETENTION', retention]);
+    if (encoding != null) cmd.addAll(['ENCODING', encoding]);
+    if (chunkSize != null) cmd.addAll(['CHUNK_SIZE', chunkSize]);
+    if (duplicatePolicy != null) {
+      cmd.addAll(['DUPLICATE_POLICY', duplicatePolicy]);
+    }
+
+    if (labels != null && labels.isNotEmpty) {
+      cmd.add('LABELS');
+      labels.forEach((k, v) => cmd.addAll([k, v]));
+    }
+
+    return execute(cmd);
+  }
 }

@@ -39,4 +39,38 @@ extension TsMGetCommand on TimeSeriesCommands {
     cmd.addAll(filters);
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.MGET [LATEST] [WITHLABELS | SELECTED_LABELS label...] FILTER filter...
+  ///
+  /// [latest]: Reports the latest possible value.
+  /// [withLabels]: Include all labels in the response.
+  /// [selectedLabels]: Include only specific labels in the response.
+  /// [filters]: List of filter expressions (e.g., 'type=cpu', 'host=server1').
+  Future<dynamic> tsMGet2(
+    List<String> filters, {
+    bool latest = false,
+    bool withLabels = false,
+    List<String>? selectedLabels,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.MGET', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.MGET'];
+
+    if (latest) cmd.add('LATEST');
+
+    if (withLabels) {
+      cmd.add('WITHLABELS');
+    } else if (selectedLabels != null && selectedLabels.isNotEmpty) {
+      cmd.addAll(['SELECTED_LABELS', ...selectedLabels]);
+    }
+
+    cmd.add('FILTER');
+    cmd.addAll(filters);
+
+    return execute(cmd);
+  }
 }

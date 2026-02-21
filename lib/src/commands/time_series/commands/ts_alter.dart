@@ -34,4 +34,35 @@ extension TsAlterCommand on TimeSeriesCommands {
     final cmd = <dynamic>['TS.ALTER', key, ...options];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.ALTER key [RETENTION retentionPeriod] [CHUNK_SIZE size]
+  /// [DUPLICATE_POLICY policy] [LABELS field value..]
+  Future<dynamic> tsAlter2(
+    String key, {
+    int? retention,
+    int? chunkSize,
+    String? duplicatePolicy,
+    Map<String, String>? labels,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.ALTER', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.ALTER', key];
+
+    if (retention != null) cmd.addAll(['RETENTION', retention]);
+    if (chunkSize != null) cmd.addAll(['CHUNK_SIZE', chunkSize]);
+    if (duplicatePolicy != null) {
+      cmd.addAll(['DUPLICATE_POLICY', duplicatePolicy]);
+    }
+
+    if (labels != null && labels.isNotEmpty) {
+      cmd.add('LABELS');
+      labels.forEach((k, v) => cmd.addAll([k, v]));
+    }
+
+    return execute(cmd);
+  }
 }

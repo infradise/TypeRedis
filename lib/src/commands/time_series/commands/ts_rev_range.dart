@@ -45,4 +45,49 @@ extension TsRevRangeCommand on TimeSeriesCommands {
     ];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.REVRANGE key fromTimestamp toTimestamp `[LATEST]` ...
+  /// Note: [fromTimestamp] is still Min, [toTimestamp] is still Max.
+  Future<dynamic> tsRevRange2(
+    String key,
+    Object fromTimestamp,
+    Object toTimestamp, {
+    bool latest = false,
+    List<int>? filterByTs,
+    num? filterByValueMin,
+    num? filterByValueMax,
+    int? count,
+    Object? align,
+    String? aggregator,
+    int? bucketDuration,
+    List<dynamic>? bucketTimestamp,
+    bool empty = false,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.REVRANGE', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.REVRANGE', key, fromTimestamp, toTimestamp];
+
+    if (latest) cmd.add('LATEST');
+    if (filterByTs != null && filterByTs.isNotEmpty) {
+      cmd.addAll(['FILTER_BY_TS', ...filterByTs]);
+    }
+    if (filterByValueMin != null && filterByValueMax != null) {
+      cmd.addAll(['FILTER_BY_VALUE', filterByValueMin, filterByValueMax]);
+    }
+    if (count != null) cmd.addAll(['COUNT', count]);
+    if (align != null) cmd.addAll(['ALIGN', align]);
+    if (aggregator != null && bucketDuration != null) {
+      cmd.addAll(['AGGREGATION', aggregator, bucketDuration]);
+    }
+    if (bucketTimestamp != null && bucketTimestamp.isNotEmpty) {
+      cmd.addAll(['BUCKETTIMESTAMP', ...bucketTimestamp]);
+    }
+    if (empty) cmd.add('EMPTY');
+
+    return execute(cmd);
+  }
 }

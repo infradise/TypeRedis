@@ -83,6 +83,16 @@ extension ServerVersionCheck on Commands {
   Future<bool> get isValkey async => _isValkey;
   Future<bool> get isDragonfly async => _isDragonfly;
 
+  // TODO: How can we decide whether it is Valkey or Memorystore?
+  // Google Memorystore for Valkey 9.0: No distinct things.
+  // - redis_version:7.2.4
+  // - server_name:valkey
+  // - valkey_version:9.0.0
+  // Future<bool> get isGoogleMemorystore async => _isGoogleMemorystore;
+  //
+  // TODO: How can we decide whether it is Redis or Memorystore?
+  // Google Memorystore for Redis: equivalent to Valkey?
+
   Future<String> get _getServerName async =>
       (await getOrFetchMetadata()).serverName.toLowerCase();
   Future<String> get getServerName async => _getServerName;

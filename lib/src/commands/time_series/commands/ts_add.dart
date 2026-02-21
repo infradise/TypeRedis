@@ -40,4 +40,38 @@ extension TsAddCommand on TimeSeriesCommands {
     final cmd = <dynamic>['TS.ADD', key, timestamp, value, ...options];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.ADD key timestamp value [RETENTION retentionPeriod]
+  /// [ENCODING uncompressed|compressed] [CHUNK_SIZE size] [ON_DUPLICATE policy]
+  /// [LABELS field value..]
+  Future<dynamic> tsAdd2(
+    String key,
+    Object timestamp,
+    num value, {
+    int? retention,
+    String? encoding,
+    int? chunkSize,
+    String? onDuplicate,
+    Map<String, String>? labels,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.ADD', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.ADD', key, timestamp, value];
+
+    if (retention != null) cmd.addAll(['RETENTION', retention]);
+    if (encoding != null) cmd.addAll(['ENCODING', encoding]);
+    if (chunkSize != null) cmd.addAll(['CHUNK_SIZE', chunkSize]);
+    if (onDuplicate != null) cmd.addAll(['ON_DUPLICATE', onDuplicate]);
+
+    if (labels != null && labels.isNotEmpty) {
+      cmd.add('LABELS');
+      labels.forEach((k, v) => cmd.addAll([k, v]));
+    }
+
+    return execute(cmd);
+  }
 }

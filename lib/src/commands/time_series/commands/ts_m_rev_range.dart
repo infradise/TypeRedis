@@ -47,4 +47,72 @@ extension TsMRevRangeCommand on TimeSeriesCommands {
     ];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.MREVRANGE fromTimestamp toTimestamp ...
+  Future<dynamic> tsMRevRange2({
+    Object? fromTimestamp,
+    Object? toTimestamp,
+    List<String> filters = const [],
+    bool latest = false,
+    List<int>? filterByTs,
+    num? filterByValueMin,
+    num? filterByValueMax,
+    bool withLabels = false,
+    List<String>? selectedLabels,
+    int? count,
+    Object? align,
+    String? aggregator,
+    int? bucketDuration,
+    List<dynamic>? bucketTimestamp,
+    bool empty = false,
+    String? groupByLabel,
+    String? reduceReducer,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.MREVRANGE', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.MREVRANGE', fromTimestamp, toTimestamp];
+
+    if (latest) cmd.add('LATEST');
+
+    if (filterByTs != null && filterByTs.isNotEmpty) {
+      cmd.addAll(['FILTER_BY_TS', ...filterByTs]);
+    }
+
+    if (filterByValueMin != null && filterByValueMax != null) {
+      cmd.addAll(['FILTER_BY_VALUE', filterByValueMin, filterByValueMax]);
+    }
+
+    if (withLabels) {
+      cmd.add('WITHLABELS');
+    } else if (selectedLabels != null && selectedLabels.isNotEmpty) {
+      cmd.addAll(['SELECTED_LABELS', ...selectedLabels]);
+    }
+
+    if (count != null) cmd.addAll(['COUNT', count]);
+
+    if (align != null) cmd.addAll(['ALIGN', align]);
+
+    if (aggregator != null && bucketDuration != null) {
+      cmd.addAll(['AGGREGATION', aggregator, bucketDuration]);
+    }
+
+    if (bucketTimestamp != null && bucketTimestamp.isNotEmpty) {
+      cmd.addAll(['BUCKETTIMESTAMP', ...bucketTimestamp]);
+    }
+
+    if (empty) cmd.add('EMPTY');
+
+    if (groupByLabel != null && reduceReducer != null) {
+      cmd.addAll(['GROUPBY', groupByLabel, 'REDUCE', reduceReducer]);
+    }
+
+    cmd.add('FILTER');
+    cmd.addAll(filters);
+
+    return execute(cmd);
+  }
 }

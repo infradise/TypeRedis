@@ -48,69 +48,76 @@ extension TsMRangeCommand on TimeSeriesCommands {
     return execute(cmd);
   }
 
-  // TODO: v4.2.1 => CHANGE TO tsMRange()
-  // Future<dynamic> tsMRange({
-  //   Object? fromTimestamp,
-  //   Object? toTimestamp,
-  //   List<String> filters = const [],
-  //   bool latest = false,
-  //   List<int>? filterByTs,
-  //   num? filterByValueMin,
-  //   num? filterByValueMax,
-  //   bool withLabels = false,
-  //   List<String>? selectedLabels,
-  //   int? count,
-  //   Object? align,
-  //   String? aggregator,
-  //   int? bucketDuration,
-  //   List<dynamic>? bucketTimestamp,
-  //   bool empty = false,
-  //   String? groupByLabel,
-  //   String? reduceReducer,
-  //   bool forceRun = false,
-  // }) async {
-  //   await checkValkeySupport('TS.MRANGE', forceRun: forceRun);
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
 
-  //   final cmd = <dynamic>['TS.MRANGE', fromTimestamp, toTimestamp];
+  /// TS.MRANGE fromTimestamp toTimestamp [LATEST] [FILTER_BY_TS ...]
+  /// [FILTER_BY_VALUE ...] [WITHLABELS | SELECTED_LABELS label...]
+  /// [COUNT count] [ALIGN align] [AGGREGATION aggregator bucketDuration]
+  /// [BUCKETTIMESTAMP ...] [EMPTY] [GROUPBY label REDUCE reducer] FILTER
+  /// filter...
+  Future<dynamic> tsMRange2({
+    Object? fromTimestamp,
+    Object? toTimestamp,
+    List<String> filters = const [],
+    bool latest = false,
+    List<int>? filterByTs,
+    num? filterByValueMin,
+    num? filterByValueMax,
+    bool withLabels = false,
+    List<String>? selectedLabels,
+    int? count,
+    Object? align,
+    String? aggregator,
+    int? bucketDuration,
+    List<dynamic>? bucketTimestamp,
+    bool empty = false,
+    String? groupByLabel,
+    String? reduceReducer,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.MRANGE', forceRun: forceRun);
 
-  //   if (latest) cmd.add('LATEST');
+    final cmd = <dynamic>['TS.MRANGE', fromTimestamp, toTimestamp];
 
-  //   if (filterByTs != null && filterByTs.isNotEmpty) {
-  //     cmd.addAll(['FILTER_BY_TS', ...filterByTs]);
-  //   }
+    if (latest) cmd.add('LATEST');
 
-  //   if (filterByValueMin != null && filterByValueMax != null) {
-  //     cmd.addAll(['FILTER_BY_VALUE', filterByValueMin, filterByValueMax]);
-  //   }
+    if (filterByTs != null && filterByTs.isNotEmpty) {
+      cmd.addAll(['FILTER_BY_TS', ...filterByTs]);
+    }
 
-  //   if (withLabels) {
-  //     cmd.add('WITHLABELS');
-  //   } else if (selectedLabels != null && selectedLabels.isNotEmpty) {
-  //     cmd.addAll(['SELECTED_LABELS', ...selectedLabels]);
-  //   }
+    if (filterByValueMin != null && filterByValueMax != null) {
+      cmd.addAll(['FILTER_BY_VALUE', filterByValueMin, filterByValueMax]);
+    }
 
-  //   if (count != null) cmd.addAll(['COUNT', count]);
+    if (withLabels) {
+      cmd.add('WITHLABELS');
+    } else if (selectedLabels != null && selectedLabels.isNotEmpty) {
+      cmd.addAll(['SELECTED_LABELS', ...selectedLabels]);
+    }
 
-  //   if (align != null) cmd.addAll(['ALIGN', align]);
+    if (count != null) cmd.addAll(['COUNT', count]);
 
-  //   if (aggregator != null && bucketDuration != null) {
-  //     cmd.addAll(['AGGREGATION', aggregator, bucketDuration]);
-  //   }
+    if (align != null) cmd.addAll(['ALIGN', align]);
 
-  //   if (bucketTimestamp != null && bucketTimestamp.isNotEmpty) {
-  //     cmd.addAll(['BUCKETTIMESTAMP', ...bucketTimestamp]);
-  //   }
+    if (aggregator != null && bucketDuration != null) {
+      cmd.addAll(['AGGREGATION', aggregator, bucketDuration]);
+    }
 
-  //   if (empty) cmd.add('EMPTY');
+    if (bucketTimestamp != null && bucketTimestamp.isNotEmpty) {
+      cmd.addAll(['BUCKETTIMESTAMP', ...bucketTimestamp]);
+    }
 
-  //   // Note: GROUPBY requires REDUCE
-  //   if (groupByLabel != null && reduceReducer != null) {
-  //     cmd.addAll(['GROUPBY', groupByLabel, 'REDUCE', reduceReducer]);
-  //   }
+    if (empty) cmd.add('EMPTY');
 
-  //   cmd.add('FILTER');
-  //   cmd.addAll(filters);
+    // Note: GROUPBY requires REDUCE
+    if (groupByLabel != null && reduceReducer != null) {
+      cmd.addAll(['GROUPBY', groupByLabel, 'REDUCE', reduceReducer]);
+    }
 
-  //   return execute(cmd);
-  // }
+    cmd.add('FILTER');
+    cmd.addAll(filters);
+
+    return execute(cmd);
+  }
 }

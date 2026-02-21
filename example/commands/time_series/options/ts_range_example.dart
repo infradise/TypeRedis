@@ -89,22 +89,20 @@ Future<void> main() async {
   // Changed fromTimestamp from '-' to 0
   // > because 'ALIGN start' requires explicit timestamp.
   // > ERR TSDB: start alignment can only be used with explicit start timestamp
-  // TODO: v4.2.1 => REMOVE.
   final mrangeRes = await client.tsMRange(0, '+', ['metric=cpu'],
       options: ['ALIGN', 'start', 'AGGREGATION', 'avg', 1000], forceRun: false);
   print('   MRange Result: $mrangeRes');
 
-  // TODO: v4.2.1 => UNCOMMENT
-  // final mrangeRes2 = await client.tsMRange(
-  //     fromTimestamp: 0, // Start Time (Explicit 0 instead of '-')
-  //     toTimestamp: '+',
-  //     filters: ['metric=cpu'],
-  //     align: 'start',
-  //     aggregator: 'avg',
-  //     bucketDuration: 1000,
-  //     count: 10,
-  //     withLabels: true);
-  // print('   MRange Result: $mrangeRes2');
+  final mrangeRes2 = await client.tsMRange2(
+      fromTimestamp: 0, // Start Time (Explicit 0 instead of '-')
+      toTimestamp: '+',
+      filters: ['metric=cpu'],
+      align: 'start',
+      aggregator: 'avg',
+      bucketDuration: 1000,
+      count: 10,
+      withLabels: true);
+  print('   MRange Result: $mrangeRes2');
 
   await client.disconnect();
   print('--- Done ---');

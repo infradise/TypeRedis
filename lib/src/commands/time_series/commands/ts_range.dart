@@ -45,4 +45,69 @@ extension TsRangeCommand on TimeSeriesCommands {
     ];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.RANGE key fromTimestamp toTimestamp [LATEST] [FILTER_BY_TS ...]
+  /// [FILTER_BY_VALUE ...] [COUNT count] [ALIGN align]
+  /// [AGGREGATION aggregator bucketDuration] [BUCKETTIMESTAMP ...] `[EMPTY]`
+  ///
+  /// [latest]: Reports the latest possible value (even if incomplete).
+  /// [filterByTs]: List of timestamps to filter by.
+  /// [filterByValueMin]: Minimum value to filter.
+  /// [filterByValueMax]: Maximum value to filter.
+  /// [count]: Limit the number of results.
+  /// [align]: Alignment for aggregation ('start', 'end', or specific timestamp)
+  /// [aggregator]: Aggregation function (e.g., 'avg', 'sum', 'min', 'max').
+  /// [bucketDuration]: Duration of each bucket in milliseconds.
+  /// [bucketTimestamp]: Controls how bucket timestamps are reported (e.g., '+',
+  ///                    '-', 'mid').
+  /// [empty]: If true, reports empty buckets with NaN or similar.
+  Future<dynamic> tsRange2(
+    String key,
+    Object fromTimestamp,
+    Object toTimestamp, {
+    bool latest = false,
+    List<int>? filterByTs,
+    num? filterByValueMin,
+    num? filterByValueMax,
+    int? count,
+    Object? align,
+    String? aggregator,
+    int? bucketDuration,
+    List<dynamic>? bucketTimestamp, // e.g., ['+', '-']
+    bool empty = false,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.RANGE', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.RANGE', key, fromTimestamp, toTimestamp];
+
+    if (latest) cmd.add('LATEST');
+
+    if (filterByTs != null && filterByTs.isNotEmpty) {
+      cmd.addAll(['FILTER_BY_TS', ...filterByTs]);
+    }
+
+    if (filterByValueMin != null && filterByValueMax != null) {
+      cmd.addAll(['FILTER_BY_VALUE', filterByValueMin, filterByValueMax]);
+    }
+
+    if (count != null) cmd.addAll(['COUNT', count]);
+
+    if (align != null) cmd.addAll(['ALIGN', align]);
+
+    if (aggregator != null && bucketDuration != null) {
+      cmd.addAll(['AGGREGATION', aggregator, bucketDuration]);
+    }
+
+    if (bucketTimestamp != null && bucketTimestamp.isNotEmpty) {
+      cmd.addAll(['BUCKETTIMESTAMP', ...bucketTimestamp]);
+    }
+
+    if (empty) cmd.add('EMPTY');
+
+    return execute(cmd);
+  }
 }

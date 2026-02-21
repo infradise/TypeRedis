@@ -111,7 +111,7 @@ void main() {
           await client.ftSearch(aliasName, '*');
           fail('Should throw error when searching deleted alias');
         } catch (e) {
-          expect(e.toString(), contains('no such index'));
+          expect(e.toString(), contains('No such index'));
         }
 
         // 5. FT.SYNUPDATE

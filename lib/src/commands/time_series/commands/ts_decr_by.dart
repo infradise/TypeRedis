@@ -37,4 +37,36 @@ extension TsDecrByCommand on TimeSeriesCommands {
     final cmd = <dynamic>['TS.DECRBY', key, value, ...options];
     return execute(cmd);
   }
+
+  // TODO: Replace with existing one.
+  @Deprecated('DO NOT USE. Will be removed in the future.')
+
+  /// TS.DECRBY key value [TIMESTAMP timestamp] [RETENTION retentionPeriod]
+  /// [UNCOMPRESSED] [CHUNK_SIZE size] [LABELS field value..]
+  Future<dynamic> tsDecrBy2(
+    String key,
+    num value, {
+    Object? timestamp,
+    int? retention,
+    bool uncompressed = false,
+    int? chunkSize,
+    Map<String, String>? labels,
+    bool forceRun = false,
+  }) async {
+    await checkValkeySupport('TS.DECRBY', forceRun: forceRun);
+
+    final cmd = <dynamic>['TS.DECRBY', key, value];
+
+    if (timestamp != null) cmd.addAll(['TIMESTAMP', timestamp]);
+    if (retention != null) cmd.addAll(['RETENTION', retention]);
+    if (uncompressed) cmd.add('UNCOMPRESSED');
+    if (chunkSize != null) cmd.addAll(['CHUNK_SIZE', chunkSize]);
+
+    if (labels != null && labels.isNotEmpty) {
+      cmd.add('LABELS');
+      labels.forEach((k, v) => cmd.addAll([k, v]));
+    }
+
+    return execute(cmd);
+  }
 }
