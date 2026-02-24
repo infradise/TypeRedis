@@ -189,8 +189,8 @@ dart pub publish --dry-run
 Update the `version` field in `pubspec.yaml` to the new version number.
 
 ```yaml
-# version: 4.5.1  # Previous version
-version: 4.5.2   # New version
+# version: 4.5.2  # Previous version
+version: 4.6.0   # New version
 ```
 
 ### Commit the Version Bump
@@ -198,7 +198,7 @@ version: 4.5.2   # New version
 Commit the version change with a conventional commit message.
 
 ```
-build: bump version to 4.5.2
+build: bump version to 4.6.0
 ```
 
 ## Tag the Release Locally
@@ -206,13 +206,13 @@ build: bump version to 4.5.2
 Create a Git tag corresponding to the new version and push it to the remote repository.
 
 ```sh
-git tag v4.5.2
-git push origin v4.5.2
+git tag v4.6.0
+git push origin v4.6.0
 ```
 
 ## Create GitHub Release
 
-Create a new release on GitHub. Use the tag you just created (e.g., `v4.5.2`). Copy the relevant section from `CHANGELOG.md` into the release notes.
+Create a new release on GitHub. Use the tag you just created (e.g., `v4.6.0`). Copy the relevant section from `CHANGELOG.md` into the release notes.
 
 ## Publish to pub.dev
 
