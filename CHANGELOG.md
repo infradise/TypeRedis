@@ -3,7 +3,11 @@
 ## 4.6.0
 * **Modular Architecture**
     * **New CONNECTION Commands**
-        * Added a full suite of CONNECTION commands: `auth`, `client`, `clientCaching`, `clientCapa`, `clientGetName`, `clientGetRedir`, `clientHelp`, `clientId`, `clientImportSource`, `clientInfo`, `clientKill`, `clientList`, `clientNoEvict`, `clientNoTouch`, `clientPause`, `clientReply`, `clientSetInfo`, `clientSetName`, `clientTracking`, `clientTrackingInfo`, `clientUnblock`, `clientUnpause`, `echo`, `hello`, `ping`, `quit`, `reset`, `select`
+        * Added a full suite of CONNECTION commands: `auth`, `client`, `clientCaching`, `clientCapa`, `clientGetName`, `clientGetRedir`, `clientHelp`, `clientId`, `clientImportSource`, `clientInfo`, `clientKill`, `clientList`, `clientNoEvict`, `clientNoTouch`, `clientPause`, `clientReply`, `clientSetInfo`, `clientSetName`, `clientTracking`, `clientTrackingInfo`, `clientUnblock`, `clientUnpause`, `echo`, `hello`, (`ping`: *excluded*), `quit`, `reset`, `select`
+    * `ping`: Excluded in this version due to **parameter-handling research**.  
+      * In Dart, positional `[]` and named `{}` parameters **cannot be used together because. they conflict**.  
+      * **Our expected usages:** `ping()`, `ping('hello')`, `ping(forceRun: true)`, `ping(forceRun: false)`  
+      * Until then, the legacy `ping` is still available: `ping()`, `ping('hello')`
 
 ## 4.5.2
 * **Modular Architecture**
