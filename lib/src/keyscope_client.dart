@@ -41,6 +41,7 @@ import 'commands/commands.dart' show Commands;
 import 'commands/connection/commands.dart' show ConnectionCommands;
 import 'commands/count_min_sketch/commands.dart' show CountMinSketchCommands;
 import 'commands/cuckoo_filter/commands.dart' show CuckooFilterCommands;
+import 'commands/extensions/raw.dart' show RawCommand;
 import 'commands/generic/commands.dart' show GenericCommands;
 import 'commands/generic/commands/del.dart' show DelCommand;
 import 'commands/generic/commands/exists.dart' show ExistsCommand;
@@ -1585,6 +1586,9 @@ class KeyscopeClient // FYI. extends KeyscopeConnection
   }
 
   // --- Public Command Methods ---
+
+  Future<dynamic> raw(List<dynamic> command) async =>
+      RawCommand(this).raw(command);
 
   /// [v2.2.0] Routing Logic
   @override
