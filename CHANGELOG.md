@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.6.1
+* **Dedicated Wrappers**: Added `raw` operations for use with `keyscope v0.11.0`'s Command Palette.
+
 ## 4.6.0
 * **Modular Architecture**
     * **New CONNECTION Commands**
